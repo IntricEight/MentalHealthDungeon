@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     // Control visiblity of navigation bar
+    @State private var progressBarVisible: Bool = false
     @State private var navBarVisible: Bool = false
     
     var body: some View {
@@ -132,6 +133,12 @@ struct ProfileView: View {
                     // Navigation tab button
                     Button {
                         print("Navigation selected")
+                        
+                        // Bring up the Navigation Bar when touched
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            navBarVisible = true
+                        }
+
                     } label: {
                         Rectangle()
                             .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
@@ -149,10 +156,20 @@ struct ProfileView: View {
             
             // Overlayed tab features
             VStack {
+                // Show or hide the progress details bar
+                if progressBarVisible {
+                    //TODO: Implement ProgressDetails subview, and implement it here
+                }
+                
                 Spacer()
                 
-                NavigationBar()
-                    .frame(alignment: .bottom)
+                // Show or hide the navigation bar
+                if navBarVisible {
+                    NavigationBar(visible: $navBarVisible)
+                        .transition(.move(edge: .bottom))
+//                        .animation(.easeInOut(duration: 5), value: navBarVisible)
+                        .frame(alignment: .bottom)
+                }
             }.zIndex(10)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct NavigationBar: View {
+    var visible: Binding<Bool>?
+    
     var body: some View {
         let screenWidth = UIScreen.main.bounds.width
         
@@ -21,6 +23,13 @@ struct NavigationBar: View {
                 // Close Navigation tab button
                 Button {
                     print("Close Navigation selected")
+                    
+                    // Signal to close the navigation bar with an animation
+                    if let binding = visible {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            binding.wrappedValue = false
+                        }
+                    }
                 } label: {
                     Rectangle()
                         .frame(width: screenWidth * 0.2, height: 40, alignment: .bottomTrailing)
@@ -46,6 +55,17 @@ struct NavigationBar: View {
                         // Tasks Navigation button
                         Button {
                             print("Task Nav selected")
+                            
+                            // Signal to close the navigation bar without an animation
+                            if let binding = visible {
+                                withTransaction(Transaction(animation: nil)) {   
+                                    binding.wrappedValue = false
+                                }
+                            }
+                            
+                            // Navigate to the TaskList view
+                            
+                            
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.red)
