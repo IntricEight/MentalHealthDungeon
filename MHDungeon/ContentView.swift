@@ -5,21 +5,23 @@
 //  Created by Collin Bowdoin on 1/29/25.
 //
 
-// TODO: Style the view. This includes spacings, colors, etc. Make it pretty
+// TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
 
 import SwiftUI
 
+// Global screen traits
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height
+
 struct ContentView: View {
-    public let screenWidth = UIScreen.main.bounds.width
-    public let screenHeight = UIScreen.main.bounds.height
-    
     var body: some View {
         // App background color
         Color(0xbababa).ignoresSafeArea()
             .overlay {
                 //Current View
                 // TODO: Make this adaptable to allow view navigation
-                ProfileView()
+//                ProfileView()
+                DungeonView()
             }
     }
 }

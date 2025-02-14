@@ -8,17 +8,12 @@
 import SwiftUI
 
 struct ProfileView: View {
-    // Control visiblity of navigation bar
-    @State private var progressBarVisible: Bool = false
-    @State private var navBarVisible: Bool = false
+    // Control visiblity of various features
+    @State private var progressBarVisible: Bool = false     //Control the visibility of the progress stats bar
+    @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
     var body: some View {
-        // Universal Screen traits
-        // TODO: Turn these into a universal variable that all views can access
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        
-        // Circle control
+        // Circle controls
         let circleScreenPercentage = 0.6
         let circleDiameter = screenWidth * circleScreenPercentage
         
@@ -36,6 +31,7 @@ struct ProfileView: View {
                 // User progress info section
                 HStack {
                     // Profile Image button
+                    // TODO: Implement selection of an image to use as a profile image. Current plan is to create premade images to choose from
                     Button {
                         print("Profile Image selected")
                     } label: {
@@ -48,7 +44,7 @@ struct ProfileView: View {
                     Spacer()
                     
                     // Account Progress tab button
-                    // TODO: Figure out how to get the tab to align with the right edge of the screen
+                    // TODO: Implement popout bar with details about the user's adventure
                     Button {
                         print("Progress Tab selected")
                     } label: {
@@ -64,7 +60,7 @@ struct ProfileView: View {
                             .ignoresSafeArea(edges: .trailing)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: circleDiameter, alignment: .top)
+                .frame(maxHeight: circleDiameter)
                 .padding(EdgeInsets(top: 64, leading: 30, bottom: 0, trailing: 0))
                 
                 
@@ -72,9 +68,10 @@ struct ProfileView: View {
                 
                 
                 // Connections section
-                // TODO: Style the buttons
                 HStack {
                     // Messages button
+                    // TODO: Implement Messaging system through database.
+                    // TODO: Implement navigation to Message view
                     Button {
                         print("Messages menu selected")
                     } label: {
@@ -86,6 +83,8 @@ struct ProfileView: View {
                     Spacer(minLength: 30)
                     
                     // Friends button
+                    // TODO: Implement friendship system through database
+                    // TODO: Implement navigation to Friends page
                     Button {
                         print("Friends menu selected")
                     } label: {
@@ -101,13 +100,19 @@ struct ProfileView: View {
                 
                 
                 // Character Creation section
-                // TODO: Place a WIP message over the top. This feature is unlikely to be implemented
-                // TODO: Create a character system
+                // TODO: Create a character system (This feature is unlikely to be implemented during this project)
                 Button {
                     print("Character creation selected")
                 } label: {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .foregroundColor(Color.green)
+                        .overlay {
+                            Text("WIP")
+                                .font(.custom("", size: 100))
+                                .foregroundColor(Color.black)
+                        }
+                    
+                    //Apple Chancery
                 }
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                 
@@ -120,6 +125,7 @@ struct ProfileView: View {
                     Spacer()
                     
                     // Settings button
+                    // TODO: Implement navigation to a setting page
                     Button {
                         print("Settings selected")
                     } label: {
@@ -167,12 +173,11 @@ struct ProfileView: View {
                 if navBarVisible {
                     NavigationBar(visible: $navBarVisible)
                         .transition(.move(edge: .bottom))
-//                        .animation(.easeInOut(duration: 5), value: navBarVisible)
                         .frame(alignment: .bottom)
                 }
             }.zIndex(10)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
     }
 }

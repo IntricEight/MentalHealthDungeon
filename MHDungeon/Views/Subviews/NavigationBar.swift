@@ -84,6 +84,17 @@ struct NavigationBar: View {
                         // Dungeon Navigation button
                         Button {
                             print("Dungeon Nav selected")
+                            
+                            // Signal to close the navigation bar without an animation
+                            if let binding = visible {
+                                withTransaction(Transaction(animation: nil)) {
+                                    binding.wrappedValue = false
+                                }
+                            }
+                            
+                            // Navigate to the Dungeon view
+                            
+                            
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.red)
@@ -102,23 +113,52 @@ struct NavigationBar: View {
                         // Profile Navigation button
                         Button {
                             print("Profile Nav selected")
-                        } label: {
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(Color.red)
-                                .frame(width: 80, height: 80)
-                                .overlay {
-                                    Image(systemName: "square.circle.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 60, height: 60, alignment: .center)
-                                        .foregroundColor(Color.white)
+                            
+                            // Signal to close the navigation bar without an animation
+                            if let binding = visible {
+                                withTransaction(Transaction(animation: nil)) {
+                                    binding.wrappedValue = false
                                 }
+                            }
+                            
+                            // Navigate to the Profile view
+                            
+                            
+                        } label: {
+//                            RoundedRectangle(cornerRadius: 20)
+//                                .foregroundColor(Color.red)
+//                                .frame(width: 80, height: 80)
+//                                .overlay {
+//                                    Image(systemName: "square.circle.fill")
+//                                        .resizable()
+//                                        .aspectRatio(contentMode: .fill)
+//                                        .frame(width: 60, height: 60, alignment: .center)
+//                                        .foregroundColor(Color.white)
+//                                }
+                            
+                            navButtonRectangle(icon: "square.circle.fill")
                         }
                         
                         Spacer()
                     }
                 }
         }.frame(height: 140)
+    }
+    
+    // The visual design for the navigational buttons
+    func navButtonRectangle(icon: String) -> some View {
+        // TODO: After figuring out View Navigation, come back and and decide how much of the buttons can be separated into this function
+        
+        RoundedRectangle(cornerRadius: 20)
+            .foregroundColor(Color.red)
+            .frame(width: 80, height: 80)
+            .overlay {
+                Image(systemName: icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 60, height: 60, alignment: .center)
+                    .foregroundColor(Color.white)
+            }
     }
 }
 
