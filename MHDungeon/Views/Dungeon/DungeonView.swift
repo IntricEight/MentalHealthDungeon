@@ -48,6 +48,9 @@ struct DungeonView: View {
                 .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
                 
                 
+                // Perhaps add a title line for the level name + stage #?
+                
+                
                 // Dungeon Unlock Progress section
                 // TODO: Implement a series of images that show how much IP has been collected through the light on a lamp.
                 Button {

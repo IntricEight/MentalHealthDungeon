@@ -10,6 +10,9 @@ import SwiftUI
 struct TaskListView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        //Use a NavigationStack here, even if I decide not to use that for arranging the total app
+        // Or a List, as it comes with a scroll. Perhaps you could even use both at the same time, future me
     }
 }
 

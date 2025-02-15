@@ -18,6 +18,10 @@ struct ContentView: View {
         // App background color
         Color(0xbababa).ignoresSafeArea()
             .overlay {
+                
+                
+                
+                
                 //Current View
                 // TODO: Make this adaptable to allow view navigation
 //                ProfileView()

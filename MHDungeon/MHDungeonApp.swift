@@ -11,7 +11,7 @@ import SwiftUI
 struct MHDungeonApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView()   //The current default. TODO: Change to the intended landing page before submission
         }
     }
 }
