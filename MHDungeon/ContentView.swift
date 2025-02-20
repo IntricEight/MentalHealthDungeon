@@ -7,25 +7,36 @@
 
 // TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
 
+// TODO: After resolving page navigation, go through and remove any unnecessary bindings, variables, and other code
+
 import SwiftUI
+
+//Helps error-assistance with page navigation
+public enum AppPage {
+    case dungeon
+    case profile
+    case taskList
+}
 
 // Global screen traits
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
 struct ContentView: View {
+    @State private var currentView: AppPage = .dungeon     //Track the view to display (Defaults on the dungeon)
+    
     var body: some View {
-        // App background color
         Color(0xbababa).ignoresSafeArea()
             .overlay {
-                
-                
-                
-                
-                //Current View
-                // TODO: Make this adaptable to allow view navigation
-//                ProfileView()
-                DungeonView()
+                //Select the view to display
+                switch currentView {
+                case AppPage.dungeon:
+                    DungeonView(currentView: $currentView)
+                case AppPage.profile:
+                    ProfileView(currentView: $currentView)
+                case AppPage.taskList:
+                    TaskListView(currentView: $currentView)
+                }
             }
     }
 }

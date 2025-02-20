@@ -12,6 +12,8 @@ struct ProfileView: View {
     @State private var progressBarVisible: Bool = false     //Control the visibility of the progress stats bar
     @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
+    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
+    
     var body: some View {
         // Circle controls
         let circleScreenPercentage = 0.6
@@ -171,7 +173,7 @@ struct ProfileView: View {
                 
                 // Show or hide the navigation bar
                 if navBarVisible {
-                    NavigationBar(visible: $navBarVisible)
+                    NavigationBar(currentView: currentView, visible: $navBarVisible)
                         .transition(.move(edge: .bottom))
                         .frame(alignment: .bottom)
                 }

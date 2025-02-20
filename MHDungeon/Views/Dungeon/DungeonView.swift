@@ -11,6 +11,8 @@ struct DungeonView: View {
     // Control visiblity of various features
     @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
+    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
+    
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
@@ -109,12 +111,11 @@ struct DungeonView: View {
             
             // Overlayed tab features
             VStack {
-                
                 Spacer()
                 
                 // Show or hide the navigation bar
                 if navBarVisible {
-                    NavigationBar(visible: $navBarVisible)
+                    NavigationBar(currentView: currentView, visible: $navBarVisible)
                         .transition(.move(edge: .bottom))
                         .frame(alignment: .bottom)
                 }

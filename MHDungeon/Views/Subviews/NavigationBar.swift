@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct NavigationBar: View {
-    var visible: Binding<Bool>?
+    var currentView: Binding<AppPage>?      // Allows this view to change the current dominant view
+    
+    var visible: Binding<Bool>?     // Allow the navigation bar to reset the host's NavBar state before leaving
     
     var body: some View {
         let screenWidth = UIScreen.main.bounds.width
@@ -44,7 +46,7 @@ struct NavigationBar: View {
                 }
             }
             
-            
+            // Navigation bar with buttons
             Rectangle()
                 .foregroundColor(Color.blue)
                 .frame(height: 100, alignment: .bottom)
@@ -53,91 +55,17 @@ struct NavigationBar: View {
                         Spacer()
                         
                         // Tasks Navigation button
-                        Button {
-                            print("Task Nav selected")
-                            
-                            // Signal to close the navigation bar without an animation
-                            if let binding = visible {
-                                withTransaction(Transaction(animation: nil)) {   
-                                    binding.wrappedValue = false
-                                }
-                            }
-                            
-                            // Navigate to the TaskList view
-                            
-                            
-                        } label: {
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(Color.red)
-                                .frame(width: 80, height: 80)
-                                .overlay {
-                                    Image(systemName: "circle.circle.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 60, height: 60, alignment: .center)
-                                        .foregroundColor(Color.white)
-                                }
-                        }
+                        navButtonRectangle(icon: "circle.circle.fill", destination: AppPage.taskList, visible: visible, consoleMessage: "Task Nav selected")
                         
                         Spacer()
                         
                         // Dungeon Navigation button
-                        Button {
-                            print("Dungeon Nav selected")
-                            
-                            // Signal to close the navigation bar without an animation
-                            if let binding = visible {
-                                withTransaction(Transaction(animation: nil)) {
-                                    binding.wrappedValue = false
-                                }
-                            }
-                            
-                            // Navigate to the Dungeon view
-                            
-                            
-                        } label: {
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(Color.red)
-                                .frame(width: 80, height: 80)
-                                .overlay {
-                                    Image(systemName: "triangle.circle.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 60, height: 60, alignment: .center)
-                                        .foregroundColor(Color.white)
-                                }
-                        }
+                        navButtonRectangle(icon: "triangle.circle.fill", destination: AppPage.dungeon, visible: visible, consoleMessage: "Dungeon Nav selected")
                         
                         Spacer()
                         
                         // Profile Navigation button
-                        Button {
-                            print("Profile Nav selected")
-                            
-                            // Signal to close the navigation bar without an animation
-                            if let binding = visible {
-                                withTransaction(Transaction(animation: nil)) {
-                                    binding.wrappedValue = false
-                                }
-                            }
-                            
-                            // Navigate to the Profile view
-                            
-                            
-                        } label: {
-//                            RoundedRectangle(cornerRadius: 20)
-//                                .foregroundColor(Color.red)
-//                                .frame(width: 80, height: 80)
-//                                .overlay {
-//                                    Image(systemName: "square.circle.fill")
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fill)
-//                                        .frame(width: 60, height: 60, alignment: .center)
-//                                        .foregroundColor(Color.white)
-//                                }
-                            
-                            navButtonRectangle(icon: "square.circle.fill")
-                        }
+                        navButtonRectangle(icon: "square.circle.fill", destination: AppPage.profile, visible: visible, consoleMessage: "Profile Nav selected")
                         
                         Spacer()
                     }
@@ -145,20 +73,38 @@ struct NavigationBar: View {
         }.frame(height: 140)
     }
     
-    // The visual design for the navigational buttons
-    func navButtonRectangle(icon: String) -> some View {
-        // TODO: After figuring out View Navigation, come back and and decide how much of the buttons can be separated into this function
+    // A function to create a navigation button on the NavigationBar
+    func navButtonRectangle(icon: String, destination dest: AppPage, visible: Binding<Bool>?, consoleMessage message: String) -> some View {
         
-        RoundedRectangle(cornerRadius: 20)
-            .foregroundColor(Color.red)
-            .frame(width: 80, height: 80)
-            .overlay {
-                Image(systemName: icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 60, height: 60, alignment: .center)
-                    .foregroundColor(Color.white)
+        // The button which contains the action and visual display for the operation
+        Button {
+            //Print the destination notification message to the console
+            print(message)
+            
+            // Signal to close the navigation bar without an animation
+            if let binding = visible {
+                withTransaction(Transaction(animation: nil)) {
+                    binding.wrappedValue = false
+                }
             }
+            
+            // Navigate to the Profile view
+            currentView?.wrappedValue = dest
+            
+        } label: {
+            // A slightly rounded rectangle with an icon from SF Symbols in the center
+            RoundedRectangle(cornerRadius: 20)
+                .foregroundColor(Color.red)
+                .frame(width: 80, height: 80)
+                .overlay {
+                    Image(systemName: icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 60, height: 60, alignment: .center)
+                        .foregroundColor(Color.white)
+                }
+        }
+        
     }
 }
 
