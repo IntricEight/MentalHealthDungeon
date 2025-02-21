@@ -5,22 +5,53 @@
 //  Created by Collin Bowdoin on 1/29/25.
 //
 
+// TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
+
 import SwiftUI
 
+//Helps error-assistance with page navigation
+public enum AppPage {
+    case dungeon
+    case profile
+    case taskList
+}
+
+// Global screen traits
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height
+
 struct ContentView: View {
+    @State private var currentView: AppPage = .dungeon     //Track the view to display (Defaults on the dungeon)
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        Color(0xbababa).ignoresSafeArea()
+            .overlay {
+                //Select the view to display
+                switch currentView {
+                case AppPage.dungeon:
+                    DungeonView(currentView: $currentView)
+                case AppPage.profile:
+                    ProfileView(currentView: $currentView)
+                case AppPage.taskList:
+                    TaskListView(currentView: $currentView)
+                }
+            }
     }
 }
 
-#Preview {
+#Preview("App Host") {
     ContentView()
 }
 
-// initial commi
+// Extend a function onto the Color operation to allow HEX codes to be passed in instead of spcific colors
+extension Color {
+    init(_ hex: Int, _ opacity: Double = 1) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255,
+            opacity: opacity
+        )
+    }
+}
