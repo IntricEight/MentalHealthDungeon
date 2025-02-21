@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NavigationBar: View {
     var currentView: Binding<AppPage>?      // Allows this view to change the current dominant view
-    
     var visible: Binding<Bool>?     // Allow the navigation bar to reset the host's NavBar state before leaving
     
     var body: some View {
@@ -108,6 +107,6 @@ struct NavigationBar: View {
     }
 }
 
-#Preview {
+#Preview("Navigation Bar") {
     NavigationBar()
 }

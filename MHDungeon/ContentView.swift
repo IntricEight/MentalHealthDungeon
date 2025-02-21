@@ -7,8 +7,6 @@
 
 // TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
 
-// TODO: After resolving page navigation, go through and remove any unnecessary bindings, variables, and other code
-
 import SwiftUI
 
 //Helps error-assistance with page navigation
@@ -41,7 +39,7 @@ struct ContentView: View {
     }
 }
 
-#Preview {
+#Preview("App Host") {
     ContentView()
 }
 

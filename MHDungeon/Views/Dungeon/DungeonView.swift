@@ -126,6 +126,6 @@ struct DungeonView: View {
     }
 }
 
-#Preview {
+#Preview("Dungeon") {
     DungeonView()
 }

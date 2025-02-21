@@ -184,6 +184,6 @@ struct ProfileView: View {
     }
 }
 
-#Preview {
+#Preview("Profile") {
     ProfileView()
 }
