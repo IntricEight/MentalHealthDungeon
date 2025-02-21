@@ -46,7 +46,6 @@ struct DungeonView: View {
                         .foregroundColor(Color.yellow)
 
                 }
-//                .frame(maxHeight: circleDiameter)
                 .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
                 
                 
