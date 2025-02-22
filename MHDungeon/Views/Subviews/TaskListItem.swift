@@ -16,7 +16,7 @@ struct TaskListItem: View {
     let points: Int
     let expirationTime: Date
 
-    @State private var timeRemaining: String = "Expires in <ERROR>"
+    @State private var timeRemaining: String = "Expires in <LOADING>"
 
     // Official init, this is what should be used when this view is actually being called
     init(_ task: Task) {
@@ -87,7 +87,6 @@ struct TaskListItem: View {
     }
     
     // Updates and formats the remaining time for display
-    // TODO: Change the following function to remove the days/hours/minutes/seconds variables and use just the timeRemaining variable (Or a temp, yes, should use a temp instead)
     func updateTimeRemaining() {
         // Record the present time to stop changing values from execution time
         let now = Date.now
@@ -98,14 +97,13 @@ struct TaskListItem: View {
             return
         }
         
-        // Store the days, hours, and minutes in separate variables (Contains the whole string display of the time segment). The booleans are for format assistance
-        var days: String = ""
+        // Store the time remaining in a formatted string
+        var formatting: String = ""
+        
+        // Record whether the segmnet was used for format assistance
         var hasDays: Bool = false
-        var hours: String = ""
         var hasHours: Bool = false
-        var minutes: String = ""
         var hasMinutes: Bool = false
-        var seconds: String = ""
         
         // Calculate the time difference
         let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: now, to: expirationTime)
@@ -115,14 +113,14 @@ struct TaskListItem: View {
         
         // Add the days remaining if there are any
         if let daysRemaining = components.day, daysRemaining > 0 {
-            // Show that our string will contain days
+            // Record that our string will contain days
             hasDays = true
             
-            days = "\(daysRemaining) day"
+            formatting += "\(daysRemaining) day"
             
             // Show the plurality
             if daysRemaining > 1 {
-                days += "s"
+                formatting += "s"
             }
         }
         
@@ -130,36 +128,36 @@ struct TaskListItem: View {
         if let hoursRemaining = components.hour, hoursRemaining > 0 {
             // Format the days segment to account for the hours segment
             if hasDays {
-                days += ", "
+                formatting += ", "
             }
             
-            // Show that our string will contain hours
+            // Record that our string will contain hours
             hasHours = true
             
-            hours = "\(hoursRemaining) hour"
+            formatting += "\(hoursRemaining) hour"
             
             // Show the plurality
             if hoursRemaining > 1 {
-                hours += "s"
+                formatting += "s"
             }
         }
         
         // Add the minutes remaining if there are any, so long as no days remain either
-        if hasDays == false {
+        if !hasDays {
             if let minutesRemaining = components.minute, minutesRemaining > 0 {
                 // Format the hours segment to account for the minutes segment
                 if hasHours {
-                    hours += ", "
+                    formatting += ", "
                 }
                 
-                // Show that our string will contain minutes
-                hasHours = true
+                // Record that our string will contain minutes
+                hasMinutes = true
                 
-                minutes = "\(minutesRemaining) minute"
+                formatting += "\(minutesRemaining) minute"
                 
                 // Show the plurality
                 if minutesRemaining > 1 {
-                    minutes += "s"
+                    formatting += "s"
                 }
             }
         }
@@ -167,16 +165,16 @@ struct TaskListItem: View {
         // If there are no days, hours, or minutes, then there is likely only seconds left on the clock and we will display that
         if !hasDays && !hasHours && !hasMinutes {
             if let secondsRemaining = components.second, secondsRemaining > 0 {
-                seconds = "\(secondsRemaining) second"
+                formatting = "\(secondsRemaining) second"
                 
                 // Show the plurality
                 if secondsRemaining > 1 {
-                    seconds += "s"
+                    formatting += "s"
                 }
             }
         }
         
-        timeRemaining = "Expires in \(days)\(hours)\(minutes)\(seconds)"
+        timeRemaining = "Expires in \(formatting)"
         
         // TODO: REMOVE after testing
         print(timeRemaining)
@@ -185,7 +183,7 @@ struct TaskListItem: View {
 
 #Preview("Task Item") {
     // Uses the number of minutes in a time span: Days, Hours, and Minutes
-    var minutesCalculated: Double = (1440.0 * 0) + (60.0 * 0) + (1.0 * 1.2)
+    var minutesCalculated: Double = (1440.0 * 0) + (60.0 * 0) + (1.0 * 0.8)
     
     TaskListItem(name: "Example Task goes here. Can you not see it? Clearly, something else is going on here", inspirationPoints: 10, expirationTime: Date.now.addingTimeInterval( minutesCalculated * 60))
 }
