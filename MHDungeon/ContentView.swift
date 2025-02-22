@@ -6,6 +6,7 @@
 //
 
 // TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
+// TODO: Clear or comment out the host of print(*Useful for navigation checking) lines throughout the code
 
 import SwiftUI
 
@@ -21,7 +22,7 @@ let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
 struct ContentView: View {
-    @State private var currentView: AppPage = .dungeon     //Track the view to display (Defaults on the dungeon)
+    @State private var currentView: AppPage = .taskList     //Track the view to display (Defaults on the dungeon)
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()
