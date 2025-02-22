@@ -17,6 +17,9 @@ struct TaskListItem: View {
     let expirationTime: Date
 
     @State private var timeRemaining: String = "Expires in <LOADING>"
+    
+    // Controls how frequently the countdown updates
+    let timeInterval: Double = 40
 
     // Official init, this is what should be used when this view is actually being called
     init(_ task: Task) {
@@ -78,7 +81,13 @@ struct TaskListItem: View {
                         // TODO: Calculate the total space the points text is taking up so that it remains consistent no matter how many points are being rewarded
                         Text("\(points)")
                         Spacer(minLength: 8)
+                        
+                        // Display the remaining time in a sporatic countdown. onAppear() runs the update on loading, while onReceive() runs it every 'timeInterval' after
                         Text("\(timeRemaining)")
+                            .onAppear(perform: updateTimeRemaining)
+                            .onReceive(Timer.publish(every: timeInterval, on: .main, in: .common).autoconnect()) { _ in
+                                    updateTimeRemaining()
+                                }
                     }
                     
                 }.padding()
@@ -87,7 +96,7 @@ struct TaskListItem: View {
     }
     
     // Updates and formats the remaining time for display
-    func updateTimeRemaining() {
+    func updateTimeRemaining() -> Void {
         // Record the present time to stop changing values from execution time
         let now = Date.now
         
@@ -107,9 +116,6 @@ struct TaskListItem: View {
         
         // Calculate the time difference
         let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: now, to: expirationTime)
-        
-        // TODO: REMOVE after testing
-        print("Days: \(components.day), Hours: \(components.hour), Minutes: \(components.minute), Seconds: \(components.second)")
         
         // Add the days remaining if there are any
         if let daysRemaining = components.day, daysRemaining > 0 {
@@ -175,15 +181,12 @@ struct TaskListItem: View {
         }
         
         timeRemaining = "Expires in \(formatting)"
-        
-        // TODO: REMOVE after testing
-        print(timeRemaining)
     }
 }
 
 #Preview("Task Item") {
     // Uses the number of minutes in a time span: Days, Hours, and Minutes
-    var minutesCalculated: Double = (1440.0 * 0) + (60.0 * 0) + (1.0 * 0.8)
+    var minutesCalculated: Double = (1440.0 * 3) + (60.0 * 7) + (1.0 * 9)
     
     TaskListItem(name: "Example Task goes here. Can you not see it? Clearly, something else is going on here", inspirationPoints: 10, expirationTime: Date.now.addingTimeInterval( minutesCalculated * 60))
 }
