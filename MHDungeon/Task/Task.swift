@@ -60,7 +60,7 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
     }
     
     // 5-arg constructor which allows the number of hours the task will be active to be provided
-    init(name: String, details: String, inspirationPoints: Int, hoursToExpiration: Int) throws {
+    init(name: String, details: String, inspirationPoints: Int, hoursToExpiration: Double) throws {
         // Error checking
         // Ensure the IP suggested in within the valid range
         if inspirationPoints == 0 {
@@ -77,7 +77,7 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
         self.points = inspirationPoints
         self.creationTime = Date.now
         
-        // Calculate the expiration time using the creationTime and number of allowed hours
+        // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
         self.expirationTime = creationTime.addingTimeInterval(TimeInterval(hoursToExpiration * 3600))
 
     }
@@ -96,7 +96,12 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
         return expirationTime.timeIntervalSinceNow
     }
     
-    
+    func CompleteTask() -> Bool {
+        // TODO: Decide if this should even be within the Task struct, or in the account.
+        // TODO: Remove the Task from the database, and set a timeout on it if it is premade
+        
+        return true
+    }
     
     
     

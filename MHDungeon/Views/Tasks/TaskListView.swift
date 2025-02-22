@@ -21,7 +21,7 @@ struct TaskListView: View {
     let tabRadius: CGFloat = 30
     
     // TODO: Clean up. Test converting into a set once the initial list is working
-    var tasks: [Task] = createSampleTasks()
+    @State var tasks: [Task] = createSampleTasks()
         
     
     
@@ -44,9 +44,7 @@ struct TaskListView: View {
                     Button {
                         print("Task Creation selected")
                         
-                        for task in tasks {
-                            print(task)
-                        }
+                        tasks.removeLast()
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
                             .frame(height: 50)
@@ -68,17 +66,17 @@ struct TaskListView: View {
                 
                 Spacer()
                 
+                // TODO: Figure out why the white background won't go away, and make it go away
                 // List of active tasks
-                VStack {
-                    List(tasks) { task in
-                        Button {
-                            print(task)
-                        } label: {
-                            TaskListItem(task)
-                        }
+                List(tasks) { task in
+                    Button {
+                        print(task)
+                    } label: {
+                        TaskListItem(task)
                     }
-                    .listStyle(.plain)
                 }
+                .scrollContentBackground(.hidden)
+                .listStyle(.plain)
                 
                 
                 
@@ -105,7 +103,7 @@ struct TaskListView: View {
                                 )
                             )
                             .ignoresSafeArea()
-                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 32))
+                    }.padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 32))
                 }
             }.zIndex(1)
             
