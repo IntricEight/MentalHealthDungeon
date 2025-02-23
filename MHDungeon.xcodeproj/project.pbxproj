@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5A6C5B482D6AB0460065A439 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5A6C5B472D6AB0460065A439 /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5A8CF9D32D4B3CE500322A27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A6C5B482D6AB0460065A439 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = MHDungeon;
 			packageProductDependencies = (
+				5A6C5B472D6AB0460065A439 /* FirebaseAnalytics */,
 			);
 			productName = MHDungeon;
 			productReference = 5A8CF9C22D4B3CE100322A27 /* MHDungeon.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 5A8CF9B92D4B3CE100322A27;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5A6C5B462D6AB0460065A439 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5A8CF9C32D4B3CE100322A27 /* Products */;
 			projectDirPath = "";
@@ -552,6 +561,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5A6C5B462D6AB0460065A439 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5A6C5B472D6AB0460065A439 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A6C5B462D6AB0460065A439 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5A8CF9BA2D4B3CE100322A27 /* Project object */;
 }

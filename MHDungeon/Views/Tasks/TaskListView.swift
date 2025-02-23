@@ -5,6 +5,8 @@
 //  Created by Collin Bowdoin on 2/12/25.
 //
 
+// TODO: Implement an override button that reduces the timer of the first task to 5 seconds. This will be useful in demonstrating that ask feature to the audience
+
 import SwiftUI
 
 struct TaskListView: View {
