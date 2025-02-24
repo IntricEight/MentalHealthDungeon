@@ -15,6 +15,7 @@ public enum AppPage {
     case dungeon
     case profile
     case taskList
+    case signIn
 }
 
 // Global screen traits
@@ -22,19 +23,23 @@ let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
 struct ContentView: View {
-    @State private var currentView: AppPage = .taskList     //Track the view to display (Defaults on the dungeon)
+    // Tracks the current primary view to display (Default is useful for testing)
+    @State private var currentView: AppPage = .signIn
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()
             .overlay {
                 //Select the view to display
                 switch currentView {
-                case AppPage.dungeon:
-                    DungeonView(currentView: $currentView)
-                case AppPage.profile:
-                    ProfileView(currentView: $currentView)
-                case AppPage.taskList:
-                    TaskListView(currentView: $currentView)
+                    case AppPage.dungeon:
+                        DungeonView(currentView: $currentView)
+                    case AppPage.profile:
+                        ProfileView(currentView: $currentView)
+                    case AppPage.taskList:
+                        TaskListView(currentView: $currentView)
+                    case AppPage.signIn:
+                        SignInView()
+                        
                 }
             }
     }
