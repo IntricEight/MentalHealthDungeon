@@ -3,13 +3,12 @@
 //  MHDungeon
 //
 
-// TODO: Chat is kinda bad at design, go through and humanize this
-
 import SwiftUI
-
-
+import _Concurrency
 
 struct SignInView: View {
+    @EnvironmentObject var authModel: AuthModel
+    
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -55,9 +54,15 @@ struct SignInView: View {
                 .padding(.horizontal)
                 
                 // Login button
-                Button  {
-                    // TODO: Implement login logic
+                Button {
                     print("Log In tapped with email: '\(email)' and password: '\(password)'")
+                    
+                    // Logic to process login attempt
+                    // Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
+                    _Concurrency.Task {
+                        try await authModel.signIn(withEmail: email, password: password)
+                    }
+                              
                 } label: {
                     Text("Log In")
                         .font(.headline)

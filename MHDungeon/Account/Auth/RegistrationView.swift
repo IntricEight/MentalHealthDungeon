@@ -4,12 +4,15 @@
 //
 
 import SwiftUI
+import _Concurrency
 
 struct RegistrationView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var authModel: AuthModel
     
     // Gather the user's sign up information
     @State private var email: String = ""
+    @State private var customName: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     
@@ -29,6 +32,12 @@ struct RegistrationView: View {
                 .autocapitalization(.none)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.emailAddress)
+                .padding(.horizontal)
+            
+            // Display name input field
+            TextField("Display name", text: $customName)
+                .autocapitalization(.words)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
             
             // Password input field
@@ -66,8 +75,13 @@ struct RegistrationView: View {
             
             // Create Account button
             Button(action: {
-                // Add your account creation logic here
                 print("Create Account tapped with email: '\(email)' and password: '\(password)'")
+                
+                // Logic to process account creation attempt
+                _Concurrency.Task {
+                    try await authModel.createUser(withEmail: email, displayName: customName, password: password)
+                }
+                
             }) {
                 Text("Create Account")
                     .font(.headline)

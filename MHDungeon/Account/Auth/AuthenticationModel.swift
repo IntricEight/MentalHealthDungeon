@@ -31,13 +31,57 @@ enum AuthenticationFlow {
     var errorMessage: String = ""
     var displayName: String = ""
     
-    init() {}
+    init() {
+        registerAuthStateHandle()
+        
+//        flow.combineLatest(email, password, confirmPassword)
+//            .map { flow, email, password, confirmPassword in
+//                flow == AuthenticationFlow.login
+//                ? !(email.isEmpty || password.isEmpty)
+//                : !(email.isEmpty || password.isEmpty || confirmPassword.isEmpty)
+//            }.assign(to: &isValid)
+    }
+    
+    private var authStateHandle: AuthStateDidChangeListenerHandle?
+    
+    func registerAuthStateHandle() {
+        if authStateHandle == nil {
+            authStateHandle = Auth.auth().addStateDidChangeListener { auth, user in
+                self.user = user
+                self.authenticationState = user == nil ? .unauthenticated : .authenticated
+                self.displayName = user?.displayName ?? "[No name]"
+            }
+        }
+    }
+    
+    func switchFlow() {
+        flow = flow == .login ? .signup : .login
+        errorMessage = ""
+    }
+    
+//    private func wait() async {
+//        do {
+//            print("Wait")
+//            try await Task.sleep(nanoseconds: 1_000_000_000)
+//        } catch {
+//            
+//        }
+//    }
+    
+    
+    
+    func reset() {
+        flow = .login
+        email = ""
+        password = ""
+        confirmPassword = ""
+    }
     
 }
 
 
 
-
+// TODO: Prepare for this to need changing
 extension AuthenticationModel {
     func signInWithEmailPassword() async -> Bool {
         authenticationState = .authenticating
@@ -46,11 +90,8 @@ extension AuthenticationModel {
             let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
             
             user = authResult.user
-            displayName = user?.displayName ?? "[No name]"
-            
             print("User '\(displayName)' <\(authResult.user.uid)> signed in successfully")
             
-            authenticationState = .authenticated
             return true
             
         } catch {
@@ -65,21 +106,40 @@ extension AuthenticationModel {
     func signUpWithEmailPassword() async -> Bool {
         authenticationState = .authenticating
         
+        do {
+            let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
+            
+            user = authResult.user
+            print("User '\(displayName)' <\(authResult.user.uid)> created an account successfully")
+            
+            return true
+        } catch {
+            print(error)
+            errorMessage = error.localizedDescription
+            return false
+        }
         
         return true
     }
     
     func signOut() {
-        authenticationState = .unauthenticated
-        
-        
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print(error)
+            errorMessage = error.localizedDescription
+        }
     }
     
     func deleteAccount() async -> Bool {
-        authenticationState = .unauthenticated
-        
-        
-        return true
+        do {
+            try await user?.delete()
+            return true
+        } catch {
+            print(error)
+            errorMessage = error.localizedDescription
+            return false
+        }
     }
     
     

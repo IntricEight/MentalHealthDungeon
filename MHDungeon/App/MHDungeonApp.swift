@@ -28,9 +28,12 @@ struct MHDungeonApp: App {
     // Register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+    @StateObject var authModel = AuthModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()   //The host page of the app navigation
+                .environmentObject(authModel)
         }
     }
 }

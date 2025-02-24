@@ -21,22 +21,45 @@ let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
 struct ContentView: View {
+    @EnvironmentObject var authModel: AuthModel
+    
     // Tracks the current primary view to display (Default is useful for testing)
     @State private var currentView: AppPage = .signIn
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()
             .overlay {
+                Group {
+                    // If the user is logged in, allow them to navigate around the app
+                    if authModel.userSession != nil {
+                        
+                        
+                        
+                    } else {    //If user is not logged in, bring them to the log in view
+                        //Select the view to display
+                        switch currentView {
+                            case AppPage.dungeon:
+                                DungeonView(currentView: $currentView)
+                            case AppPage.profile:
+                                ProfileView(currentView: $currentView)
+                            case AppPage.taskList:
+                                TaskListView(currentView: $currentView)
+                            default:
+                                SignInView()    //Fallback in case something about the auth goes wrong
+                    }
+                }
+                
+                
                 //Select the view to display
-                switch currentView {
-                    case AppPage.dungeon:
-                        DungeonView(currentView: $currentView)
-                    case AppPage.profile:
-                        ProfileView(currentView: $currentView)
-                    case AppPage.taskList:
-                        TaskListView(currentView: $currentView)
-                    case AppPage.signIn:
-                        SignInView()
+//                switch currentView {
+//                    case AppPage.dungeon:
+//                        DungeonView(currentView: $currentView)
+//                    case AppPage.profile:
+//                        ProfileView(currentView: $currentView)
+//                    case AppPage.taskList:
+//                        TaskListView(currentView: $currentView)
+//                    case AppPage.signIn:
+//                        SignInView()
                         
                 }
             }
