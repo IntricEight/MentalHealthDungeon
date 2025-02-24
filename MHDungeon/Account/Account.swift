@@ -18,9 +18,9 @@ class Account: Identifiable, Codable {
     let displayName: String
     let email: String
     
-    init(id: String, displayName: String, email: String) {
+    init(id: String, displayName name: String, email: String) {
         self.id = id
-        self.displayName = displayName
+        self.displayName = name
         self.email = email
     }
 }
