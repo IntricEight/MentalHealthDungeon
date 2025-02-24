@@ -2,8 +2,6 @@
 //  MHDungeonApp.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 1/29/25.
-//
 
 import SwiftUI
 import Firebase

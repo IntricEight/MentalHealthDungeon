@@ -2,8 +2,6 @@
 //  NavigationBar.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/12/25.
-//
 
 import SwiftUI
 

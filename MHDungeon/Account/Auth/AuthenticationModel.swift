@@ -2,8 +2,6 @@
 //  AuthenticationModel.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/23/25.
-//
 
 import Foundation
 import FirebaseAuth

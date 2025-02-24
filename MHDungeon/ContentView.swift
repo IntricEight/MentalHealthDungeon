@@ -2,8 +2,6 @@
 //  ContentView.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 1/29/25.
-//
 
 // TODO: Style the application views. This includes spacings, colors, etc. Make it pretty before the submission
 // TODO: Clear or comment out the host of print(*Useful for navigation checking) lines throughout the code

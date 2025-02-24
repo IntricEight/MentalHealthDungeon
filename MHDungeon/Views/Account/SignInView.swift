@@ -2,8 +2,6 @@
 //  SignInView.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/23/25.
-//
 
 // TODO: Chat is kinda bad at design, go through and humanize this
 

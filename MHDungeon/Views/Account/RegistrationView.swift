@@ -2,8 +2,6 @@
 //  RegistrationView.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/22/25.
-//
 
 import SwiftUI
 

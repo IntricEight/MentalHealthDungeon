@@ -2,8 +2,6 @@
 //  Task.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/19/25.
-//
 
 import Foundation
 
