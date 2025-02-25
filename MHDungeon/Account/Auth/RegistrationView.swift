@@ -92,6 +92,8 @@ struct RegistrationView: View {
                     .cornerRadius(10)
             }
             .padding(.horizontal)
+            .disabled(!formIsValid)
+            .opacity(formIsValid ? 1.0 : 0.5)
             
             Button {
                 dismiss()
@@ -105,6 +107,15 @@ struct RegistrationView: View {
         }
         .padding()
         .navigationBarTitle("Create Account", displayMode: .inline)
+    }
+}
+
+// Ensure that valid information is passed into the authentication form
+// MARK - AuthenticationFormProtocol
+extension RegistrationView: AuthenticationFormProtocol {
+    var formIsValid: Bool {
+        // TODO: Implement bool logic for conditions I want the user's submission details to meet
+        return !email.isEmpty && email.contains("@") && !customName.isEmpty && !password.isEmpty && password.count > 5 && password == confirmPassword
     }
 }
 

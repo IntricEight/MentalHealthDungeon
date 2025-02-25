@@ -31,38 +31,23 @@ struct ContentView: View {
             .overlay {
                 Group {
                     // If the user is logged in, allow them to navigate around the app
-                    if authModel.userSession != nil {
+                    if authModel.userSession != nil && authModel.currentAccount != nil {
                         //Select the view to display
-                        
-                        SettingsView()
-                        
-                        // TODO: Uncomment the code and resume developing the navigation as normal once the authentication test is complete
-//                        switch currentView {
-//                            case AppPage.dungeon:
-//                                DungeonView(currentView: $currentView)
-//                            case AppPage.profile:
-//                                ProfileView(currentView: $currentView)
-//                            case AppPage.taskList:
-//                                TaskListView(currentView: $currentView)
-//                            default:
-//                                SignInView()    //Fallback in case something about the auth goes wrong
+                        switch currentView {
+                            case AppPage.dungeon:
+                                DungeonView(currentView: $currentView)
+                            case AppPage.profile:
+                                ProfileView(currentView: $currentView)
+                            case AppPage.taskList:
+                                TaskListView(currentView: $currentView)
+                            default:
+                                SettingsView()    //Fallback in case something about the auth goes wrong
+                        }
                         
                     } else {    //If user is not logged in, bring them to the log in view
                         SignInView()
                     }
                 }
-                
-                
-                //Select the view to display
-//                switch currentView {
-//                    case AppPage.dungeon:
-//                        DungeonView(currentView: $currentView)
-//                    case AppPage.profile:
-//                        ProfileView(currentView: $currentView)
-//                    case AppPage.taskList:
-//                        TaskListView(currentView: $currentView)
-//                    case AppPage.signIn:
-//                        SignInView()
             }
     }
 }

@@ -10,6 +10,7 @@
 .runtimeconfig.json
 .firebase/
 firebase-debug.log
+firebase-export-*
 
 ### Swift ###
 # Xcode

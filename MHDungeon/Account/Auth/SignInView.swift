@@ -74,6 +74,8 @@ struct SignInView: View {
                         .cornerRadius(10)
                 }
                 .padding(.horizontal)
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
                 
                 // Create new account button/link
                 NavigationLink {
@@ -88,6 +90,15 @@ struct SignInView: View {
             }
             .padding()
         }
+    }
+}
+
+// Ensure that valid information is passed into the authentication form
+// MARK - AuthenticationFormProtocol
+extension SignInView: AuthenticationFormProtocol {
+    var formIsValid: Bool {
+        // TODO: Implement bool logic for conditions I want the user's submission details to meet
+        return !email.isEmpty && email.contains("@") && !password.isEmpty && password.count > 5
     }
 }
 

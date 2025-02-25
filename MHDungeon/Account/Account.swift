@@ -24,7 +24,3 @@ class Account: Identifiable, Codable {
         self.email = email
     }
 }
-
-extension Account {
-    static var MOCK_USER = Account(id: NSUUID().uuidString, displayName: "Universaliscam", email: "fake@got.cha")
-}
