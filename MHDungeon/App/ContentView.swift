@@ -10,10 +10,10 @@ import SwiftUI
 
 //Helps error-assistance with page navigation
 public enum AppPage {
+    case signIn
     case dungeon
     case profile
     case taskList
-    case signIn
 }
 
 // Global screen traits
@@ -24,7 +24,7 @@ struct ContentView: View {
     @EnvironmentObject var authModel: AuthModel
     
     // Tracks the current primary view to display (Default is useful for testing)
-    @State private var currentView: AppPage = .signIn
+    @State private var currentView: AppPage = .dungeon
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()

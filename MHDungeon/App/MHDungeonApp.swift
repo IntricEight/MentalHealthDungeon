@@ -37,6 +37,8 @@ struct MHDungeonApp: App {
         WindowGroup {
             ContentView()   //The host page of the app navigation
                 .environmentObject(authModel)
+            
+            // TODO: Make the primary page navigation enum into an environment variable
         }
     }
 }

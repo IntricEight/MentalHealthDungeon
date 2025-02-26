@@ -24,161 +24,171 @@ struct ProfileView: View {
         let buttonRadius: CGFloat = 20
         let buttonHeight: CGFloat = 40
 
-        // One layer for the main app stuff, and one for the overlay tab feature
-        ZStack {
-            // Main screen view
-            VStack {
-                // User progress info section
-                HStack {
-                    // Profile Image button
-                    // TODO: Implement selection of an image to use as a profile image. Current plan is to create premade images to choose from
-                    Button {
-                        print("Profile Image selected")
-                    } label: {
-                        Circle()
-                            .frame(width: circleDiameter, height: circleDiameter, alignment: .leading)
-                            .foregroundColor(Color.yellow)
-                            .padding([.leading], 10)
-                    }
-                    
-                    Spacer()
-                    
-                    // Account Progress tab button
-                    // TODO: Implement popout bar with details about the user's adventure
-                    Button {
-                        print("Progress Tab selected")
-                    } label: {
-                        Rectangle()
-                            .frame(width: 50, alignment: .trailing)
-                            .foregroundColor(Color.blue)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: tabRadius,
-                                    bottomLeadingRadius: tabRadius
+        
+        NavigationStack {
+            // One layer for the main app stuff, and one for the overlay tab feature
+            ZStack {
+                // Main screen view
+                VStack {
+                    // User progress info section
+                    HStack {
+                        // Profile Image button
+                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create premade images to choose from
+                        Button {
+                            print("Profile Image selected")
+                        } label: {
+                            Circle()
+                                .frame(width: circleDiameter, height: circleDiameter, alignment: .leading)
+                                .foregroundColor(Color.yellow)
+                                .padding([.leading], 10)
+                        }
+                        
+                        Spacer()
+                        
+                        // Account Progress tab button
+                        // TODO: Implement popout bar with details about the user's adventure
+                        Button {
+                            print("Progress Tab selected")
+                        } label: {
+                            Rectangle()
+                                .frame(width: 50, alignment: .trailing)
+                                .foregroundColor(Color.blue)
+                                .clipShape(
+                                    .rect(
+                                        topLeadingRadius: tabRadius,
+                                        bottomLeadingRadius: tabRadius
+                                    )
                                 )
-                            )
-                            .ignoresSafeArea(edges: .trailing)
+                                .ignoresSafeArea(edges: .trailing)
+                        }
                     }
-                }
-                .frame(maxHeight: circleDiameter)
-                .padding(EdgeInsets(top: 64, leading: 30, bottom: 0, trailing: 0))
-                
-                
-                Spacer(minLength: 30)
-                
-                
-                // Connections section
-                HStack {
-                    // Messages button
-                    // TODO: Implement Messaging system through database.
-                    // TODO: Implement navigation to Message view
-                    Button {
-                        print("Messages menu selected")
-                    } label: {
-                        RoundedRectangle(cornerRadius: buttonRadius)
-                            .frame(height: buttonHeight)
-                            .foregroundColor(Color.brown)
-                    }
+                    .frame(maxHeight: circleDiameter)
+                    .padding(EdgeInsets(top: 64, leading: 30, bottom: 0, trailing: 0))
+                    
                     
                     Spacer(minLength: 30)
                     
-                    // Friends button
-                    // TODO: Implement friendship system through database
-                    // TODO: Implement navigation to Friends page
+                    
+                    // Connections section
+                    HStack {
+                        // Messages button
+                        // TODO: Implement Messaging system through database.
+                        // TODO: Implement navigation to Message view
+                        Button {
+                            print("Messages menu selected")
+                        } label: {
+                            RoundedRectangle(cornerRadius: buttonRadius)
+                                .frame(height: buttonHeight)
+                                .foregroundColor(Color.brown)
+                        }
+                        
+                        Spacer(minLength: 30)
+                        
+                        // Friends button
+                        // TODO: Implement friendship system through database
+                        // TODO: Implement navigation to Friends page
+                        Button {
+                            print("Friends menu selected")
+                        } label: {
+                            RoundedRectangle(cornerRadius: buttonRadius)
+                                .frame(height: buttonHeight)
+                                .foregroundColor(Color.indigo)
+                        }
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    
+                    
+                    Spacer(minLength: 20)
+                    
+                    
+                    // Character Creation section
+                    // TODO: Create a character system (This feature is unlikely to be implemented during this project)
                     Button {
-                        print("Friends menu selected")
+                        print("Character creation selected")
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
-                            .frame(height: buttonHeight)
-                            .foregroundColor(Color.indigo)
+                            .foregroundColor(Color.green)
+                            .overlay {
+                                Text("WIP")
+                                    .font(.custom("", size: 100))
+                                    .foregroundColor(Color.black)
+                            }
+                        
+                        //Apple Chancery
                     }
-                }
-                .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
-                
-                
-                Spacer(minLength: 20)
-                
-                
-                // Character Creation section
-                // TODO: Create a character system (This feature is unlikely to be implemented during this project)
-                Button {
-                    print("Character creation selected")
-                } label: {
-                    RoundedRectangle(cornerRadius: buttonRadius)
-                        .foregroundColor(Color.green)
-                        .overlay {
-                            Text("WIP")
-                                .font(.custom("", size: 100))
-                                .foregroundColor(Color.black)
-                        }
+                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     
-                    //Apple Chancery
-                }
-                .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    
+                    Spacer(minLength: 20)
+                    
+                    
+                    // Settings and Navigation section
+                    HStack {
+                        Spacer()
+                        
+                        // Settings button
+                        // TODO: Implement navigation to a setting page
+//                        Button {
+//                            print("Settings selected")
+//                        } label: {
+//                            RoundedRectangle(cornerRadius: buttonRadius)
+//                                .frame(width: 200, height: 30, alignment: .top)
+//                                .foregroundColor(Color.orange)
+//                        }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
+                        
+                        NavigationLink(destination: SettingsView()) {
+                            RoundedRectangle(cornerRadius: buttonRadius)
+                                .frame(width: 200, height: 30, alignment: .top)
+                                .foregroundColor(Color.orange)
+                                .padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
+                        }
+                        
+                        Spacer(minLength: 10)
+                        
+                        // Navigation tab button
+                        Button {
+                            print("Navigation selected")
+                            
+                            // Bring up the Navigation Bar when touched
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                navBarVisible = true
+                            }
+                            
+                        } label: {
+                            Rectangle()
+                                .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
+                                .foregroundColor(Color.blue)
+                                .clipShape(
+                                    .rect(
+                                        topLeadingRadius: tabRadius,
+                                        topTrailingRadius: tabRadius
+                                    )
+                                )
+                                .ignoresSafeArea()
+                        }.padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
+                    }
+                }.zIndex(0)
                 
-                
-                Spacer(minLength: 20)
-                
-                
-                // Settings and Navigation section
-                HStack {
+                // Overlayed tab features
+                VStack {
+                    // Show or hide the progress details bar
+                    if progressBarVisible {
+                        //TODO: Implement ProgressDetails subview, and implement it here
+                    }
+                    
                     Spacer()
                     
-                    // Settings button
-                    // TODO: Implement navigation to a setting page
-                    Button {
-                        print("Settings selected")
-                    } label: {
-                        RoundedRectangle(cornerRadius: buttonRadius)
-                            .frame(width: 200, height: 30, alignment: .top)
-                            .foregroundColor(Color.orange)
-                    }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
-                    
-                    Spacer(minLength: 10)
-                    
-                    // Navigation tab button
-                    Button {
-                        print("Navigation selected")
-                        
-                        // Bring up the Navigation Bar when touched
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            navBarVisible = true
-                        }
-
-                    } label: {
-                        Rectangle()
-                            .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                            .foregroundColor(Color.blue)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: tabRadius,
-                                    topTrailingRadius: tabRadius
-                                )
-                            )
-                            .ignoresSafeArea()
-                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
-                }
-            }.zIndex(0)
-            
-            // Overlayed tab features
-            VStack {
-                // Show or hide the progress details bar
-                if progressBarVisible {
-                    //TODO: Implement ProgressDetails subview, and implement it here
-                }
-                
-                Spacer()
-                
-                // Show or hide the navigation bar
-                if navBarVisible {
-                    NavigationBar(currentView: currentView, visible: $navBarVisible)
-                        .transition(.move(edge: .bottom))
-                        .frame(alignment: .bottom)
-                }
-            }.zIndex(10)
+                    // Show or hide the navigation bar
+                    if navBarVisible {
+                        NavigationBar(currentView: currentView, visible: $navBarVisible)
+                            .transition(.move(edge: .bottom))
+                            .frame(alignment: .bottom)
+                    }
+                }.zIndex(10)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea()
     }
 }
 
