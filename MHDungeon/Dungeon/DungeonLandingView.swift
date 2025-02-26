@@ -2,16 +2,15 @@
 //  DungeonView.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/13/25.
-//
 
 import SwiftUI
 
-struct DungeonView: View {
+struct DungeonLandingView: View {
     // Control visiblity of various features
     @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
     var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
+    var currentDungeonView: Binding<DungeonPage>?
     
     var body: some View {
         // Dungeon button controls
@@ -126,5 +125,5 @@ struct DungeonView: View {
 }
 
 #Preview("Dungeon") {
-    DungeonView()
+    DungeonLandingView()
 }

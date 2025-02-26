@@ -2,8 +2,6 @@
 //  Task.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/19/25.
-//
 
 import Foundation
 
@@ -19,7 +17,7 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
     // Should summarize the task assigned
     private(set) var name: String
     
-    //Can contain a more detailed summmary of the task's objectives. Can be empty, but not nil
+    //Can contain a more detailed summmary of the task's objectives. Can be empty, but not nil. User submission should be optional
     private(set) var details: String = ""
     
     // The number of Inspiration Points that the task can reward
@@ -34,7 +32,7 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
     
     
     // 5-arg constructor which allows the expiration time of the task to be directly provided
-    init(name: String, details: String, inspirationPoints: Int, expirationTime: Date) throws(TaskCreationError) {
+    init(name: String, details: String = "", inspirationPoints: Int, expirationTime: Date) throws(TaskCreationError) {
         // Error checking
         // Ensure the IP suggested in within the valid range
         if inspirationPoints == 0 {

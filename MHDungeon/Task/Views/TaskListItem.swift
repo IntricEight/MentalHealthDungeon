@@ -2,8 +2,6 @@
 //  TaskItem.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/21/25.
-//
 
 import SwiftUI
 
@@ -186,7 +184,7 @@ struct TaskListItem: View {
 
 #Preview("Task Item") {
     // Uses the number of minutes in a time span: Days, Hours, and Minutes
-    var minutesCalculated: Double = (1440.0 * 3) + (60.0 * 7) + (1.0 * 9)
+    let minutesCalculated: Double = (1440.0 * 3) + (60.0 * 7) + (1.0 * 9)
     
     TaskListItem(name: "Example Task goes here. Can you not see it? Clearly, something else is going on here", inspirationPoints: 10, expirationTime: Date.now.addingTimeInterval( minutesCalculated * 60))
 }

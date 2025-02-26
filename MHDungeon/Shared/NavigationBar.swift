@@ -2,8 +2,6 @@
 //  NavigationBar.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/12/25.
-//
 
 import SwiftUI
 
@@ -72,6 +70,7 @@ struct NavigationBar: View {
         }.frame(height: 140)
     }
     
+    // TODO: Convert this from a func into a View, now that I better understand the relationships
     // A function to create a navigation button on the NavigationBar
     func navButtonRectangle(icon: String, destination dest: AppPage, visible: Binding<Bool>?, consoleMessage message: String) -> some View {
         
