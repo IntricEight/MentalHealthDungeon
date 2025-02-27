@@ -10,8 +10,6 @@ struct ProfileView: View {
     @State private var progressBarVisible: Bool = false     //Control the visibility of the progress stats bar
     @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
-    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
-    
     var body: some View {
         // Circle controls
         let circleScreenPercentage = 0.6
@@ -102,21 +100,8 @@ struct ProfileView: View {
                     
                     
                     // Character Creation section
-                    // TODO: Create a character system (This feature is unlikely to be implemented during this project)
-                    Button {
-                        print("Character creation selected")
-                    } label: {
-                        RoundedRectangle(cornerRadius: buttonRadius)
-                            .foregroundColor(Color.green)
-                            .overlay {
-                                Text("WIP")
-                                    .font(.custom("", size: 100))
-                                    .foregroundColor(Color.black)
-                            }
-                        
-                        //Apple Chancery
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    CharacterPreview()
+                        .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     
                     
                     Spacer(minLength: 20)
@@ -127,15 +112,6 @@ struct ProfileView: View {
                         Spacer()
                         
                         // Settings button
-                        // TODO: Implement navigation to a setting page
-//                        Button {
-//                            print("Settings selected")
-//                        } label: {
-//                            RoundedRectangle(cornerRadius: buttonRadius)
-//                                .frame(width: 200, height: 30, alignment: .top)
-//                                .foregroundColor(Color.orange)
-//                        }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
-                        
                         NavigationLink(destination: SettingsView()) {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(width: 200, height: 30, alignment: .top)
@@ -146,26 +122,8 @@ struct ProfileView: View {
                         Spacer(minLength: 10)
                         
                         // Navigation tab button
-                        Button {
-                            print("Navigation selected")
-                            
-                            // Bring up the Navigation Bar when touched
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                navBarVisible = true
-                            }
-                            
-                        } label: {
-                            Rectangle()
-                                .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                                .foregroundColor(Color.blue)
-                                .clipShape(
-                                    .rect(
-                                        topLeadingRadius: tabRadius,
-                                        topTrailingRadius: tabRadius
-                                    )
-                                )
-                                .ignoresSafeArea()
-                        }.padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
+                        NavBarTab(navBarVisible: $navBarVisible)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
                     }
                 }.zIndex(0)
                 
@@ -180,7 +138,7 @@ struct ProfileView: View {
                     
                     // Show or hide the navigation bar
                     if navBarVisible {
-                        NavigationBar(currentView: currentView, visible: $navBarVisible)
+                        NavigationBar(visible: $navBarVisible)
                             .transition(.move(edge: .bottom))
                             .frame(alignment: .bottom)
                     }

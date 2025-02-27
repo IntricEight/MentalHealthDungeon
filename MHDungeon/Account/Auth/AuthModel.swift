@@ -129,7 +129,7 @@ class AuthModel: ObservableObject {
         // Store the snapshot of the user's data in the local account
         self.currentAccount = try? snapshot.data(as: Account.self)
         
-        print("Retrieved data of user \(self.currentAccount)")
+//        print("Retrieved data of user \(self.currentAccount)")
     }
      
 }

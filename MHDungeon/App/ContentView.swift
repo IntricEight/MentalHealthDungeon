@@ -8,23 +8,13 @@
 
 import SwiftUI
 
-//Helps error-assistance with page navigation
-public enum AppPage {
-    case signIn
-    case dungeon
-    case profile
-    case taskList
-}
-
 // Global screen traits
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
 
 struct ContentView: View {
     @EnvironmentObject var authModel: AuthModel
-    
-    // Tracks the current primary view to display (Default is useful for testing)
-    @State private var currentView: AppPage = .dungeon
+    @Environment(AppState.self) var appState: AppState
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()
@@ -33,13 +23,13 @@ struct ContentView: View {
                     // If the user is logged in, allow them to navigate around the app
                     if authModel.userSession != nil && authModel.currentAccount != nil {
                         //Select the view to display
-                        switch currentView {
+                        switch appState.currentView {
                             case AppPage.dungeon:
-                                DungeonView(currentView: $currentView)
+                                DungeonView()
                             case AppPage.profile:
-                                ProfileView(currentView: $currentView)
+                                ProfileView()
                             case AppPage.taskList:
-                                TaskListView(currentView: $currentView)
+                                TaskListView()
                             default:
                                 SettingsView()    //Fallback in case something about the auth goes wrong
                         }
@@ -52,7 +42,7 @@ struct ContentView: View {
     }
 }
 
-#Preview("App Host") {
+#Preview("Views Host") {
     ContentView()
 }
 

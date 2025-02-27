@@ -10,8 +10,6 @@ import SwiftUI
 struct TaskListView: View {
     @EnvironmentObject var authModel: AuthModel
     
-    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
-    
     // Control visiblity of various features
     @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
     
@@ -85,25 +83,8 @@ struct TaskListView: View {
                     Spacer()
                     
                     // Navigation tab button
-                    Button {
-                        print("Navigation selected")
-                        
-                        // Bring up the Navigation Bar when touched
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            navBarVisible = true
-                        }
-                    } label: {
-                        Rectangle()
-                            .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                            .foregroundColor(Color.blue)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: tabRadius,
-                                    topTrailingRadius: tabRadius
-                                )
-                            )
-                            .ignoresSafeArea()
-                    }.padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 32))
+                    NavBarTab(navBarVisible: $navBarVisible)
+                        .padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 32))
                 }
             }.zIndex(1)
                 .onAppear {
@@ -118,7 +99,7 @@ struct TaskListView: View {
                 
                 // Show or hide the navigation bar
                 if navBarVisible {
-                    NavigationBar(currentView: currentView, visible: $navBarVisible)
+                    NavigationBar(visible: $navBarVisible)
                         .transition(.move(edge: .bottom))
                         .frame(alignment: .bottom)
                 }

@@ -31,12 +31,14 @@ struct MHDungeonApp: App {
     // Register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject var authModel = AuthModel()
+    @StateObject private var authModel = AuthModel()
+    @State private var appState: AppState = AppState()
     
     var body: some Scene {
         WindowGroup {
             ContentView()   //The host page of the app navigation
                 .environmentObject(authModel)
+                .environment(appState)
             
             // TODO: Make the primary page navigation enum into an environment variable
         }
