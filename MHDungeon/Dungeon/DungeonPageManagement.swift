@@ -8,7 +8,6 @@ import Foundation
 public enum DungeonPage {
     case landing
     case begin
-    case decision
 }
 
 @Observable

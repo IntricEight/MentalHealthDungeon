@@ -70,8 +70,8 @@ struct ProfileView: View {
                     // Connections section
                     HStack {
                         // Messages button
-                        // TODO: Implement Messaging system through database.
-                        // TODO: Implement navigation to Message view
+                        // TODO: Implement Messaging system through database
+                        // TODO: Implement navigation to Message view through NavigationLink
                         Button {
                             print("Messages menu selected")
                         } label: {
@@ -80,11 +80,13 @@ struct ProfileView: View {
                                 .foregroundColor(Color.brown)
                         }
                         
+                        
                         Spacer(minLength: 30)
+                        
                         
                         // Friends button
                         // TODO: Implement friendship system through database
-                        // TODO: Implement navigation to Friends page
+                        // TODO: Implement navigation to Friends page through NavigationLink
                         Button {
                             print("Friends menu selected")
                         } label: {

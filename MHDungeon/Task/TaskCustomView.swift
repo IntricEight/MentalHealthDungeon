@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct TaskCreationView: View {
+struct TaskCustomView: View {
     var body: some View {
         // TODO: Has various text and selection inputs to allow the user to create a task from several options
         
@@ -14,5 +14,5 @@ struct TaskCreationView: View {
 }
 
 #Preview {
-    TaskCreationView()
+    TaskCustomView()
 }

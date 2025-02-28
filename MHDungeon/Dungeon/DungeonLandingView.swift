@@ -36,11 +36,8 @@ struct DungeonLandingView: View {
                     Spacer()
                     
                     // Profile image
-                    // TODO: Implement profile picture display. Picture taken from selection on Profile view
-                    Circle()
-                        .frame(width: 60, height: 60, alignment: .trailing)
-                        .foregroundColor(Color.yellow)
-
+                    SmallProfileImage()
+                        .frame(alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
                 

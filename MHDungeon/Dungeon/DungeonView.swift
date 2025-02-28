@@ -3,6 +3,8 @@
 //  MHDungeon
 //
 
+// TODO: Why did I decide to use a management and cases instead of NavStack here? I don't remember, but hopefully I do before I begin working on this in earnest. Otherwise, go back to using NavStack you dolt
+
 import SwiftUI
 
 struct DungeonView: View {
@@ -18,10 +20,6 @@ struct DungeonView: View {
                         .environment(dungeonState)
                 case .begin:
                     // TODO: Create a page for starting a dungeon once you have enough IP
-                    DungeonLandingView()
-                        .environment(dungeonState)
-                case .decision:
-                    // TODO: Create a page for choosing between the unlocked dungeon levels
                     DungeonLandingView()
                         .environment(dungeonState)
             }
