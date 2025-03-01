@@ -1,5 +1,5 @@
 //
-//  TaskListView.swift
+//  TaskView.swift
 //  MHDungeon
 //
 
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskListView: View {
+struct TaskView: View {
     // Stores the list of the user's current tasks
     @EnvironmentObject var authModel: AuthModel
     
@@ -29,7 +29,7 @@ struct TaskListView: View {
     // Tab controls
     let tabRadius: CGFloat = 30
     
-        
+    
     
     
     var body: some View {
@@ -114,19 +114,13 @@ struct TaskListView: View {
                 Spacer()
                 
                 
-                // TODO: Figure out why the white background won't go away, and make it go away
-                // TODO: Delete tasks from the authModel's account when they expire. Might need to invoke authModel function to remove task while we're at it
-                // List of active tasks
-                List(authModel.currentAccount?.taskList ?? []) { task in
-                    Button {
-                        print(task)
-                    } label: {
-                        TaskListItem(task)
-                    }
+                // Show the user's current tasks
+                if authModel.currentAccount != nil {
+                    TaskListView(account: authModel.currentAccount!)
+                } else {
+                    // The user should not be able to see this
+                    Text("Account failed to create. You should not be able to see this. Please report this with any helpful information.")
                 }
-                .scrollContentBackground(.hidden)
-                .listStyle(.plain)
-                
                 
                 // Navigation section
                 HStack {
@@ -161,5 +155,32 @@ struct TaskListView: View {
 }
 
 #Preview("Task List") {
-    TaskListView()
+    TaskView()
+}
+
+struct TaskListView: View {
+    @ObservedObject var account: Account
+    
+    // TODO: Figure out why the white background won't go away, and make it go away
+    // TODO: Figure out how to get the animation when removing a task back to appear on the list
+    
+    var body: some View {
+        if account.taskList.isEmpty {
+            // Show that no tasks exist, and direct them to the task creation button
+            // TODO: Style this and include instructions on how to create a task
+            Text("No tasks found in account")
+                .font(.title3)
+        } else {
+            // List of active tasks
+            List(account.taskList) { task in
+                Button {
+                    print(task)
+                } label: {
+                    TaskListItem(task)
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .listStyle(.plain)
+        }
+    }
 }

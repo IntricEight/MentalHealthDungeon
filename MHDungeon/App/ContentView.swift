@@ -29,7 +29,7 @@ struct ContentView: View {
                             case AppPage.profile:
                                 ProfileView()
                             case AppPage.taskList:
-                                TaskListView()
+                                TaskView()
                             default:
                                 SettingsView()    //Fallback in case something about the auth goes wrong
                         }
