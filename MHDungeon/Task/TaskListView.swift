@@ -115,8 +115,9 @@ struct TaskListView: View {
                 
                 
                 // TODO: Figure out why the white background won't go away, and make it go away
+                // TODO: Delete tasks from the authModel's account when they expire. Might need to invoke authModel function to remove task while we're at it
                 // List of active tasks
-                List(tasks) { task in
+                List(authModel.currentAccount?.taskList ?? []) { task in
                     Button {
                         print(task)
                     } label: {
@@ -125,7 +126,6 @@ struct TaskListView: View {
                 }
                 .scrollContentBackground(.hidden)
                 .listStyle(.plain)
-                
                 
                 
                 // Navigation section

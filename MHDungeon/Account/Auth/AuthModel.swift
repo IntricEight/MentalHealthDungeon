@@ -131,5 +131,39 @@ class AuthModel: ObservableObject {
         
 //        print("Retrieved data of user \(self.currentAccount)")
     }
+    
+    func deleteTask(id taskUID: UUID?) {
+        print("Task UUID: \(String(describing: taskUID)).")
+        
+        guard let account = currentAccount else {
+            print("Stored account value is nil")
+            return
+        }
+        
+        // Implement removal of specified task from user's account
+        guard let index = account.taskList.firstIndex(where: {
+            $0.id == taskUID
+        }) else {
+            print("No Task with UID \(String(describing: taskUID)) found")
+            return
+        }
+        
+        // Retrieve the user's UID from the local auth state
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        // Remove the task from the user's account
+        account.taskList.remove(at: index)
+        
+        // Convert the taskList into a dictionary to allow it to be used in updating the database record
+        let updatedTaskList = account.taskList.map{ $0.toDictionary() }
+    
+        // Remove the task from the database
+        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList ])
+        
+        
+        print("Task at index \(index) with UID \(String(describing: taskUID)) removed from database. Please confirm")
+    }
      
 }

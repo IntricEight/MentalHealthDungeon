@@ -6,6 +6,9 @@
 import SwiftUI
 
 struct TaskListItem: View {
+    // Stores the list of the user's current tasks
+    @EnvironmentObject var authModel: AuthModel
+    
     // The task on display
     var task: Task?
     
@@ -15,6 +18,7 @@ struct TaskListItem: View {
     let expirationTime: Date
 
     @State private var timeRemaining: String = "Expires in <LOADING>"
+    
     
     // Controls how frequently the countdown updates
     let timeInterval: Double = 40
@@ -52,7 +56,8 @@ struct TaskListItem: View {
                             print("\(name) checked!")
                             
                             // TODO: Remove after testing
-                            updateTimeRemaining()
+                            authModel.objectWillChange.send()
+                            authModel.deleteTask(id: task?.id)
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.black)

@@ -4,22 +4,15 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
-class Account: Identifiable, Codable {
-    // TODO: Look into creating a singleton on Swift. That might be a good way to manage this, unless I wanna just use some universl variables that track login status
-    // If not a singleton, then a static class might be the preferred method - Research @GlobalActor
-    // Using Firebase to store the accounts and manage login process?
-    // Another idea is to use the @EnvironmentObject and set the account as an environmental variable?
-    
-    
-    
-    // The current content within Account is in place from an authentication tutorial. Refactor to meet this app's requirements after auth is confirmed to work effectively
+class Account: Identifiable, Codable, ObservableObject {
     let id: String
-    let displayName: String
+    @Published var displayName: String
     let email: String
     
-    // TODO: Implement the task list array and confirm that tasks also save in Firebase
-    var taskList: [Task] = []
+    // Stores the user's tasks
+    @Published var taskList: [Task] = []
     
     init(id: String, displayName name: String, email: String) {
         self.id = id
@@ -27,10 +20,18 @@ class Account: Identifiable, Codable {
         self.email = email
         
         taskList = createSampleTasks()
-
     }
     
-    // Function to create a list to test the visuals on.
+    // TODO: Saved in case I figure out how to get Firestore to ignore certain attributes
+//    var description: String {       // Allows me to control what gets printed to the Console
+//        return "Account: \(displayName) : \(email). Contains \(taskList.count) tasks."
+//    }
+    
+    
+    
+    
+    
+    // Function to create a list of tasks to test the visuals on.
     // TODO: REMOVE after getting proper task creation working
     func createSampleTasks () -> [Task] {
         var tasks: [Task] = []
@@ -66,5 +67,36 @@ class Account: Identifiable, Codable {
         
         return tasks
     }
+    
+    
+    
+    // Custom CodingKeys to match property names during en/decoding
+    enum CodingKeys: String, CodingKey {
+        case id
+        case displayName
+        case email
+        case taskList
+    }
+    
+    // Custom encoding function to manage the @Published attributes
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: CodingKeys.id)
+        try container.encode(displayName, forKey: CodingKeys.displayName)
+        try container.encode(email, forKey: CodingKeys.email)
+        try container.encode(taskList, forKey: CodingKeys.taskList)
+    }
 
+    // Custom decoding init to manage @Published attributes
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(String.self, forKey: CodingKeys.id)
+        displayName = try container.decode(String.self, forKey: CodingKeys.displayName)
+        email = try container.decode(String.self, forKey: CodingKeys.email)
+        taskList = try container.decode([Task].self, forKey: CodingKeys.taskList)
+    }
+    
+    
 }

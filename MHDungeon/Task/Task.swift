@@ -11,23 +11,24 @@ enum TaskCreationError: Error {
     case InvalidExpiration
 }
 
-struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
+struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
+    // Store a unique ID of the Task instance
     var id: UUID = UUID()
     
     // Should summarize the task assigned
-    private(set) var name: String
+    let name: String
     
     //Can contain a more detailed summmary of the task's objectives. Can be empty, but not nil. User submission should be optional
-    private(set) var details: String = ""
+    let details: String
     
     // The number of Inspiration Points that the task can reward
-    private(set) var points: Int
+    let points: Int
     
     //Tracks the time of the task's creation
-    private(set) var creationTime: Date
+    let creationTime: Date
     
     //Tracks the time when the task expires
-    private(set) var expirationTime: Date
+    let expirationTime: Date
     
     
     
@@ -94,6 +95,7 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
         return expirationTime.timeIntervalSinceNow
     }
     
+    // Mark the task as complete
     func CompleteTask() -> Bool {
         // TODO: Decide if this should even be within the Task struct, or in the account.
         // TODO: Remove the Task from the database, and set a timeout on it if it is premade
@@ -101,8 +103,17 @@ struct Task : CustomStringConvertible, Hashable, Codable, Identifiable {
         return true
     }
     
-    
-    
+    // Convert the task into a dictionary to assist with updating the database
+    func toDictionary() -> [String: Any] {
+        return [
+            "id" : id.uuidString,
+            "name" : name,
+            "details" : details,
+            "points" : points,
+            "creationTime" : creationTime,
+            "expirationTime" : expirationTime
+        ]
+    }
     
     
     
