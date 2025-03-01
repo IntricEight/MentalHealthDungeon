@@ -135,6 +135,7 @@ class AuthModel: ObservableObject {
     func deleteTask(id taskUID: UUID?) {
         print("Task UUID: \(String(describing: taskUID)).")
         
+        // Check that an accounr is currently registered. Passed by reference, so changes to account affect currentAccount
         guard let account = currentAccount else {
             print("Stored account value is nil")
             return
@@ -162,8 +163,6 @@ class AuthModel: ObservableObject {
         // Remove the task from the database
         Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList ])
         
-        
-        print("Task at index \(index) with UID \(String(describing: taskUID)) removed from database. Please confirm")
+//        print("Task at index \(index) with UID \(String(describing: taskUID)) removed from database. Please confirm in Firebase")
     }
-     
 }

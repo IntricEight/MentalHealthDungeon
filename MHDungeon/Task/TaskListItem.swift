@@ -56,8 +56,10 @@ struct TaskListItem: View {
                             print("\(name) checked!")
                             
                             // TODO: Remove after testing
-                            authModel.objectWillChange.send()
+                            authModel.objectWillChange.send()   // TODO: Forces an update but kills the animation. Find a way to get the program to recognize the update naturally
                             authModel.deleteTask(id: task?.id)
+                            
+                            
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.black)
