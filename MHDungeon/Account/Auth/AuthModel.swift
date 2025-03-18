@@ -132,8 +132,39 @@ class AuthModel: ObservableObject {
 //        print("Retrieved data of user \(self.currentAccount)")
     }
     
+    // Add a task to the user's locally stored account and the Firebase Firestore
+    // TODO: Bring the task creation into another function? Not sure if that would be good practice or not
+    func addTask(name: String, details: String, points: Int, hours: Double) throws {
+        // Attempt to create the new task and get its ID
+        var newTask: Task = try Task(name: name, details: details, inspirationPoints: points, hoursToExpiration: hours)
+        let taskUID: UUID = newTask.id
+        
+        print("Adding Task UUID: \(taskUID)).")
+        
+        // Check that an accounr is currently registered. Passed by reference, so changes to account affect currentAccount
+        guard let account = currentAccount else {
+            print("Stored account value is nil")
+            return
+        }
+        
+        // Add a task to the user's account
+        account.taskList.append(newTask)
+        
+        // Retrieve the user's UID from the local auth state
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        // Convert the taskList into a dictionary to allow it to be used in updating the database record
+        let updatedTaskList = account.taskList.map{ $0.toDictionary() }
+    
+        // Add the task to the database
+        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList ])
+    }
+    
+    // Remove a task from the user's locally stored account and the Firebase Firestore
     func deleteTask(id taskUID: UUID?) {
-        print("Task UUID: \(String(describing: taskUID)).")
+        print("Removing Task UUID: \(String(describing: taskUID)).")
         
         // Check that an accounr is currently registered. Passed by reference, so changes to account affect currentAccount
         guard let account = currentAccount else {

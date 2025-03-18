@@ -10,8 +10,9 @@ struct SettingsView: View {
     
     var body: some View {
         
-        // TODO: May have to change displayName from 'let' to 'var' later
         // Interesting note from tutorial, I can't actually use the preview for this file because of the EnvObj. Not sure why, and the actual running process works fine, so I won't pursue it for now. But I should look into this later.
+        
+        // TODO: May have to change displayName from 'let' to 'var' later
 //        let displayName: String = authModel.currentAccount?.displayName ?? "<NAME ERROR>"
 //        let email: String = authModel.currentAccount?.email ?? "<EMAIL ERROR>"
         

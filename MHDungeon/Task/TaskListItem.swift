@@ -43,6 +43,7 @@ struct TaskListItem: View {
     var body: some View {
         
         // Task display bar with buttons
+        // TODO: Figure out why the checkmark button code executes wherever you click on the task
         RoundedRectangle(cornerRadius: 20)
             .foregroundColor(Color.green)
             .frame(width: screenWidth * 0.9, height: 140, alignment: .bottom)

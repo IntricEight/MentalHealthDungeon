@@ -14,12 +14,16 @@ class Account: Identifiable, Codable, ObservableObject {
     // Stores the user's tasks
     @Published var taskList: [Task] = []
     
+    // Stores the account's current Inspiration Point score
+    @Published var inspirationPoints: Int
+    
     init(id: String, displayName name: String, email: String) {
         self.id = id
         self.displayName = name
         self.email = email
         
-        taskList = createSampleTasks()
+        self.inspirationPoints = 0
+        self.taskList = createSampleTasks()
     }
     
     // TODO: Saved in case I figure out how to get Firestore to ignore certain attributes
@@ -75,6 +79,7 @@ class Account: Identifiable, Codable, ObservableObject {
         case id
         case displayName
         case email
+        case inspirationPoints
         case taskList
     }
     
@@ -85,6 +90,7 @@ class Account: Identifiable, Codable, ObservableObject {
         try container.encode(id, forKey: CodingKeys.id)
         try container.encode(displayName, forKey: CodingKeys.displayName)
         try container.encode(email, forKey: CodingKeys.email)
+        try container.encode(inspirationPoints, forKey: CodingKeys.inspirationPoints)
         try container.encode(taskList, forKey: CodingKeys.taskList)
     }
 
@@ -95,6 +101,7 @@ class Account: Identifiable, Codable, ObservableObject {
         id = try container.decode(String.self, forKey: CodingKeys.id)
         displayName = try container.decode(String.self, forKey: CodingKeys.displayName)
         email = try container.decode(String.self, forKey: CodingKeys.email)
+        inspirationPoints = try container.decode(Int.self, forKey: CodingKeys.inspirationPoints)
         taskList = try container.decode([Task].self, forKey: CodingKeys.taskList)
     }
     

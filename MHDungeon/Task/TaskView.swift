@@ -37,120 +37,122 @@ struct TaskView: View {
         //  OR
         // Use a NavigationStack with NavigationLink
         
-        // One layer for the main app stuff, and one for the overlay tab feature
-        ZStack {
-            // Main screen view
-            VStack {
-                // Account details section
-                HStack {
-                    
-                    Spacer(minLength: 15)
-                    
-                    
-                    // Task Creation Button
-                    // TODO: After I get the sheet working, see if I can break this button into its own View
-                    if !isExpanded {
-                        Button {
-                            print("Task Creation selected")
+        NavigationStack {
+            // One layer for the main app stuff, and one for the overlay tab feature
+            ZStack {
+                // Main screen view
+                VStack {
+                    // Account details section
+                    HStack {
+                        
+                        Spacer(minLength: 15)
+                        
+                        
+                        // Task Creation Button
+                        // TODO: After I get the sheet working, see if I can break this button into its own View
+                        if !isExpanded {
+                            Button {
+                                print("Task Creation selected")
+                                
+                                // Show the two buttons that allow users to create new tasks
+                                isExpanded.toggle()
+                            } label: {
+                                RoundedRectangle(cornerRadius: buttonRadius)
+                                    .frame(width: screenWidth * 0.6, height: buttonHeight)
+                                    .foregroundColor(Color.red)
+                                    .overlay {
+                                        Text("Add Task")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.semibold)
+                                            .font(.title)
+                                            .frame(alignment: .center)
+                                    }
+                            }
+                        } else {
+                            // Custom task creation button
+                            NavigationLink(destination: TaskCustomView()) {
+                                RoundedRectangle(cornerRadius: buttonRadius)
+                                    .foregroundColor(Color.blue)
+                                    .frame(height: buttonHeight)
+                                    .overlay(
+                                        Text("Custom")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.semibold)
+                                            .font(.title)
+                                    )
+                            }.navigationBarBackButtonHidden(true)
                             
-                            // Show the two buttons that allow users to create new tasks
-                            isExpanded.toggle()
-                        } label: {
-                            RoundedRectangle(cornerRadius: buttonRadius)
-                                .frame(width: screenWidth * 0.6, height: buttonHeight)
-                                .foregroundColor(Color.red)
-                                .overlay {
-                                    Text("Add Task")
-                                        .foregroundColor(.white)
-                                        .fontWeight(.semibold)
-                                        .font(.title)
-                                        .frame(alignment: .center)
-                                }
-                        }
-                    } else {
-                        Button {
-                            print("Custom selected")
-                        } label: {
-                            RoundedRectangle(cornerRadius: buttonRadius)
-                                .foregroundColor(Color.blue)
-                                .frame(height: buttonHeight)
-                                .overlay(
-                                    Text("Custom")
-                                        .foregroundColor(.white)
-                                        .fontWeight(.semibold)
-                                        .font(.title)
-                                )
+                            Spacer(minLength: 10)
+                            
+                            // Preset task creation button
+                            NavigationLink(destination: TaskPresetView()) {
+                                RoundedRectangle(cornerRadius: buttonRadius)
+                                    .foregroundColor(Color.green)
+                                    .frame(height: buttonHeight)
+                                    .overlay(
+                                        Text("Preset")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.semibold)
+                                            .font(.title)
+                                    )
+                            }.navigationBarBackButtonHidden(true)
                         }
                         
-                        Spacer(minLength: 10)
-
-                        Button {
-                            print("Preset selected")
-                        } label: {
-                            RoundedRectangle(cornerRadius: buttonRadius)
-                                .foregroundColor(Color.green)
-                                .frame(height: buttonHeight)
-                                .overlay(
-                                    Text("Preset")
-                                        .foregroundColor(.white)
-                                        .fontWeight(.semibold)
-                                        .font(.title)
-                                )
-                        }
+                        Spacer(minLength: 15)
+                        
+                        // Profile image
+                        SmallProfileImage()
+                            .frame(alignment: .trailing)
+                        
                     }
-                        
-                    
-                    Spacer(minLength: 15)
+                    .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
                     
                     
-                    // Profile image
-                    SmallProfileImage()
-                        .frame(alignment: .trailing)
-
-                }
-                .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
-                
-                
-                Spacer()
-                
-                
-                // Show the user's current tasks
-                if authModel.currentAccount != nil {
-                    TaskListView(account: authModel.currentAccount!)
-                } else {
-                    // The user should not be able to see this
-                    Text("Account failed to create. You should not be able to see this. Please report this with any helpful information.")
-                }
-                
-                // Navigation section
-                HStack {
                     Spacer()
                     
-                    // Navigation tab button
-                    NavBarTab(navBarVisible: $navBarVisible)
-                        .padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 32))
-                }
-            }.zIndex(1)
-                .onAppear {
-                    tasks = authModel.currentAccount?.taskList ?? []
-                }
-            
-            
-            // Overlayed tab features
-            VStack {
+                    
+                    // Show the user's current tasks
+                    if authModel.currentAccount != nil {
+                        TaskListView(account: authModel.currentAccount!)
+                    } else {
+                        // The user should not be able to see this
+                        Text("Account failed to create. You should not be able to see this. Please report this with any helpful information.")
+                            .background(Color.white)
+                            .foregroundColor(Color.red)
+                            .fontWeight(.bold)
+                    }
+                    
+                    // Navigation section
+                    HStack {
+                        Spacer()
+                        
+                        // Navigation tab button
+                        NavBarTab(navBarVisible: $navBarVisible)
+                            .padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 32))
+                    }
+                }.zIndex(1)
+                    .onAppear {
+                        tasks = authModel.currentAccount?.taskList ?? []
+                    }
                 
-                Spacer()
                 
-                // Show or hide the navigation bar
-                if navBarVisible {
-                    NavigationBar(visible: $navBarVisible)
-                        .transition(.move(edge: .bottom))
-                        .frame(alignment: .bottom)
-                }
-            }.zIndex(10)
+                // Overlayed tab features
+                VStack {
+                    
+                    Spacer()
+                    
+                    // Show or hide the navigation bar
+                    if navBarVisible {
+                        NavigationBar(visible: $navBarVisible)
+                            .transition(.move(edge: .bottom))
+                            .frame(alignment: .bottom)
+                    }
+                }.zIndex(10)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .ignoresSafeArea()
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -173,11 +175,7 @@ struct TaskListView: View {
         } else {
             // List of active tasks
             List(account.taskList) { task in
-                Button {
-                    print(task)
-                } label: {
-                    TaskListItem(task)
-                }
+                TaskListItem(task)
             }
             .scrollContentBackground(.hidden)
             .listStyle(.plain)
