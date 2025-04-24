@@ -5,11 +5,16 @@
 
 import Foundation
 
+/// Errors that can be caused during the creation of a `Task`.
 enum TaskCreationError: Error, LocalizedError {
+    /// Thrown when a `Task` is made which rewards zero `Inspiration Points`.
     case ZeroPoints
+    /// Thrown when a `Task` is made which rewards zero `Inspiration Points`.
     case NegativePoints
+    /// Thrown when a `Task` is made who's expiration time is in the past.
     case InvalidExpiration
     
+    /// The useful description of each error used by `LocalizedError`.
     var errorDescription: String? {
         switch self {
             case .ZeroPoints:
@@ -22,29 +27,26 @@ enum TaskCreationError: Error, LocalizedError {
     }
 }
 
+/// A model which manages the identity of an objective that the user can complete within an established time frame to earn `Inspiration Points`.
 struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
-    // Store a unique ID of the Task instance
+    /// Store a unique ID of the `Task` instance.
     var id: UUID = UUID()
-    
-    // Should summarize the task assigned
+    /// The name of the `Task`, which should summarize the objective in a few words.
     let name: String
-    
-    //Can contain a more detailed summmary of the task's objectives. Can be empty, but not nil. User submission should be optional
+    /// Contains a (more) detailed summmary of the `Task`'s objectives than the name.
+    ///
+    /// Can be empty, but not nil. User submission should be optional.
     let details: String
-    
-    // The number of Inspiration Points that the task can reward
     // TODO: Convert into an unsigned int
+    /// The number of `Inspiration Points` that the `Task` will reward.
     let points: Int
-    
-    //Tracks the time of the task's creation
+    /// Tracks the time when the `Task` was created.
     let creationTime: Date
-    
-    //Tracks the time when the task expires
+    /// Tracks the time when the `Task` expires.
     let expirationTime: Date
     
-    
-    
-    // 5-arg constructor which allows the expiration time of the task to be directly provided
+    // 5-arg constructor which allows the expiration time of the task to be directly provided.
+    /// Initialize a `Task` with the expiration time directly provided.
     init(name: String, details: String = "", inspirationPoints ip: Int, expirationTime: Date) throws(TaskCreationError) {
         // Error checking
         // Ensure the IP suggested in within the valid range
@@ -70,7 +72,8 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         self.expirationTime = expirationTime
     }
     
-    // 5-arg constructor which allows the number of hours the task will be active to be provided
+    // 5-arg constructor which allows the number of hours the task will be active to be provided.
+    /// Initialize a `Task` with the number of hours until expiration provided.
     init(name: String, details: String, inspirationPoints ip: Int, hoursToExpiration expiresIn: Double) throws {
         // Error checking
         // Ensure the IP suggested in within the valid range
@@ -103,17 +106,17 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     
     
     
-    // Contains the error checking
+    /// Error checking that should be performed during initialization.
     func InitErrorChecking(points: Int) -> Void {
         // TODO: Either figure out how to call functions in init before setting all variables, or trash this function
     }
     
-    // Get the remaining time before the task expires
+    /// Get the remaining time before the `Task` expires.
     func GetRemainingTime() -> TimeInterval {
         return expirationTime.timeIntervalSinceNow
     }
     
-    // Mark the task as complete
+    /// Mark the `Task` as complete.
     func CompleteTask() -> Bool {
         // TODO: Decide if this should even be within the Task struct, or in the account.
         // TODO: Remove the Task from the database, and set a timeout on it if it is premade
@@ -121,7 +124,7 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         return true
     }
     
-    // Convert the task into a dictionary to assist with updating the database
+    /// Convert the `Task` into a `Dictionary` to assist with updating the database.
     func toDictionary() -> [String: Any] {
         return [
             "id" : id.uuidString,
@@ -137,6 +140,7 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     
     
     // TODO: Make this more useful after initial testing is complete
+    /// The description of the `Task`, to be used when printing to the console or stored within a `String`.
     var description: String {       // Allows me to control what gets printed to the Console
         return "Task: \(name). Expires at \(expirationTime)"
     }

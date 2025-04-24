@@ -5,18 +5,27 @@
 
 import SwiftUI
 
+/// A view which guides the user through creating a custom `Task` before adding it to their `Account`.
 struct TaskCustomView: View {
     @Environment(\.dismiss) var dismiss
     
-    // Stores the list of the user's current tasks
+    // Contains the account which stores the list of the user's current tasks
     @EnvironmentObject var authModel: AuthModel
     
+    /// The user-provided name of the `Task`.
     @State private var name: String = ""
+    /// The provided details of the `Task`.
     @State private var details: String = ""
+    /// The number of `Inspiration Points` that the `Task` rewards upon completion,
     @State private var inspirationPoints: String = ""
+    /// The number of hours until the `Task` expires after creation.
     @State private var hoursToExpiration: String = ""
     
+    /// A storage and display variable for any errors that the user encounters during the `Task` creation process.
     @State private var errorMessage: String? = nil
+    /// The `Task` that the user has created.
+    ///
+    /// This will be stored within the user's list of `Task`s inside `Account`.
     @State private var createdTask: Task? = nil
     
     // Communication (and settings) button controls

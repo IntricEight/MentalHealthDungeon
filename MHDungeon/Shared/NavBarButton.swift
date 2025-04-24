@@ -5,20 +5,22 @@
 
 import SwiftUI
 
+/// A button which will direct the user into the selected major section of the application.
 struct NavBarButton: View {
     @Environment(AppState.self) var appState: AppState
     
-    @Binding var visible: Bool
-    
+    /// The name of the `SF Symbols` icon that adorns the button.
     let icon: String
+    /// The section destination that the button will direct the user to.
     var dest: AppPage
+    /// A message to be printed to the console when the button is pressed.
     let message: String
     
-    init(icon: String, destination: AppPage, visible: Binding<Bool>, consoleMessage: String) {
+    /// Instantiates the button with the icon and destination, alongside a message to be printed to the console during navigation.
+    init(icon: String, destination: AppPage, consoleMessage message: String = "") {
         self.icon = icon
         self.dest = destination
-        self._visible = visible
-        self.message = consoleMessage
+        self.message = message
     }
     
     var body: some View {
@@ -26,11 +28,6 @@ struct NavBarButton: View {
         Button {
             //Print the destination notification message to the console
             print(message)
-            
-            // Signal to close the navigation bar without an animation
-            withTransaction(Transaction(animation: nil)) {
-                visible = false
-            }
             
             // Navigate to the destination view
             appState.currentView = dest
@@ -54,7 +51,7 @@ struct NavBarButton: View {
 }
 
 #Preview {
-    @Previewable @State var visible = true
+    /// The destination of the button in the Preview
     var p_appState: AppState = AppState(.profile)
     
     NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, visible: $visible, consoleMessage: "Preview Button selected")

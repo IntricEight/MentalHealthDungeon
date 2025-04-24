@@ -5,10 +5,20 @@
 
 import SwiftUI
 
+/// A view page that provides the user an interface menu that they can use to interact with various account-related systems.
+///
+/// Acts as a central page for account-related actions. These include:
+/// - The profile picture and account settings of the user's account.
+/// - A tab of dungeon progress details.
+/// - The messaging system.
+/// - The friendship system.
+/// - Access to and a preview of the user's character cosmetics.
 struct ProfileView: View {
     // Control visiblity of various features
-    @State private var progressBarVisible: Bool = false     //Control the visibility of the progress stats bar
-    @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
+    /// Controls visibility of dungeon progress statistics tab that overlays profile image.
+    @State private var progressTabVisible: Bool = false
+    /// Controls visibility of app navigation bar.
+    @State private var navBarVisible: Bool = false
     
     var body: some View {
         // Circle controls
@@ -31,7 +41,7 @@ struct ProfileView: View {
                     // User progress info section
                     HStack {
                         // Profile Image button
-                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create premade images to choose from
+                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create a list of premade images to choose from
                         Button {
                             print("Profile Image selected")
                         } label: {
@@ -102,6 +112,7 @@ struct ProfileView: View {
                     
                     
                     // Character Creation section
+                    // TODO: Wrap in a button to navigate to Cosmetics page
                     CharacterPreview()
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     
@@ -132,7 +143,7 @@ struct ProfileView: View {
                 // Overlayed tab features
                 VStack {
                     // Show or hide the progress details bar
-                    if progressBarVisible {
+                    if progressTabVisible {
                         //TODO: Implement ProgressDetails subview, and implement it here
                     }
                     
@@ -141,8 +152,8 @@ struct ProfileView: View {
                     // Show or hide the navigation bar
                     if navBarVisible {
                         NavigationBar(visible: $navBarVisible)
-                            .transition(.move(edge: .bottom))
                             .frame(alignment: .bottom)
+                            .transition(.move(edge: .bottom))
                     }
                 }.zIndex(10)
             }

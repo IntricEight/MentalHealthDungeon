@@ -6,18 +6,27 @@
 import SwiftUI
 import _Concurrency
 
+/// A view page that allows the user to register a new account in the application.
+///
+/// - Note: Intended to be used as a part of a `NavigationStack`
 struct RegistrationView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authModel: AuthModel
     
     // Gather the user's sign up information
+    /// The user's unique email.
     @State private var email: String = ""
+    /// The name that the user will be identified by.
     @State private var customName: String = ""
+    /// The user's desired password.
     @State private var password: String = ""
+    /// A repeat of the user's desired password for verification purposes.
     @State private var confirmPassword: String = ""
     
-    // Controls password visibility for both fields
+    /// Controls password visibility for the first Password entry field
     @State private var isSecure: Bool = true
+    /// Controls password visibility for the Confirm Password entry field
+    @State private var isSecureConfirm: Bool = true
 
     var body: some View {
         
@@ -40,38 +49,49 @@ struct RegistrationView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
             
-            // Password input field
+            // Password input field with visibility toggle
             HStack {
-                if isSecure {
-                    SecureField("Password", text: $password)
-                } else {
-                    TextField("Password", text: $password)
+                Group {
+                    if isSecure {
+                        SecureField("Password", text: $password)
+                    } else {
+                        TextField("Password", text: $password)
+                    }
                 }
-            }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.horizontal)
-            
-            // Confirm password input field
-            HStack {
-                if isSecure {
-                    SecureField("Confirm Password", text: $confirmPassword)
-                } else {
-                    TextField("Confirm Password", text: $confirmPassword)
-                }
-            }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.horizontal)
-            
-            // Toggle button for password visibility (applies to both fields)
-            Button(action: {
-                isSecure.toggle()
-            }) {
-                HStack {
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                
+                // Visibility toggle
+                Button {
+                    isSecure.toggle()
+                } label: {
                     Image(systemName: isSecure ? "eye.slash" : "eye")
-                    Text(isSecure ? "Show Passwords" : "Hide Passwords")
+                        .foregroundColor(Color.gray)
                 }
-                .foregroundColor(.blue)
             }
+            .padding(.horizontal)
+            
+            // Confirm Password input field with visibility toggle
+            HStack {
+                Group {
+                    if isSecureConfirm {
+                        SecureField("Confirm Password", text: $confirmPassword)
+                    } else {
+                        TextField("Confirm Password", text: $confirmPassword)
+                    }
+                }
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                
+                // Visibility toggle
+                Button {
+                    isSecureConfirm.toggle()
+                } label: {
+                    Image(systemName: isSecureConfirm ? "eye.slash" : "eye")
+                        .foregroundColor(Color.gray)
+                }
+            }
+            .padding(.horizontal)
             
             // Create Account button
             Button(action: {
@@ -96,6 +116,7 @@ struct RegistrationView: View {
             .opacity(formIsValid ? 1.0 : 0.5)
             
             Button {
+                // Move down the NavigationStack
                 dismiss()
             } label: {
                 Text("Sign in with an existing account")

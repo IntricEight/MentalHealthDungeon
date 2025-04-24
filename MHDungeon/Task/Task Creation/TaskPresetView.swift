@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+/// A view which provides the user with a list of premade`Task`s that they can add to their `Account`.
 struct TaskPresetView: View {
     @Environment(\.dismiss) var dismiss
     

@@ -5,24 +5,32 @@
 
 import SwiftUI
 
+// TODO: Refactor to be used in the Preset lists of tasks with a '+' instead of a checkmark
+
+/// A subview which displays the contents of a single `Task` within a visual list.
 struct TaskListItem: View {
-    // Stores the list of the user's current tasks
+    // Contains the account which stores the list of the user's current tasks
     @EnvironmentObject var authModel: AuthModel
     
-    // The task on display
+    /// The `Task` being displayed.
     var task: Task?
     
-    // Features from the task that we have brought out into their own variables
+    // Features from the `Task` that have been brought out into their own variables.
+    /// The name of the `Task`.
     let name: String
+    /// The number of `Inspiration Points` that the `Task` will reward.
     let points: Int
+    /// Tracks the time when the `Task` expires.
     let expirationTime: Date
 
+    /// A visual countdown of the time remaining before the `Task` expires.
     @State private var timeRemaining: String = "Expires in <LOADING>"
     
-    // Controls how frequently the countdown updates
+    /// Controls how frequently the visual countdown updates.
     let timeInterval: Double = 40
 
     // Official init, this is what should be used when this view is actually being called
+    /// Initialize the visual with a `Task` item.
     init(_ task: Task) {
         self.task = task
         
@@ -31,7 +39,7 @@ struct TaskListItem: View {
         self.expirationTime = task.expirationTime
     }
     
-    // Preview init because error handling is impossible on those
+    // Preview init because error handling is impossible on Previews, it seems
     #if DEBUG
     init(name: String, inspirationPoints: Int, expirationTime: Date) {
         self.name = name
@@ -55,7 +63,7 @@ struct TaskListItem: View {
                         Button {
                             print("\(name) checked!")
                             
-                            // TODO: Remove after testing
+                            // TODO: Remove after testing, and replace with a completion method instead
                             authModel.deleteTask(id: task?.id)
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
@@ -97,21 +105,21 @@ struct TaskListItem: View {
             .listRowBackground(Color.clear)
     }
     
-    // Updates and formats the remaining time for display
+    /// Updates and formats the remaining time for the display.
     func updateTimeRemaining() -> Void {
-        // Record the present time to stop changing values from execution time
+        /// Record the present time to stop the value changing from now until execution time.
         let now = Date.now
         
-        // Ensure that the expiration time hasn't already passed
+        // Ensure that the expiration time hasn't already passed.
         guard expirationTime > now else {
             timeRemaining = "Expired"
             return
         }
         
-        // Store the time remaining in a formatted string
+        /// Store the time remaining in a formatted string.
         var formatting: String = ""
         
-        // Record whether the segmnet was used for format assistance
+        // Record whether the segment was used for format assistance.
         var hasDays: Bool = false
         var hasHours: Bool = false
         var hasMinutes: Bool = false

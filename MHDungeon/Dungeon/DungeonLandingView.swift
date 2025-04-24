@@ -5,9 +5,14 @@
 
 import SwiftUI
 
+/// A view page that provides the user an interface menu that they can use to interact with various dungeon-related systems.
+///
+/// Acts as a landing page for dungeon-related actions. These include:
+/// - Choosing which dungeon level the user wants to adventure through.
+/// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
-    // Control visiblity of various features
-    @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
+    /// Controls visibility of app navigation bar.
+    @State private var navBarVisible: Bool = false
     
     var body: some View {
         // Dungeon button controls

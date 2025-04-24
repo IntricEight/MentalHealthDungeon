@@ -7,18 +7,27 @@
 
 import SwiftUI
 
+/// A view page that provides the user an interface menu that they can use to interact with various task-related systems.
+///
+/// Acts as a central page for task-related actions. These include:
+/// - Marking tasks as complete to earn points.
+/// - Creating new Tasks from either a list of presets or a custom menu.
+/// - Accessing an existing task to read its details.
 struct TaskView: View {
     // Stores the list of the user's current tasks
     @EnvironmentObject var authModel: AuthModel
     
-    // Control the visibility of the navigation bar
+    /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
     
-    // Controls whether the new task button is split or not
     // TODO: After getting the new task implementation working, look at refactoring this button/state into its own view
+    /// Controls whether the "new task" button is split or not.
+    ///
+    /// This controls whether the menu-like button is present, or if the button has been split apart into the Custom and Preset options.
     @State var isExpanded: Bool = false
     
     // TODO: Test converting into a set once the initial list is working
+    /// The list of the user's `Task`s.
     @State var tasks: [Task] = []
     
     // Dungeon button controls
@@ -28,9 +37,7 @@ struct TaskView: View {
     
     // Tab controls
     let tabRadius: CGFloat = 30
-    
-    
-    
+
     
     var body: some View {
         // Use a .sheet (iExpense, look up Paul Hudson's tutorial) to display the Task details / Task Creation

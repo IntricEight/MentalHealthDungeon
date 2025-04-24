@@ -6,13 +6,17 @@
 import SwiftUI
 import _Concurrency
 
+/// A view page that allows the user to log into an existing account to use in the application.
 struct SignInView: View {
     @EnvironmentObject var authModel: AuthModel
     
+    // Gather the user's sign up information
+    /// The user's unique email.
     @State private var email: String = ""
+    /// The user's password.
     @State private var password: String = ""
     
-    // Controls password visibility for both fields
+    /// Controls password visibility for Password entry fields
     @State private var isSecure: Bool = true
 
     var body: some View {
@@ -44,6 +48,7 @@ struct SignInView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.none)
                     
+                    // Visibility toggle
                     Button {
                         isSecure.toggle()
                     } label: {
@@ -57,9 +62,8 @@ struct SignInView: View {
                 Button {
                     print("Log In tapped with email: '\(email)' and password: '\(password)'")
                     
-                    
                     // Logic to process login attempt
-                    // Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
+                    // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
                     _Concurrency.Task {
                         try await authModel.signIn(withEmail: email, password: password)
                     }
@@ -94,7 +98,7 @@ struct SignInView: View {
 }
 
 // Ensure that valid information is passed into the authentication form
-// MARK - AuthenticationFormProtocol
+// MARK: AuthenticationFormProtocol
 extension SignInView: AuthenticationFormProtocol {
     var formIsValid: Bool {
         // TODO: Implement bool logic for conditions I want the user's submission details to meet
