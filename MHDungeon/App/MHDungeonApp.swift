@@ -8,6 +8,7 @@ import Firebase
 import FirebaseCore
 import FirebaseAuth
 
+/// Facilitates the `Firebase` usage and connection in the application.
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
@@ -20,7 +21,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
-
+/// The app hosting structure.
+///
+/// Global environment objects are instantiated here.
 @main
 struct MHDungeonApp: App {
     // TODO: Run functions on app startup like timer checking before displaying any views.
@@ -31,14 +34,16 @@ struct MHDungeonApp: App {
     // Register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    @StateObject var authModel = AuthModel()
+    /// Manages authenticating the user and interacting with `Firebase`.
+    @StateObject private var authModel = AuthModel()
+    /// Manages the current major section of the application.
+    @State private var appState: AppState = AppState()
     
     var body: some Scene {
         WindowGroup {
             ContentView()   //The host page of the app navigation
                 .environmentObject(authModel)
-            
-            // TODO: Make the primary page navigation enum into an environment variable
+                .environment(appState)
         }
     }
 }

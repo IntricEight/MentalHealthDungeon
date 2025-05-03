@@ -5,19 +5,14 @@
 
 import SwiftUI
 
+// TODO: Create a settings page for the user to control features about their account. This will probably be a NavigationStack
+
+/// A view page thats allows users to view and change their account details.
 struct SettingsView: View {
     @EnvironmentObject var authModel: AuthModel
     
     var body: some View {
-        
-        // TODO: May have to change displayName from 'let' to 'var' later
-        // Interesting note from tutorial, I can't actually use the preview for this file because of the EnvObj. Not sure why, and the actual running process works fine, so I won't pursue it for now. But I should look into this later.
-//        let displayName: String = authModel.currentAccount?.displayName ?? "<NAME ERROR>"
-//        let email: String = authModel.currentAccount?.email ?? "<EMAIL ERROR>"
-        
-        // TODO: Create a settings page for the user to control features about their account. This will probably be a .screen?
-        
-        // TODO: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it later
+        // TODO: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it
         
         VStack {
             Text("Settings")

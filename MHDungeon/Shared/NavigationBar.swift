@@ -5,14 +5,17 @@
 
 import SwiftUI
 
+/// A subview that provides users with buttons to control the major section of the application that they are on.
 struct NavigationBar: View {
-    var currentView: Binding<AppPage>?      // Allows this view to change the current dominant view
-    var visible: Binding<Bool>?     // Allow the navigation bar to reset the host's NavBar state before leaving
+    /// Allow the navigation bar to reset the host's NavBar state before leaving
+    @Binding var visible: Bool
     
     var body: some View {
+        /// The screen width of the user's device
         let screenWidth = UIScreen.main.bounds.width
         
-        // Tab controls
+        // Tab Controls
+        /// The radius of the tab that closes the navigation bar
         let tabRadius: CGFloat = 30
         
         VStack (spacing: 0) {
@@ -20,92 +23,54 @@ struct NavigationBar: View {
                 Spacer()    // Moves the tab to the far right
                 
                 // Close Navigation tab button
-                Button {
+                HStack {
+                    // TODO: Place an icon with downward arrows here to show the functionality
+                }
+                .frame(width: screenWidth * 0.2, height: 40)
+                .background(Color.blue)
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: tabRadius,
+                        topTrailingRadius: tabRadius
+                    )
+                )
+                .padding(.trailing, 32)
+                .onTapGesture {
                     print("Close Navigation selected")
                     
-                    // Signal to close the navigation bar with an animation
-                    if let binding = visible {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            binding.wrappedValue = false
-                        }
+                    // Signal the navigation bar to close and move out of the screen
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        visible = false
                     }
-                } label: {
-                    Rectangle()
-                        .frame(width: screenWidth * 0.2, height: 40, alignment: .bottomTrailing)
-                        .foregroundColor(Color.blue)
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: tabRadius,
-                                topTrailingRadius: tabRadius
-                            )
-                        )
-                        .padding([.trailing], 32)
                 }
             }
             
             // Navigation bar with buttons
-            Rectangle()
-                .foregroundColor(Color.blue)
-                .frame(height: 100, alignment: .bottom)
-                .overlay {
-                    HStack {
-                        Spacer()
-                        
-                        // Tasks Navigation button
-                        navButtonRectangle(icon: "circle.circle.fill", destination: AppPage.taskList, visible: visible, consoleMessage: "Task Nav selected")
-                        
-                        Spacer()
-                        
-                        // Dungeon Navigation button
-                        navButtonRectangle(icon: "triangle.circle.fill", destination: AppPage.dungeon, visible: visible, consoleMessage: "Dungeon Nav selected")
-                        
-                        Spacer()
-                        
-                        // Profile Navigation button
-                        navButtonRectangle(icon: "square.circle.fill", destination: AppPage.profile, visible: visible, consoleMessage: "Profile Nav selected")
-                        
-                        Spacer()
-                    }
-                }
-        }.frame(height: 140)
-    }
-    
-    // TODO: Convert this from a func into a View, now that I better understand the relationships
-    // A function to create a navigation button on the NavigationBar
-    func navButtonRectangle(icon: String, destination dest: AppPage, visible: Binding<Bool>?, consoleMessage message: String) -> some View {
-        
-        // The button which contains the action and visual display for the operation
-        Button {
-            //Print the destination notification message to the console
-            print(message)
-            
-            // Signal to close the navigation bar without an animation
-            if let binding = visible {
-                withTransaction(Transaction(animation: nil)) {
-                    binding.wrappedValue = false
-                }
+            HStack {
+                Spacer()
+                
+                // Tasks Navigation button
+                NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, consoleMessage: "Task Nav selected")
+                
+                Spacer()
+                
+                // Dungeon Navigation button
+                NavBarButton(icon: "triangle.circle.fill", destination: AppPage.dungeon, consoleMessage: "Dungeon Nav selected")
+                
+                Spacer()
+                
+                // Profile Navigation button
+                NavBarButton(icon: "square.circle.fill", destination: AppPage.profile, consoleMessage: "Profile Nav selected")
+                
+                Spacer()
             }
-            
-            // Navigate to the Profile view
-            currentView?.wrappedValue = dest
-            
-        } label: {
-            // A slightly rounded rectangle with an icon from SF Symbols in the center
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color.red)
-                .frame(width: 80, height: 80)
-                .overlay {
-                    Image(systemName: icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 60, height: 60, alignment: .center)
-                        .foregroundColor(Color.white)
-                }
-        }
-        
+            .frame(height: 100, alignment: .center)
+            .background(Color.blue)
+        }.frame(height: 140)
     }
 }
 
 #Preview("Navigation Bar") {
-    NavigationBar()
+    @Previewable @State var visible: Bool = true
+    NavigationBar(visible: $visible)
 }

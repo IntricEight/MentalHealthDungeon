@@ -5,12 +5,14 @@
 
 import SwiftUI
 
+/// A view page that provides the user an interface menu that they can use to interact with various dungeon-related systems.
+///
+/// Acts as a landing page for dungeon-related actions. These include:
+/// - Choosing which dungeon level the user wants to adventure through.
+/// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
-    // Control visiblity of various features
-    @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
-    
-    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
-    var currentDungeonView: Binding<DungeonPage>?
+    /// Controls visibility of app navigation bar.
+    @State private var navBarVisible: Bool = false
     
     var body: some View {
         // Dungeon button controls
@@ -39,11 +41,8 @@ struct DungeonLandingView: View {
                     Spacer()
                     
                     // Profile image
-                    // TODO: Implement profile picture display. Picture taken from selection on Profile view
-                    Circle()
-                        .frame(width: 60, height: 60, alignment: .trailing)
-                        .foregroundColor(Color.yellow)
-
+                    SmallProfileImage()
+                        .frame(alignment: .trailing)
                 }
                 .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
                 
@@ -84,25 +83,8 @@ struct DungeonLandingView: View {
                     
                     
                     // Navigation tab button
-                    Button {
-                        print("Navigation selected")
-                        
-                        // Bring up the Navigation Bar when touched
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            navBarVisible = true
-                        }
-                    } label: {
-                        Rectangle()
-                            .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                            .foregroundColor(Color.blue)
-                            .clipShape(
-                                .rect(
-                                    topLeadingRadius: tabRadius,
-                                    topTrailingRadius: tabRadius
-                                )
-                            )
-                            .ignoresSafeArea()
-                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 32))
+                    NavBarTab(navBarVisible: $navBarVisible)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 32))
                 }
                 
             }.zIndex(0)
@@ -113,7 +95,7 @@ struct DungeonLandingView: View {
                 
                 // Show or hide the navigation bar
                 if navBarVisible {
-                    NavigationBar(currentView: currentView, visible: $navBarVisible)
+                    NavigationBar(visible: $navBarVisible)
                         .transition(.move(edge: .bottom))
                         .frame(alignment: .bottom)
                 }

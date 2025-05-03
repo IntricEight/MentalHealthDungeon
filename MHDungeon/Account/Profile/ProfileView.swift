@@ -5,12 +5,20 @@
 
 import SwiftUI
 
+/// A view page that provides the user an interface menu that they can use to interact with various account-related systems.
+///
+/// Acts as a central page for account-related actions. These include:
+/// - The profile picture and account settings of the user's account.
+/// - A tab of dungeon progress details.
+/// - The messaging system.
+/// - The friendship system.
+/// - Access to and a preview of the user's character cosmetics.
 struct ProfileView: View {
     // Control visiblity of various features
-    @State private var progressBarVisible: Bool = false     //Control the visibility of the progress stats bar
-    @State private var navBarVisible: Bool = false      //Control the visibility of the navigation bar
-    
-    var currentView: Binding<AppPage>?      // Passed through here into the NavigationBar
+    /// Controls visibility of dungeon progress statistics tab that overlays profile image.
+    @State private var progressTabVisible: Bool = false
+    /// Controls visibility of app navigation bar.
+    @State private var navBarVisible: Bool = false
     
     var body: some View {
         // Circle controls
@@ -33,7 +41,7 @@ struct ProfileView: View {
                     // User progress info section
                     HStack {
                         // Profile Image button
-                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create premade images to choose from
+                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create a list of premade images to choose from
                         Button {
                             print("Profile Image selected")
                         } label: {
@@ -72,8 +80,8 @@ struct ProfileView: View {
                     // Connections section
                     HStack {
                         // Messages button
-                        // TODO: Implement Messaging system through database.
-                        // TODO: Implement navigation to Message view
+                        // TODO: Implement Messaging system through database
+                        // TODO: Implement navigation to Message view through NavigationLink
                         Button {
                             print("Messages menu selected")
                         } label: {
@@ -82,11 +90,13 @@ struct ProfileView: View {
                                 .foregroundColor(Color.brown)
                         }
                         
+                        
                         Spacer(minLength: 30)
+                        
                         
                         // Friends button
                         // TODO: Implement friendship system through database
-                        // TODO: Implement navigation to Friends page
+                        // TODO: Implement navigation to Friends page through NavigationLink
                         Button {
                             print("Friends menu selected")
                         } label: {
@@ -102,21 +112,9 @@ struct ProfileView: View {
                     
                     
                     // Character Creation section
-                    // TODO: Create a character system (This feature is unlikely to be implemented during this project)
-                    Button {
-                        print("Character creation selected")
-                    } label: {
-                        RoundedRectangle(cornerRadius: buttonRadius)
-                            .foregroundColor(Color.green)
-                            .overlay {
-                                Text("WIP")
-                                    .font(.custom("", size: 100))
-                                    .foregroundColor(Color.black)
-                            }
-                        
-                        //Apple Chancery
-                    }
-                    .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    // TODO: Wrap in a button to navigate to Cosmetics page
+                    CharacterPreview()
+                        .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     
                     
                     Spacer(minLength: 20)
@@ -127,15 +125,6 @@ struct ProfileView: View {
                         Spacer()
                         
                         // Settings button
-                        // TODO: Implement navigation to a setting page
-//                        Button {
-//                            print("Settings selected")
-//                        } label: {
-//                            RoundedRectangle(cornerRadius: buttonRadius)
-//                                .frame(width: 200, height: 30, alignment: .top)
-//                                .foregroundColor(Color.orange)
-//                        }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
-                        
                         NavigationLink(destination: SettingsView()) {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(width: 200, height: 30, alignment: .top)
@@ -146,33 +135,15 @@ struct ProfileView: View {
                         Spacer(minLength: 10)
                         
                         // Navigation tab button
-                        Button {
-                            print("Navigation selected")
-                            
-                            // Bring up the Navigation Bar when touched
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                navBarVisible = true
-                            }
-                            
-                        } label: {
-                            Rectangle()
-                                .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                                .foregroundColor(Color.blue)
-                                .clipShape(
-                                    .rect(
-                                        topLeadingRadius: tabRadius,
-                                        topTrailingRadius: tabRadius
-                                    )
-                                )
-                                .ignoresSafeArea()
-                        }.padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
+                        NavBarTab(navBarVisible: $navBarVisible)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 32))
                     }
                 }.zIndex(0)
                 
                 // Overlayed tab features
                 VStack {
                     // Show or hide the progress details bar
-                    if progressBarVisible {
+                    if progressTabVisible {
                         //TODO: Implement ProgressDetails subview, and implement it here
                     }
                     
@@ -180,9 +151,9 @@ struct ProfileView: View {
                     
                     // Show or hide the navigation bar
                     if navBarVisible {
-                        NavigationBar(currentView: currentView, visible: $navBarVisible)
-                            .transition(.move(edge: .bottom))
+                        NavigationBar(visible: $navBarVisible)
                             .frame(alignment: .bottom)
+                            .transition(.move(edge: .bottom))
                     }
                 }.zIndex(10)
             }

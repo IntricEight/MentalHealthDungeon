@@ -8,23 +8,17 @@
 
 import SwiftUI
 
-//Helps error-assistance with page navigation
-public enum AppPage {
-    case signIn
-    case dungeon
-    case profile
-    case taskList
-}
-
 // Global screen traits
+// TODO: See if the usage of these can be modified to allow the removal of depreciated code
+/// The width of the user's screen.
 let screenWidth = UIScreen.main.bounds.width
+/// The height of the user's screen.
 let screenHeight = UIScreen.main.bounds.height
 
+/// The view page that manages the view display of the application through the navigation status of `AppState`.
 struct ContentView: View {
     @EnvironmentObject var authModel: AuthModel
-    
-    // Tracks the current primary view to display (Default is useful for testing)
-    @State private var currentView: AppPage = .dungeon
+    @Environment(AppState.self) var appState: AppState
     
     var body: some View {
         Color(0xbababa).ignoresSafeArea()
@@ -32,16 +26,22 @@ struct ContentView: View {
                 Group {
                     // If the user is logged in, allow them to navigate around the app
                     if authModel.userSession != nil && authModel.currentAccount != nil {
-                        //Select the view to display
-                        switch currentView {
+                        //Select the view to display using appState's navigation status
+                        switch appState.currentView {
+                            // Displays the dungeon view system.
                             case AppPage.dungeon:
-                                DungeonView(currentView: $currentView)
+                                DungeonView()
+                            // Displays the profile view system.
                             case AppPage.profile:
-                                ProfileView(currentView: $currentView)
+                                ProfileView()
+                            // Displays the task view system.
                             case AppPage.taskList:
-                                TaskListView(currentView: $currentView)
+                                TaskView()
+                            // Displays the minimal viable code page
+                            case AppPage.minimal:
+                                MinimalParent()
                             default:
-                                SettingsView()    //Fallback in case something about the auth goes wrong
+                                SettingsView()    //Fallback in case something about the authentication goes wrong
                         }
                         
                     } else {    //If user is not logged in, bring them to the log in view
@@ -52,7 +52,7 @@ struct ContentView: View {
     }
 }
 
-#Preview("App Host") {
+#Preview("Views Host") {
     ContentView()
 }
 
