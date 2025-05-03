@@ -28,7 +28,6 @@ struct NavBarTab: View {
             )
         )
         .ignoresSafeArea()
-        .contentShape(Rectangle())   // makes the padded area tappable
         .onTapGesture {
             print("Navigation selected")
             

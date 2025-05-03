@@ -76,7 +76,7 @@ struct TaskListItem: View {
                                         .frame(width: 60, height: 60, alignment: .center)
                                         .foregroundColor(Color.white)
                                 }
-                        }
+                        }.buttonStyle(.borderless)
                         
                         Spacer(minLength: 16)
                         
