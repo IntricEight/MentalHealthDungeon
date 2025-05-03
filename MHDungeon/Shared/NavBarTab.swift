@@ -2,8 +2,6 @@
 //  NavBarTab.swift
 //  MHDungeon
 //
-//  Created by Collin Bowdoin on 2/27/25.
-//
 
 import SwiftUI
 
@@ -18,27 +16,28 @@ struct NavBarTab: View {
         let tabRadius: CGFloat = 30
         
         // Navigation tab button
-        Button {
+        HStack {
+            // TODO: Place an icon with upward arrows here to show the functionality
+        }
+        .frame(width: screenWidth * 0.2, height: 40)
+        .background(Color.blue)
+        .clipShape(
+            .rect(
+                topLeadingRadius: tabRadius,
+                topTrailingRadius: tabRadius
+            )
+        )
+        .ignoresSafeArea()
+        .contentShape(Rectangle())   // makes the padded area tappable
+        .onTapGesture {
             print("Navigation selected")
             
             // Bring up the Navigation Bar when touched
             // This animation controls the animation of the navigation bar as it appears
-            withAnimation(.easeIn(duration: 0.5)) {
+            withAnimation(.easeInOut(duration: 0.5)) {
                 navBarVisible = true
             }
-        } label: {
-            Rectangle()
-                .frame(width: screenWidth * 0.2, height: 40, alignment: .bottom)
-                .foregroundColor(Color.blue)
-                .clipShape(
-                    .rect(
-                        topLeadingRadius: tabRadius,
-                        topTrailingRadius: tabRadius
-                    )
-                )
-                .ignoresSafeArea()
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 

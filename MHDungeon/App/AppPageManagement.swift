@@ -16,6 +16,8 @@ public enum AppPage {
     case profile
     /// The task management pages, which includes creating and completing tasks.
     case taskList
+    /// Left in place for testing purposes, this allows me to navigate to a dedicated Minimal Viable Example page for demonstrations
+    case minimal
 }
 
 /// Manages the current major page(s) section of the application.

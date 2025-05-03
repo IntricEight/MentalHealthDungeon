@@ -37,6 +37,9 @@ struct ContentView: View {
                             // Displays the task view system.
                             case AppPage.taskList:
                                 TaskView()
+                            // Displays the minimal viable code page
+                            case AppPage.minimal:
+                                MinimalParent()
                             default:
                                 SettingsView()    //Fallback in case something about the authentication goes wrong
                         }

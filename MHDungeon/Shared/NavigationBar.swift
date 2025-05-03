@@ -23,52 +23,49 @@ struct NavigationBar: View {
                 Spacer()    // Moves the tab to the far right
                 
                 // Close Navigation tab button
-                Button {
+                HStack {
+                    // TODO: Place an icon with downward arrows here to show the functionality
+                }
+                .frame(width: screenWidth * 0.2, height: 40)
+                .background(Color.blue)
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: tabRadius,
+                        topTrailingRadius: tabRadius
+                    )
+                )
+                .padding(.trailing, 32)
+                .onTapGesture {
                     print("Close Navigation selected")
                     
-                    // Signal to close the navigation bar with an animation
-                    withAnimation(.easeOut(duration: 0.5)) {
+                    // Signal the navigation bar to close and move out of the screen
+                    withAnimation(.easeInOut(duration: 0.5)) {
                         visible = false
                     }
-                } label: {
-                    Rectangle()
-                        .frame(width: screenWidth * 0.2, height: 40, alignment: .bottomTrailing)
-                        .foregroundColor(Color.blue)
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: tabRadius,
-                                topTrailingRadius: tabRadius
-                            )
-                        )
-                        .padding([.trailing], 32)
                 }
-                .buttonStyle(PlainButtonStyle())
             }
             
             // Navigation bar with buttons
-            Rectangle()
-                .foregroundColor(Color.blue)
-                .frame(height: 100, alignment: .bottom)
-                .overlay {
-                    HStack {
-                        Spacer()
-                        
-                        // Tasks Navigation button
-                        NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, consoleMessage: "Task Nav selected")
-                        
-                        Spacer()
-                        
-                        // Dungeon Navigation button
-                        NavBarButton(icon: "triangle.circle.fill", destination: AppPage.dungeon, consoleMessage: "Dungeon Nav selected")
-                        
-                        Spacer()
-                        
-                        // Profile Navigation button
-                        NavBarButton(icon: "square.circle.fill", destination: AppPage.profile, consoleMessage: "Profile Nav selected")
-                        
-                        Spacer()
-                    }
-                }
+            HStack {
+                Spacer()
+                
+                // Tasks Navigation button
+                NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, consoleMessage: "Task Nav selected")
+                
+                Spacer()
+                
+                // Dungeon Navigation button
+                NavBarButton(icon: "triangle.circle.fill", destination: AppPage.dungeon, consoleMessage: "Dungeon Nav selected")
+                
+                Spacer()
+                
+                // Profile Navigation button
+                NavBarButton(icon: "square.circle.fill", destination: AppPage.profile, consoleMessage: "Profile Nav selected")
+                
+                Spacer()
+            }
+            .frame(height: 100, alignment: .center)
+            .background(Color.blue)
         }.frame(height: 140)
     }
 }
