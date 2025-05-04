@@ -116,14 +116,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         return expirationTime.timeIntervalSinceNow
     }
     
-    /// Mark the `Task` as complete.
-    func CompleteTask() -> Bool {
-        // TODO: Decide if this should even be within the Task struct, or in the account.
-        // TODO: Remove the Task from the database, and set a timeout on it if it is premade
-        
-        return true
-    }
-    
     /// Convert the `Task` into a `Dictionary` to assist with updating the database.
     func toDictionary() -> [String: Any] {
         return [
@@ -136,7 +128,15 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         ]
     }
     
-    
+    /// `@MainActor` static function that removes the provided `Task` from the application and `Firebase` storage.
+    ///
+    /// If the `Task` was completed successfully, rewards the player with the appropriate points.
+    @MainActor
+    static func deleteTask(id taskUID: UUID?, authAccess auth: AuthModel, isCompleted: Bool)
+    {
+        // This function largely exists at present to abstract away the AuthModel access from views.
+        auth.deleteTask(id: taskUID, isCompleted: isCompleted)
+    }
     
     
     // TODO: Make this more useful after initial testing is complete

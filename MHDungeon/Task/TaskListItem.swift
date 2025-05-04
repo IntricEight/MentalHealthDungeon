@@ -28,6 +28,9 @@ struct TaskListItem: View {
     
     /// Controls how frequently the visual countdown updates.
     let timeInterval: Double = 40
+    /// Message to show that the countdown has elapsed
+    let expiredMessage: String = "Expired"
+    
 
     // Official init, this is what should be used when this view is actually being called
     /// Initialize the visual with a `Task` item.
@@ -63,14 +66,14 @@ struct TaskListItem: View {
                         Button {
                             print("\(name) checked!")
                             
-                            // TODO: Remove after testing, and replace with a completion method instead
-                            authModel.deleteTask(id: task?.id)
+                            // Mark the Task as either failed or completed and remove it from the user
+                            Task.deleteTask(id: task?.id, authAccess: authModel, isCompleted: timeRemaining != expiredMessage)
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.black)
                                 .frame(width: 80, height: 80, alignment: .topLeading)
                                 .overlay {
-                                    Image(systemName: "checkmark")
+                                    Image(systemName: timeRemaining != expiredMessage ? "checkmark" : "xmark")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 60, height: 60, alignment: .center)
@@ -112,7 +115,7 @@ struct TaskListItem: View {
         
         // Ensure that the expiration time hasn't already passed.
         guard expirationTime > now else {
-            timeRemaining = "Expired"
+            timeRemaining = expiredMessage
             return
         }
         

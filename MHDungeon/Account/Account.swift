@@ -20,6 +20,7 @@ class Account: Identifiable, Codable, ObservableObject {
     
     /// The user's current Inspiration Points counter.
     @Published var inspirationPoints: Int
+    var maxIP: Int
     
     /// Create a new account with no points. Adds the default tasks to the user's account.
     /// - Parameters:
@@ -32,6 +33,7 @@ class Account: Identifiable, Codable, ObservableObject {
         self.email = email
         
         self.inspirationPoints = 0
+        self.maxIP = 20
         
         // TODO: Remove after task creation process is properly tutorialized. Modify the function's description when this is done.
         self.taskList = createSampleTasks()
@@ -41,6 +43,73 @@ class Account: Identifiable, Codable, ObservableObject {
 //    var description: String {       // Allows me to control what gets printed to the Console
 //        return "Account: \(displayName) : \(email). Contains \(taskList.count) tasks."
 //    }
+    
+    
+    
+    
+    
+    /// Custom CodingKeys to match property names during [en/de]coding
+    enum CodingKeys: String, CodingKey {
+        case id
+        case displayName
+        case email
+        case inspirationPoints
+        case maxIP
+        case taskList
+    }
+    
+    // Custom encoding function to manage the @Published attributes
+    /// Encode the Account instance's data
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: CodingKeys.id)
+        try container.encode(displayName, forKey: CodingKeys.displayName)
+        try container.encode(email, forKey: CodingKeys.email)
+        try container.encode(inspirationPoints, forKey: CodingKeys.inspirationPoints)
+        try container.encode(maxIP, forKey: CodingKeys.maxIP)
+        try container.encode(taskList, forKey: CodingKeys.taskList)
+    }
+
+    // Custom decoding init to manage @Published attributes
+    /// Decode the information into an Account instance
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(String.self, forKey: CodingKeys.id)
+        displayName = try container.decode(String.self, forKey: CodingKeys.displayName)
+        email = try container.decode(String.self, forKey: CodingKeys.email)
+        inspirationPoints = try container.decode(Int.self, forKey: CodingKeys.inspirationPoints)
+        maxIP = try container.decode(Int.self, forKey: CodingKeys.maxIP)
+        taskList = try container.decode([Task].self, forKey: CodingKeys.taskList)
+    }
+    
+    /// Reward the user with points from a completed `Task`.
+    func RewardPoints (index: Int) {
+        // The points rewarded by the task
+        let points = taskList[index].points
+        
+        // Ensure the points rewarded don't go over the maximum
+        if inspirationPoints + points >= maxIP {
+            inspirationPoints = maxIP
+        }
+        else {
+            inspirationPoints += points
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // TODO: REMOVE after getting proper task creation working
     /// Create a list of tasks to be used in testing accounts
@@ -78,41 +147,4 @@ class Account: Identifiable, Codable, ObservableObject {
         
         return tasks
     }
-    
-    
-    
-    /// Custom CodingKeys to match property names during [en/de]coding
-    enum CodingKeys: String, CodingKey {
-        case id
-        case displayName
-        case email
-        case inspirationPoints
-        case taskList
-    }
-    
-    // Custom encoding function to manage the @Published attributes
-    /// Encode the Account instance's data
-    func encode(to encoder: any Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        try container.encode(id, forKey: CodingKeys.id)
-        try container.encode(displayName, forKey: CodingKeys.displayName)
-        try container.encode(email, forKey: CodingKeys.email)
-        try container.encode(inspirationPoints, forKey: CodingKeys.inspirationPoints)
-        try container.encode(taskList, forKey: CodingKeys.taskList)
-    }
-
-    // Custom decoding init to manage @Published attributes
-    /// Decode the information into an Account instance
-    required init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        id = try container.decode(String.self, forKey: CodingKeys.id)
-        displayName = try container.decode(String.self, forKey: CodingKeys.displayName)
-        email = try container.decode(String.self, forKey: CodingKeys.email)
-        inspirationPoints = try container.decode(Int.self, forKey: CodingKeys.inspirationPoints)
-        taskList = try container.decode([Task].self, forKey: CodingKeys.taskList)
-    }
-    
-    
 }
