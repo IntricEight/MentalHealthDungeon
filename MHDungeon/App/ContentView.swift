@@ -14,6 +14,9 @@ import SwiftUI
 let screenWidth = UIScreen.main.bounds.width
 /// The height of the user's screen.
 let screenHeight = UIScreen.main.bounds.height
+/// The primary character font used in the app.
+// TODO: Find a good font for the app.
+let appFont1 = 0
 
 /// The view page that manages the view display of the application through the navigation status of `AppState`.
 struct ContentView: View {

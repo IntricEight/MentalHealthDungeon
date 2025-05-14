@@ -9,7 +9,7 @@ import SwiftUI
 
 /// The view page that manages the view display of the application's dungeon interface through the navigation status of `DungeonState`.
 struct DungeonView: View {
-    @State var dungeonState: DungeonState = DungeonState(.landing)
+    @State var dungeonState: DungeonState = DungeonState()
     
     var body: some View {
         Group {
@@ -18,9 +18,13 @@ struct DungeonView: View {
                 case .landing:
                     DungeonLandingView()
                         .environment(dungeonState)
-                case .begin:
-                    // TODO: Create a page for starting a dungeon once you have enough IP
-                    DungeonLandingView()
+                case .adventure:
+                    // The user should only be able to enter this if they have enough IP
+                    DungeonAdventureView()
+                        .environment(dungeonState)
+                case .selection:
+                    // Choose the currently active dungeon
+                    DungeonSelectionView()
                         .environment(dungeonState)
             }
         }

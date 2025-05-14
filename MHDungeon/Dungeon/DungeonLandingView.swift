@@ -11,6 +11,8 @@ import SwiftUI
 /// - Choosing which dungeon level the user wants to adventure through.
 /// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
+    @Environment(DungeonState.self) var dungeonState: DungeonState
+    
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
     
@@ -60,6 +62,10 @@ struct DungeonLandingView: View {
                         .frame(height: 400)
                 }
                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16))
+                
+                
+                
+                
                 
                 
                 // Enter Dungeon section
