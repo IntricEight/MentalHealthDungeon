@@ -16,12 +16,14 @@ struct DungeonLandingView: View {
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
     
+//    var testDungeon = try! Dungeon(name: "Dark Cave")
+    
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
         
         // Tab controls
-        let tabRadius: CGFloat = 30
+//        let tabRadius: CGFloat = 30
         
         // One layer for the main app stuff, and one for the overlay tab feature
         ZStack {
@@ -33,6 +35,8 @@ struct DungeonLandingView: View {
                     // TODO: Implement Dungeon selection feature (Popup or new page?)
                     Button {
                         print("Dungeon Selection selected")
+                        
+                        dungeonState.currentView = DungeonPage.selection
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
                             .frame(height: 50)

@@ -20,7 +20,7 @@ class DungeonState {
     // MARK: Set the default values of the landing page for the dungeon here
     /// The current page location within the dungeon system.
     var currentView: DungeonPage = .landing
-    private let DEFAULT_DUNGEON_NAME = "Dark Cave"
+    private let DEFAULT_DUNGEON_NAME: String = "Dark Cave"
     
     
     
@@ -32,6 +32,9 @@ class DungeonState {
         // MARK: Set the default dungeon here
         do {
             currentDungeon = try Dungeon(name: DEFAULT_DUNGEON_NAME)
+            
+            // TODO: REMOVE
+            print("  Wtach 99")
         } catch {
             print("DUNGEON - Failed to create the default dungeon.")
         }

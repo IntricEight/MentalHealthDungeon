@@ -15,7 +15,7 @@ struct TaskListItem: View {
     /// The `Task` being displayed.
     var task: Task?
     
-    // Features from the `Task` that have been brought out into their own variables.
+    // Features from the Task that have been brought out into their own variables.
     /// The name of the `Task`.
     let name: String
     /// The number of `Inspiration Points` that the `Task` will reward.
@@ -32,8 +32,8 @@ struct TaskListItem: View {
     let expiredMessage: String = "Expired"
     
 
-    // Official init, this is what should be used when this view is actually being called
-    /// Initialize the visual with a `Task` item.
+    // Official init, this is what should be used when this view is actually being called by lists.
+    /// Initialize the list visual with a `Task` item.
     init(_ task: Task) {
         self.task = task
         
@@ -59,7 +59,7 @@ struct TaskListItem: View {
             .foregroundColor(Color.green)
             .frame(width: screenWidth * 0.9, height: 140, alignment: .bottom)
             .overlay {
-                VStack{
+                VStack {
                     // Checkmark and name
                     HStack {
                         // Checkmark button to mark the task as complete

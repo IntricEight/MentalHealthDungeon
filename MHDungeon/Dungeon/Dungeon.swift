@@ -22,7 +22,9 @@ enum DungeonError: Error, LocalizedError {
 /// Represents a Dungeon that the user can adventure through.
 ///
 /// Contains a name, details, lists of images and rewards, and the cost and time to complete connected to the Dungeon.
-struct Dungeon: Decodable {
+struct Dungeon: Decodable, Identifiable {
+    /// Store a registered ID of the `Dungeon` instance.
+    var id: Int
     /// The dungeon's name
     let name: String
     /// A brief description of the dungeon's appearance.
@@ -58,12 +60,56 @@ struct Dungeon: Decodable {
     
     /// Initialize by using just the dungeon's name, and filling out the rest of the data using the
     init(name: String) throws {
-//        let dungeons: [Dungeon] = []
+        // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
+        guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
+            throw DungeonError.NotFound
+        }
         
+        // We want to avoid decoding the JSON until we've separated out the Dungeon whose name matches the given name. This way, we avoid creating more dungeons than we need by only decoding the one that we are looking for.
         
-        throw DungeonError.NotFound
+        // Get the data stored witin the dungeon's JSON file without decoding it.
+        let dungeonData = try Data(contentsOf: dungeonUrl)
+        let raw = try JSONSerialization.jsonObject(with: dungeonData, options: [])
+        
+        // Convert the raw data into an array of strings containing the Dungeons in the file.
+        guard
+          let top = raw as? [String: Any],
+          let list = top["dungeons"] as? [[String: Any]]
+        else {
+            let context = DecodingError.Context(codingPath: [], debugDescription: "Invalid top-level ‘dungeons’ structure")
+            throw DecodingError.dataCorrupted(context)
+        }
+
+        // Find the item in the data whose name matches the provided parameter, and store it separately
+        guard let matchData = list.first(where: { $0["name"] as? String == name }) else {
+            throw DungeonError.NotFound
+        }
+
+        // Convert the matched data back into a JSON format, to be used with a decoder.
+        let matchJSON = try JSONSerialization.data(withJSONObject: matchData, options: [])
+        
+        // Decode the JSON that contains only the desired Dungeon.
+        self = try! JSONDecoder().decode(Dungeon.self, from: matchJSON)
     }
  
     
     // TODO: Make static list that returns a list of all Dungeons
+    ///
+    @MainActor
+    static func getAllDungeons() throws -> [Dungeon] {
+        // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
+        guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "JSON") else {
+            throw DungeonError.NotFound
+        }
+        
+        // Get the data from within the dungeons JSON file
+        let dungeonData = try Data(contentsOf: dungeonUrl)
+        
+        // Decode the data and store it within an immutable array
+        let dungeons: [Dungeon] = try JSONDecoder().decode([Dungeon].self, from: dungeonData)
+        
+        
+        
+        return dungeons
+    }
 }

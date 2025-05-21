@@ -3,8 +3,6 @@
 //  MHDungeon
 //
 
-// TODO: Why did I decide to use a management and cases instead of NavStack here? I don't remember, but hopefully I do before I begin working on this in earnest. Otherwise, go back to using NavStack you dolt
-
 import SwiftUI
 
 /// The view page that manages the view display of the application's dungeon interface through the navigation status of `DungeonState`.
