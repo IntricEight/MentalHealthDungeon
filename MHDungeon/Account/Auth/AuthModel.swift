@@ -210,6 +210,9 @@ class AuthModel: ObservableObject {
         if isCompleted {
             // Reward the user for completing the task
             account.RewardPoints(index: index)
+            
+            // Increase the user's total number of completed tasks
+            account.IncreaseTaskCompletions()
         }
         
         // Remove the task from the user's account
