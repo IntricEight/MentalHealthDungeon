@@ -9,7 +9,7 @@
 import SwiftUI
 
 // Communication (and settings) button controls
-let buttonRadius: CGFloat = 20
+private let buttonRadius: CGFloat = 20
 
 /// A subview that displays the user's character.
 ///

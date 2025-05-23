@@ -20,11 +20,12 @@ let appFont1 = 0
 
 /// The view page that manages the view display of the application through the navigation status of `AppState`.
 struct ContentView: View {
-    @EnvironmentObject var authModel: AuthModel
-    @Environment(AppState.self) var appState: AppState
+    @EnvironmentObject private var authModel: AuthModel
+    @Environment(AppState.self) private var appState: AppState
     
     var body: some View {
-        Color(0xbababa).ignoresSafeArea()
+        // 0xbababa was the prefered grey, moving to white until the issue with list backgrounds is fixed
+        Color(0xffffff).ignoresSafeArea()
             .overlay {
                 Group {
                     // If the user is logged in, allow them to navigate around the app

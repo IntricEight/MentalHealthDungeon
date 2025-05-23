@@ -28,15 +28,16 @@ class Account: Identifiable, Codable, ObservableObject {
     
     // Task Data
     /// A list of the user's tasks. Ordered from oldest to newest.
+    // TODO: Make this variable only readable, hide adding/removing functions behind a function
     @Published var taskList: [Task] = []
     /// The number of tasks that the user has completed.
-    @Published var tasksCompleted: Int = 0
+    @Published public private(set) var tasksCompleted: Int = 0
     
     // Dungeon Data
     /// The time when the current dungeon session is completed.
     @Published var dungeonEndTime: Date?
     /// The number of dungeons that the user has completed.
-    @Published var dungeonsCompleted: Int = 0
+    @Published public private(set) var dungeonsCompleted: Int = 0
     /// Tracks the user's progression through the dungeon.
     var dungeonProgression: [Int] = [1,1]
     

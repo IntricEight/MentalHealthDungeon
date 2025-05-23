@@ -8,11 +8,32 @@
 import SwiftUI
 
 struct DungeonSelectionView: View {
-    
-    
+    @Environment(DungeonState.self) private var dungeonState: DungeonState
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        // Dungeon button controls
+        let buttonRadius: CGFloat = 20
+        
+        VStack {
+            // Display a list of the existing Dungeons
+            DungeonListView()
+            
+            
+            Spacer()
+            
+            
+            Button {
+                // Return to the Dungeon landing page
+                dungeonState.ChangeView(to: DungeonPage.landing)
+                
+            } label: {
+                RoundedRectangle(cornerRadius: buttonRadius)
+                    .frame(height: 70)
+                    .foregroundColor(Color.orange)
+                    .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
+            }
+            .frame(alignment: .bottom)
+        }
     }
 }
 

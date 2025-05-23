@@ -13,23 +13,23 @@ struct TaskListItem: View {
     @EnvironmentObject var authModel: AuthModel
     
     /// The `Task` being displayed.
-    var task: Task?
+    private var task: Task?
     
     // Features from the Task that have been brought out into their own variables.
     /// The name of the `Task`.
-    let name: String
+    private let name: String
     /// The number of `Inspiration Points` that the `Task` will reward.
-    let points: Int
+    private let points: Int
     /// Tracks the time when the `Task` expires.
-    let expirationTime: Date
+    private let expirationTime: Date
 
     /// A visual countdown of the time remaining before the `Task` expires.
     @State private var timeRemaining: String = "Expires in <LOADING>"
     
-    /// Controls how frequently the visual countdown updates.
-    let timeInterval: Double = 40
+    /// Controls how frequently the visual countdown updates (In seconds).
+    private let timeInterval: Double = 40
     /// Message to show that the countdown has elapsed
-    let expiredMessage: String = "Expired"
+    private let expiredMessage: String = "Expired"
     
 
     // Official init, this is what should be used when this view is actually being called by lists.

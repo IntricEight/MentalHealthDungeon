@@ -20,21 +20,55 @@ public enum AppPage {
     case minimal
 }
 
+// MARK: Set the default values of the application here
+private let DEFAULT_DUNGEON_VIEW: AppPage = .dungeon
+
 /// Manages the current major page(s) section of the application.
 ///
 /// Used in controlling navigation between these major sections.
 @Observable
 class AppState {
-    // MARK: Set the value of the default landing page for the app here
-    // TODO: Set to Dungeon before the app launch
     /// The current section location within the application.
-    var currentView: AppPage = .profile
-    
-    // Init while using the default landing page
-    init() {}
+    public private(set) var currentView: AppPage
     
     // Allows the caller to override the default landing page when creating the class if they wish
-    init(_ page: AppPage) {
+    init(_ page: AppPage = DEFAULT_DUNGEON_VIEW) {
         self.currentView = page
     }
+    
+    /// Change the current major page of the application.
+    ///
+    /// - Parameters:
+    ///   - to: The `AppPage` element of the desired destination.
+    func ChangeView(to page: AppPage) {
+        self.currentView = page
+    }
+    
+    /// Change the current major page of the application.
+    ///
+    /// - Parameters:
+    ///   - to: The `String` name of the desired destination.
+    func ChangeView(to page: String) {
+        // Remove spaces and dashes and make the characters lowercase to allow more variety in input
+        let characterFilter = CharacterSet(charactersIn: " -")
+        let pageName: String = page.components(separatedBy: characterFilter).joined().lowercased()
+        
+        // Determine the desired destination using the normalized string.
+        switch pageName {
+            case "signin":
+                self.currentView = AppPage.signIn
+            case "dungeon":
+                self.currentView = AppPage.dungeon
+            case "profile":
+                self.currentView = AppPage.profile
+            case "tasklist":
+                self.currentView = AppPage.taskList
+            case "minimal":
+                self.currentView = AppPage.minimal
+            default:
+                print("No matching view was found. Failed to navigate.")
+        }
+    }
+    
+    
 }

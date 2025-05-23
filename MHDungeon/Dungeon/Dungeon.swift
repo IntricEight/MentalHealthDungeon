@@ -10,11 +10,16 @@ enum DungeonError: Error, LocalizedError {
     /// Thrown when a search is made for a `Dungeon` that does not exist.
     case NotFound
     
+    /// Thrown when an error is encountered during the decoding process.
+    case DecodeError
+    
     /// The useful description of each error used by `LocalizedError`.
     var errorDescription: String? {
         switch self {
             case .NotFound:
                 return "No dungeon was found with that name."
+            case .DecodeError:
+                return "Failed to properly decode the dungeon's JSON file."
         }
     }
 }
@@ -24,7 +29,7 @@ enum DungeonError: Error, LocalizedError {
 /// Contains a name, details, lists of images and rewards, and the cost and time to complete connected to the Dungeon.
 struct Dungeon: Decodable, Identifiable {
     /// Store a registered ID of the `Dungeon` instance.
-    var id: Int
+    let id: Int
     /// The dungeon's name
     let name: String
     /// A brief description of the dungeon's appearance.
@@ -62,6 +67,8 @@ struct Dungeon: Decodable, Identifiable {
     init(name: String) throws {
         // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
         guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
+            print("Dungeon file was not found.")
+            
             throw DungeonError.NotFound
         }
         
@@ -89,26 +96,36 @@ struct Dungeon: Decodable, Identifiable {
         let matchJSON = try JSONSerialization.data(withJSONObject: matchData, options: [])
         
         // Decode the JSON that contains only the desired Dungeon.
-        self = try! JSONDecoder().decode(Dungeon.self, from: matchJSON)
+        self = try JSONDecoder().decode(Dungeon.self, from: matchJSON)
     }
  
-    
-    // TODO: Make static list that returns a list of all Dungeons
-    ///
+    /// Returns a list of all of the `Dungeons` stored on the local JSON file.
     @MainActor
     static func getAllDungeons() throws -> [Dungeon] {
+        print("Attempting to get all dungeons.")
+        
         // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
-        guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "JSON") else {
+        guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
+            print("Dungeon file was not found.")
+            
             throw DungeonError.NotFound
         }
         
         // Get the data from within the dungeons JSON file
-        let dungeonData = try Data(contentsOf: dungeonUrl)
+        let dungeonData: Data = try Data(contentsOf: dungeonUrl)
         
         // Decode the data and store it within an immutable array
-        let dungeons: [Dungeon] = try JSONDecoder().decode([Dungeon].self, from: dungeonData)
+        let dungeonJSON: [String: [Dungeon]] = try JSONDecoder().decode([String: [Dungeon]].self, from: dungeonData)
+        guard let dungeons: [Dungeon] = dungeonJSON["dungeons"] else {
+            print("Failed to extract Dungeon array from String:[Dungeon] dictionary")
+            
+            throw DungeonError.DecodeError
+        }
         
-        
+        // TODO: Remove after testing
+        dungeons.forEach { dungeon in
+            print("\(dungeon.name) - \(dungeon.cost)")
+        }
         
         return dungeons
     }

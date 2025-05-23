@@ -7,7 +7,7 @@ import SwiftUI
 
 /// The view page that manages the view display of the application's dungeon interface through the navigation status of `DungeonState`.
 struct DungeonView: View {
-    @State var dungeonState: DungeonState = DungeonState()
+    @State private var dungeonState: DungeonState = DungeonState()
     
     var body: some View {
         Group {

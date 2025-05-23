@@ -7,14 +7,14 @@ import SwiftUI
 
 /// A button which will direct the user into the selected major section of the application.
 struct NavBarButton: View {
-    @Environment(AppState.self) var appState: AppState
+    @Environment(AppState.self) private var appState: AppState
     
     /// The name of the `SF Symbols` icon that adorns the button.
-    let icon: String
+    private let icon: String
     /// The section destination that the button will direct the user to.
-    var dest: AppPage
+    private var dest: AppPage
     /// A message to be printed to the console when the button is pressed.
-    let message: String
+    private let message: String
     
     /// Instantiates the button with the icon and destination, alongside a message to be printed to the console during navigation.
     init(icon: String, destination: AppPage, consoleMessage message: String = "") {
@@ -30,7 +30,7 @@ struct NavBarButton: View {
             print(message)
             
             // Navigate to the destination view
-            appState.currentView = dest
+            appState.ChangeView(to: dest)
             
             print(appState.currentView)
             

@@ -5,9 +5,9 @@
 
 import SwiftUI
 
+// TODO: Generic-ify this function to not use navBar naming. This includes the Binding variable and console printing.
 /// A button to be placed on the bottom of the screen which controls the visibility of an external feature, such as the `NavigationBar`.
 struct NavBarTab: View {
-    // TODO: Generic-ify this function to not use navBar naming. This includes the Binding variable and console printing.
     /// The visibility toggle for the external feature.
     @Binding var navBarVisible: Bool
     

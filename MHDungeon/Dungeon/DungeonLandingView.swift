@@ -11,7 +11,7 @@ import SwiftUI
 /// - Choosing which dungeon level the user wants to adventure through.
 /// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
-    @Environment(DungeonState.self) var dungeonState: DungeonState
+    @Environment(DungeonState.self) private var dungeonState: DungeonState
     
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
@@ -21,9 +21,6 @@ struct DungeonLandingView: View {
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
-        
-        // Tab controls
-//        let tabRadius: CGFloat = 30
         
         // One layer for the main app stuff, and one for the overlay tab feature
         ZStack {
@@ -36,7 +33,8 @@ struct DungeonLandingView: View {
                     Button {
                         print("Dungeon Selection selected")
                         
-                        dungeonState.currentView = DungeonPage.selection
+                        // Navigate to the Dungeon Selection page
+                        dungeonState.ChangeView(to: DungeonPage.selection)
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
                             .frame(height: 50)
