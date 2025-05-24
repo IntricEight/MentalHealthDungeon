@@ -18,19 +18,25 @@ struct DungeonSelectionView: View {
             // Display a list of the existing Dungeons
             DungeonListView()
             
-            
             Spacer()
             
-            
+            // Back button
             Button {
                 // Return to the Dungeon landing page
                 dungeonState.ChangeView(to: DungeonPage.landing)
                 
             } label: {
                 RoundedRectangle(cornerRadius: buttonRadius)
-                    .frame(height: 70)
+                    .frame(height: 50)
                     .foregroundColor(Color.orange)
-                    .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
+                    .padding(EdgeInsets(top: 0, leading: 64, bottom: 0, trailing: 64))
+                    .overlay {
+                        Text("Back")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                            .font(.title)
+                            .frame(alignment: .center)
+                    }
             }
             .frame(alignment: .bottom)
         }
@@ -46,8 +52,7 @@ struct DungeonListView: View {
     
     var body: some View {
         if dungeonList.isEmpty {
-            // Show that no tasks exist, and direct them to the task creation button
-            // TODO: Style this and include instructions on how to create a task
+            // Show that no dungeons have been found on their local file.
             Text("No dungeons found on file.")
                 .font(.title3)
         } else {

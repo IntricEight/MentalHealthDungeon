@@ -79,6 +79,13 @@ struct DungeonLandingView: View {
                         .frame(height: 70)
                         .foregroundColor(Color.orange)
                         .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
+                        .overlay {
+                            Text("\(dungeonState.currentDungeon?.name ?? "No dungeon connected!")")
+                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .font(.title)
+                                .frame(alignment: .center)
+                        }
                 }
                 
                 

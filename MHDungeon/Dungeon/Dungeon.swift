@@ -9,7 +9,6 @@ import Foundation
 enum DungeonError: Error, LocalizedError {
     /// Thrown when a search is made for a `Dungeon` that does not exist.
     case NotFound
-    
     /// Thrown when an error is encountered during the decoding process.
     case DecodeError
     
@@ -43,27 +42,12 @@ struct Dungeon: Decodable, Identifiable {
     /// The time (in hours) it takes to complete this dungeon.
     let hours: Double
     
-//    /// Initialize a dungeon instance without any images attached.
-//    init(name: String, description: String, cost: Int, hours: Double) {
-//        self.name = name
-//        self.description = description
-//        self.imageNames = []
-//        self.rewards = []
-//        self.cost = cost
-//        self.hours = hours
-//    }
-//    
-//    /// Initialize a dungeon instance with a set of images to display.
-//    init(name: String, description: String, images: [String] = [], rewards: [Reward<<#ItemType: Decodable#>>] = [], cost: Int, hours: Double) {
-//        self.name = name
-//        self.description = description
-//        self.imageNames = images
-//        self.rewards = rewards
-//        self.cost = cost
-//        self.hours = hours
-//    }
-    
-    /// Initialize by using just the dungeon's name, and filling out the rest of the data using the
+    /// Initialize by using the dungeon's name.
+    ///
+    /// Only decodes the desired `Dungeon` instance, which cuts down on resource cost.
+    ///
+    /// - Parameters:
+    ///   - name: The `String`  name of the chosen `Dungeon`.
     init(name: String) throws {
         // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
         guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
@@ -99,7 +83,9 @@ struct Dungeon: Decodable, Identifiable {
         self = try JSONDecoder().decode(Dungeon.self, from: matchJSON)
     }
  
-    /// Returns a list of all of the `Dungeons` stored on the local JSON file.
+    /// Returns an array of all of the `Dungeons` stored on the local JSON file.
+    ///
+    /// The array of dungeons has been sorted by the ID of each dungeon, from least to greatest.
     @MainActor
     static func getAllDungeons() throws -> [Dungeon] {
         print("Attempting to get all dungeons.")
@@ -116,11 +102,14 @@ struct Dungeon: Decodable, Identifiable {
         
         // Decode the data and store it within an immutable array
         let dungeonJSON: [String: [Dungeon]] = try JSONDecoder().decode([String: [Dungeon]].self, from: dungeonData)
-        guard let dungeons: [Dungeon] = dungeonJSON["dungeons"] else {
+        guard var dungeons: [Dungeon] = dungeonJSON["dungeons"] else {
             print("Failed to extract Dungeon array from String:[Dungeon] dictionary")
             
             throw DungeonError.DecodeError
         }
+        
+        // Sort the dungeon array using their IDs in ascending order
+        dungeons = dungeons.sorted { $0.id < $1.id }
         
         // TODO: Remove after testing
         dungeons.forEach { dungeon in

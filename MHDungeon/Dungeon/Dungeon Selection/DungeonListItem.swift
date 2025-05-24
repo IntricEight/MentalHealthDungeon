@@ -6,8 +6,7 @@
 import SwiftUI
 
 struct DungeonListItem: View {
-    // Contains the account which stores the user's current progress marker
-    @EnvironmentObject private var authModel: AuthModel
+    @Environment(DungeonState.self) private var dungeonState: DungeonState
     
     /// The `Dungeon` being displayed.
     private let dungeon: Dungeon?
@@ -33,34 +32,52 @@ struct DungeonListItem: View {
     var body: some View {
         let picWidth = screenWidth * 0.35
         
-        HStack {
-            // The dungeon's summary image and selection button
-            Button {
-                print("Dungeon \"\(name)\" has been selected.")
+        // The dungeon's summary image and selection button
+        Button {
+            print("Dungeon \"\(name)\" has been selected.")
+            
+            // TODO: Change the user's current dungeon to be the new one that the user has selected, unless they are seclecting the currently active one
+
+            // Check if the user has permission to access their desired dungeon.
+            if !locked {
+                // Change the active dungeon
+                dungeonState.ChangeDungeon(to: name)
                 
-                // TODO: Change the user's current dungeon to be the new one that the user has selected, unless they are seclecting the currently active one
+                
                 
                 // Return the user to the dungeon landing page with the newly selected dungeon
-            } label: {
+                dungeonState.ChangeView(to: DungeonPage.landing)
+                
+            } else {
+                print("User attempted to access a locked dungeon")
+                
+                // TODO: Cause a popup telling the user that they cannot use a locked dungeon? "<name> is locked."
+            }
+                
+                
+            
+        } label: {
+            HStack {
                 // TODO: Display the topical image of the dungeon. Replace the rounded rectangle with a rounded image?
                 RoundedRectangle(cornerRadius: 20)
                     .frame(width: picWidth, height: picWidth, alignment: .bottom)
                     .overlay {
                         // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
                         
-                    }
-            }.padding(.trailing, 20)
-            
-            VStack(alignment: .leading) {
-                Text("\(name)")
-                    .font(.title)
+                    }.padding(.trailing, 20)
                 
-                Divider()
-                
-                Text("Cost: \(cost)")
+                VStack(alignment: .leading) {
+                    Text("\(name)")
+                        .font(.title)
+                    
+                    Divider()
+                    
+                    Text("Cost: \(cost)")
+                }
             }
-            
         }
+            
+            
         
     }
 }
