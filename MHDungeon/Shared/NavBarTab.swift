@@ -17,7 +17,7 @@ struct NavBarTab: View {
         
         // Navigation tab button
         HStack {
-            // TODO: Place an icon with upward arrows here to show the functionality
+            NavBarArrows(iconDirection: "up")
         }
         .frame(width: screenWidth * 0.2, height: 40)
         .background(Color.blue)

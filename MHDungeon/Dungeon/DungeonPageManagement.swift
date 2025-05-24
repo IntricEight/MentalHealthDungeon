@@ -32,6 +32,7 @@ class DungeonState {
     
     /// Init which allows the caller to override the default landing page when creating the instance
     init(_ page: DungeonPage = DEFAULT_DUNGEON_VIEW, dungeonName: String = DEFAULT_DUNGEON_NAME) {
+        // Set the active page of the dungeon system
         self.currentView = page
         
         // Ensure that the default dungeon is created correctly

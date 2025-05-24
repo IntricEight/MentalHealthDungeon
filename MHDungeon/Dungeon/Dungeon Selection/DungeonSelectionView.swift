@@ -3,8 +3,6 @@
 //  MHDungeon
 //
 
-// TODO: Go around app and make private many of the variables inside Views
-
 import SwiftUI
 
 struct DungeonSelectionView: View {
@@ -29,7 +27,6 @@ struct DungeonSelectionView: View {
                 RoundedRectangle(cornerRadius: buttonRadius)
                     .frame(height: 50)
                     .foregroundColor(Color.orange)
-                    .padding(EdgeInsets(top: 0, leading: 64, bottom: 0, trailing: 64))
                     .overlay {
                         Text("Back")
                             .foregroundColor(.white)
@@ -37,8 +34,10 @@ struct DungeonSelectionView: View {
                             .font(.title)
                             .frame(alignment: .center)
                     }
+                    .contentShape(Rectangle())
             }
             .frame(alignment: .bottom)
+            .padding(EdgeInsets(top: 0, leading: 64, bottom: 0, trailing: 64))
         }
     }
 }

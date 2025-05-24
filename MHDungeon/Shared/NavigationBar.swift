@@ -24,7 +24,7 @@ struct NavigationBar: View {
                 
                 // Close Navigation tab button
                 HStack {
-                    // TODO: Place an icon with downward arrows here to show the functionality
+                    NavBarArrows(iconDirection: "down")
                 }
                 .frame(width: screenWidth * 0.2, height: 40)
                 .background(Color.blue)

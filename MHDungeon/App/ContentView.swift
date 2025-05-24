@@ -22,6 +22,7 @@ let appFont1 = 0
 struct ContentView: View {
     @EnvironmentObject private var authModel: AuthModel
     @Environment(AppState.self) private var appState: AppState
+    @State private var dungeonState: DungeonState = DungeonState()
     
     var body: some View {
         // 0xbababa was the prefered grey, moving to white until the issue with list backgrounds is fixed
@@ -35,6 +36,7 @@ struct ContentView: View {
                             // Displays the dungeon view system.
                             case AppPage.dungeon:
                                 DungeonView()
+                                    .environment(dungeonState)
                             // Displays the profile view system.
                             case AppPage.profile:
                                 ProfileView()

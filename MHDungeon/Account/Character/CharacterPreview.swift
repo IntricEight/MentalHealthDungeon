@@ -27,6 +27,7 @@ struct CharacterPreview: View {
                         .font(.custom("", size: 100))
                         .foregroundColor(Color.black)
                 }
+                .contentShape(Rectangle())
         }
     }
 }

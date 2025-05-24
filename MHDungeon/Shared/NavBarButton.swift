@@ -26,13 +26,14 @@ struct NavBarButton: View {
     var body: some View {
         // The button which contains the action and visual display for the operation
         Button {
-            //Print the destination notification message to the console
-            print(message)
+            // Only navigate if the user isn't already on the desired page
+            if appState.currentView != dest {
+                //Print the destination notification message to the console
+                print(message)
             
-            // Navigate to the destination view
-            appState.ChangeView(to: dest)
-            
-            print(appState.currentView)
+                // Navigate to the destination view
+                appState.ChangeView(to: dest)
+            }
             
         } label: {
             // A slightly rounded rectangle with an icon from SF Symbols in the center

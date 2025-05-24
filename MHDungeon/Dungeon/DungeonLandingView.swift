@@ -39,8 +39,8 @@ struct DungeonLandingView: View {
                         RoundedRectangle(cornerRadius: buttonRadius)
                             .frame(height: 50)
                             .foregroundColor(Color.red)
-                            .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
-                    }
+                            .contentShape(Rectangle())
+                    }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
                     
                     Spacer()
                     
@@ -55,19 +55,7 @@ struct DungeonLandingView: View {
                 
                 
                 // Dungeon Unlock Progress section
-                // TODO: Implement a series of images that show how much IP has been collected through the light on a lamp.
-                Button {
-                    print("Dungeon unlock (Visual progress) selected")
-                } label: {
-                    RoundedRectangle(cornerRadius: buttonRadius)
-                        .foregroundColor(Color.green)
-                        .frame(height: 400)
-                }
-                .padding(EdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16))
-                
-                
-                
-                
+                DungeonImage()
                 
                 
                 // Enter Dungeon section
@@ -78,7 +66,6 @@ struct DungeonLandingView: View {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .frame(height: 70)
                         .foregroundColor(Color.orange)
-                        .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
                         .overlay {
                             Text("\(dungeonState.currentDungeon?.name ?? "No dungeon connected!")")
                                 .foregroundColor(.white)
@@ -86,7 +73,8 @@ struct DungeonLandingView: View {
                                 .font(.title)
                                 .frame(alignment: .center)
                         }
-                }
+                        .contentShape(Rectangle())
+                }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
                 
                 
                 Spacer(minLength: 20)

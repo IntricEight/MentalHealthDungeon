@@ -48,9 +48,10 @@ struct ProfileView: View {
                             Circle()
                                 .frame(width: circleDiameter, height: circleDiameter, alignment: .leading)
                                 .foregroundColor(Color.yellow)
-                                .padding([.leading], 10)
                         }
-                        
+                        .padding([.leading], 10)
+                        .contentShape(Circle())
+
                         Spacer()
                         
                         // Account Progress tab button
@@ -68,6 +69,7 @@ struct ProfileView: View {
                                     )
                                 )
                                 .ignoresSafeArea(edges: .trailing)
+                                .contentShape(Rectangle())
                         }
                     }
                     .frame(maxHeight: circleDiameter)
@@ -88,6 +90,7 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.brown)
+                                .contentShape(Rectangle())
                         }
                         
                         
@@ -103,6 +106,7 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.indigo)
+                                .contentShape(Rectangle())
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -130,6 +134,7 @@ struct ProfileView: View {
                                 .frame(width: 200, height: 30, alignment: .top)
                                 .foregroundColor(Color.orange)
                                 .padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
+                                .contentShape(Rectangle())
                         }
                         
                         Spacer(minLength: 10)
