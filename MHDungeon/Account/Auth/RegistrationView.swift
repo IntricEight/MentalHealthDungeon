@@ -10,8 +10,8 @@ import _Concurrency
 ///
 /// - Note: Intended to be used as a part of a `NavigationStack`
 struct RegistrationView: View {
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var authModel: AuthModel
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var authModel: AuthModel
     
     // Gather the user's sign up information
     /// The user's unique email.

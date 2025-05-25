@@ -7,11 +7,11 @@ import SwiftUI
 
 /// A view which provides the user with a list of premade`Task`s that they can add to their `Account`.
 struct TaskPresetView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     // Communication (and settings) button controls
-    let buttonRadius: CGFloat = 20
-    let buttonHeight: CGFloat = 40
+    private let buttonRadius: CGFloat = 20
+    private let buttonHeight: CGFloat = 40
     
     var body: some View {
         // TODO: Create a list of preset tasks that the user can choose from. They can choose as little or as many items as they want. Display should look like the TaskListItem, except the check mark is replaced with a plus symbol that adds it to the user

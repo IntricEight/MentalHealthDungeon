@@ -8,7 +8,7 @@ import _Concurrency
 
 /// A view page that allows the user to log into an existing account to use in the application.
 struct SignInView: View {
-    @EnvironmentObject var authModel: AuthModel
+    @EnvironmentObject private var authModel: AuthModel
     
     // Gather the user's sign up information
     /// The user's unique email.

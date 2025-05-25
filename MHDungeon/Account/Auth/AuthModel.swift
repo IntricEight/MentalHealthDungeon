@@ -184,7 +184,7 @@ class AuthModel: ObservableObject {
     }
     
     /// Remove a `Task` from the user's local `Account` instance and the `Firestore`
-    func deleteTask(id taskUID: UUID?) {
+    func deleteTask(id taskUID: UUID?, isCompleted: Bool) {
         print("Removing Task UUID: \(String(describing: taskUID)).")
         
         // Check that an accounr is currently registered. Passed by reference, so changes to account affect currentAccount
@@ -206,14 +206,24 @@ class AuthModel: ObservableObject {
             return
         }
         
+        // Reward the user if the task was completed
+        if isCompleted {
+            // Reward the user for completing the task
+            account.RewardPoints(index: index)
+            
+            // Increase the user's total number of completed tasks
+            account.IncreaseTaskCompletions()
+        }
+        
         // Remove the task from the user's account
+        // TODO: Set a timer on the task category to prevent quickly-repeated use
         account.taskList.remove(at: index)
         
         // Convert the taskList into a dictionary to allow it to be used in updating the database record
         let updatedTaskList = account.taskList.map{ $0.toDictionary() }
     
-        // Remove the task from the database
-        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList ])
+        // Remove the task from the database, and update the user's inspiration points
+        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints ])
         
 //        print("Task at index \(index) with UID \(String(describing: taskUID)) removed from database. Please confirm in Firebase")
     }
@@ -245,5 +255,13 @@ class AuthModel: ObservableObject {
         }
         
         print("Changed user display name from \"\(oldName)\" to \"\(name)\"")
+    }
+    
+    
+    func updatePoints(inspirationPoints points: Int) {
+        
+        
+        
+        print("Changed IP record from ")
     }
 }

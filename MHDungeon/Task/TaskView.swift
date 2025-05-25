@@ -26,17 +26,17 @@ struct TaskView: View {
     /// This controls whether the menu-like button is present, or if the button has been split apart into the Custom and Preset options.
     @State var isExpanded: Bool = false
     
-    // TODO: Test converting into a set once the initial list is working
+    // TODO: Test converting into a set once the initial list is working. Also, if it needs privating
     /// The list of the user's `Task`s.
     @State var tasks: [Task] = []
     
-    // Dungeon button controls
+    // Task button controls
     // TODO: Make some environmental file where this stuff can be stored
-    let buttonRadius: CGFloat = 20
-    let buttonHeight: CGFloat = 50
+    private let buttonRadius: CGFloat = 20
+    private let buttonHeight: CGFloat = 50
     
     // Tab controls
-    let tabRadius: CGFloat = 30
+    private let tabRadius: CGFloat = 30
 
     
     var body: some View {

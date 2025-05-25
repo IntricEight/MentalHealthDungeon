@@ -7,10 +7,10 @@ import SwiftUI
 
 /// A view which guides the user through creating a custom `Task` before adding it to their `Account`.
 struct TaskCustomView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     // Contains the account which stores the list of the user's current tasks
-    @EnvironmentObject var authModel: AuthModel
+    @EnvironmentObject private var authModel: AuthModel
     
     /// The user-provided name of the `Task`.
     @State private var name: String = ""
@@ -29,8 +29,8 @@ struct TaskCustomView: View {
     @State private var createdTask: Task? = nil
     
     // Communication (and settings) button controls
-    let buttonRadius: CGFloat = 20
-    let buttonHeight: CGFloat = 40
+    private let buttonRadius: CGFloat = 20
+    private let buttonHeight: CGFloat = 40
     
     var body: some View {
         // TODO: Has various text and selection inputs to allow the user to create a task from several options
@@ -52,10 +52,6 @@ struct TaskCustomView: View {
                         .keyboardType(.decimalPad)
                 }
             }
-            
-            Spacer()
-            
-            Text("Allow the user to create a task")
             
             Spacer()
             

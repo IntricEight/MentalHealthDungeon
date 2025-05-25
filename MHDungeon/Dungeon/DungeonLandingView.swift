@@ -11,15 +11,16 @@ import SwiftUI
 /// - Choosing which dungeon level the user wants to adventure through.
 /// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
+    @Environment(DungeonState.self) private var dungeonState: DungeonState
+    
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
+    
+//    var testDungeon = try! Dungeon(name: "Dark Cave")
     
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
-        
-        // Tab controls
-        let tabRadius: CGFloat = 30
         
         // One layer for the main app stuff, and one for the overlay tab feature
         ZStack {
@@ -31,12 +32,15 @@ struct DungeonLandingView: View {
                     // TODO: Implement Dungeon selection feature (Popup or new page?)
                     Button {
                         print("Dungeon Selection selected")
+                        
+                        // Navigate to the Dungeon Selection page
+                        dungeonState.ChangeView(to: DungeonPage.selection)
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
                             .frame(height: 50)
                             .foregroundColor(Color.red)
-                            .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
-                    }
+                            .contentShape(Rectangle())
+                    }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
                     
                     Spacer()
                     
@@ -51,15 +55,7 @@ struct DungeonLandingView: View {
                 
                 
                 // Dungeon Unlock Progress section
-                // TODO: Implement a series of images that show how much IP has been collected through the light on a lamp.
-                Button {
-                    print("Dungeon unlock (Visual progress) selected")
-                } label: {
-                    RoundedRectangle(cornerRadius: buttonRadius)
-                        .foregroundColor(Color.green)
-                        .frame(height: 400)
-                }
-                .padding(EdgeInsets(top: 0, leading: 16, bottom: 24, trailing: 16))
+                DungeonImage()
                 
                 
                 // Enter Dungeon section
@@ -70,8 +66,15 @@ struct DungeonLandingView: View {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .frame(height: 70)
                         .foregroundColor(Color.orange)
-                        .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
-                }
+                        .overlay {
+                            Text("\(dungeonState.currentDungeon?.name ?? "No dungeon connected!")")
+                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .font(.title)
+                                .frame(alignment: .center)
+                        }
+                        .contentShape(Rectangle())
+                }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
                 
                 
                 Spacer(minLength: 20)

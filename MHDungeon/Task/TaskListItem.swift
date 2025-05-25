@@ -13,24 +13,27 @@ struct TaskListItem: View {
     @EnvironmentObject var authModel: AuthModel
     
     /// The `Task` being displayed.
-    var task: Task?
+    private var task: Task?
     
-    // Features from the `Task` that have been brought out into their own variables.
+    // Features from the Task that have been brought out into their own variables.
     /// The name of the `Task`.
-    let name: String
+    private let name: String
     /// The number of `Inspiration Points` that the `Task` will reward.
-    let points: Int
+    private let points: Int
     /// Tracks the time when the `Task` expires.
-    let expirationTime: Date
+    private let expirationTime: Date
 
     /// A visual countdown of the time remaining before the `Task` expires.
     @State private var timeRemaining: String = "Expires in <LOADING>"
     
-    /// Controls how frequently the visual countdown updates.
-    let timeInterval: Double = 40
+    /// Controls how frequently the visual countdown updates (In seconds).
+    private let timeInterval: Double = 40
+    /// Message to show that the countdown has elapsed
+    private let expiredMessage: String = "Expired"
+    
 
-    // Official init, this is what should be used when this view is actually being called
-    /// Initialize the visual with a `Task` item.
+    // Official init, this is what should be used when this view is actually being called by lists.
+    /// Initialize the list visual with a `Task` item.
     init(_ task: Task) {
         self.task = task
         
@@ -56,27 +59,27 @@ struct TaskListItem: View {
             .foregroundColor(Color.green)
             .frame(width: screenWidth * 0.9, height: 140, alignment: .bottom)
             .overlay {
-                VStack{
+                VStack {
                     // Checkmark and name
                     HStack {
                         // Checkmark button to mark the task as complete
                         Button {
                             print("\(name) checked!")
                             
-                            // TODO: Remove after testing, and replace with a completion method instead
-                            authModel.deleteTask(id: task?.id)
+                            // Mark the Task as either failed or completed and remove it from the user
+                            Task.deleteTask(id: task?.id, authAccess: authModel, isCompleted: timeRemaining != expiredMessage)
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.black)
                                 .frame(width: 80, height: 80, alignment: .topLeading)
                                 .overlay {
-                                    Image(systemName: "checkmark")
+                                    Image(systemName: timeRemaining != expiredMessage ? "checkmark" : "xmark")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 60, height: 60, alignment: .center)
                                         .foregroundColor(Color.white)
                                 }
-                        }
+                        }.buttonStyle(.borderless)
                         
                         Spacer(minLength: 16)
                         
@@ -112,7 +115,7 @@ struct TaskListItem: View {
         
         // Ensure that the expiration time hasn't already passed.
         guard expirationTime > now else {
-            timeRemaining = "Expired"
+            timeRemaining = expiredMessage
             return
         }
         
