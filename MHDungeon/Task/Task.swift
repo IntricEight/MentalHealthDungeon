@@ -128,9 +128,16 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         ]
     }
     
+    // TODO: Check if I can remove the ? on UUID? without breaking anything?
+    
     /// `@MainActor` static function that removes the provided `Task` from the application and `Firebase` storage.
     ///
     /// If the `Task` was completed successfully, rewards the player with the appropriate points.
+    ///
+    /// - Parameters:
+    ///   - taskUID: The unique ID of the `Task` being deleted.
+    ///   - auth: The `AuthModel` that manages access to the `Firebase` records.
+    ///   - isCompleted: Whether the `Task` was completed successfully, or was failed and is being removed.
     @MainActor
     static func deleteTask(id taskUID: UUID?, authAccess auth: AuthModel, isCompleted: Bool)
     {

@@ -65,7 +65,7 @@ struct SignInView: View {
                     // Logic to process login attempt
                     // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
                     _Concurrency.Task {
-                        try await authModel.signIn(withEmail: email, password: password)
+                        try await authModel.SignIn(withEmail: email, password: password)
                     }
                               
                 } label: {

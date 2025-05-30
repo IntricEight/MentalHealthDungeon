@@ -83,11 +83,11 @@ struct Dungeon: Decodable, Identifiable {
         self = try JSONDecoder().decode(Dungeon.self, from: matchJSON)
     }
  
-    /// Returns an array of all of the `Dungeons` stored on the local JSON file.
+    /// `@MainActor` static function that returns an array of all of the `Dungeons` stored on the local JSON file.
     ///
     /// The array of dungeons has been sorted by the ID of each dungeon, from least to greatest.
     @MainActor
-    static func getAllDungeons() throws -> [Dungeon] {
+    static func GetAllDungeons() throws -> [Dungeon] {
         print("Attempting to get all dungeons.")
         
         // Get the url for the Dungeons file, or throw a NotFound error if it does not exist.
@@ -118,4 +118,19 @@ struct Dungeon: Decodable, Identifiable {
         
         return dungeons
     }
+    
+    /// `@MainActor` static function that begins an adventure within a `Dungeon`.
+    ///
+    /// - Parameters:
+    ///   - dungeonID: The ID of the `Dungeon` where the adventure is starting.
+    ///   - auth: The `AuthModel` that manages access to the `Firebase` records.
+    @MainActor
+    static func BeginDungeon(id dungeonID: Int, authAccess auth: AuthModel) {
+        
+        
+        
+    }
+    
+    
+    
 }

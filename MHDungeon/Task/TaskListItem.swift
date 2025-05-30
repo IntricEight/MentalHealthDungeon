@@ -53,8 +53,10 @@ struct TaskListItem: View {
     
     var body: some View {
         
+        // TODO: Bring the name and other task details into here to bring them out of Struct variable status.
+        // This will require changing the preview, which is why I haven't done it yet myself.
+        
         // Task display bar with buttons
-        // TODO: Figure out why the checkmark button code executes wherever you click on the task
         RoundedRectangle(cornerRadius: 20)
             .foregroundColor(Color.green)
             .frame(width: screenWidth * 0.9, height: 140, alignment: .bottom)

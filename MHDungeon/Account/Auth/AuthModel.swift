@@ -42,7 +42,7 @@ class AuthModel: ObservableObject {
     /// - Parameters:
     ///   - email: The user's unique email address.
     ///   - password: The user's password.
-    func signIn(withEmail email: String, password: String) async throws {
+    func SignIn(withEmail email: String, password: String) async throws {
         print("Sign in attempt with email '\(email)' and password '\(password)'")
         
         do {

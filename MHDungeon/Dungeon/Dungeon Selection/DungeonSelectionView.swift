@@ -47,7 +47,7 @@ struct DungeonSelectionView: View {
 }
 
 struct DungeonListView: View {
-    private var dungeonList: [Dungeon] = (try? Dungeon.getAllDungeons()) ?? []
+    private var dungeonList: [Dungeon] = (try? Dungeon.GetAllDungeons()) ?? []
     
     var body: some View {
         if dungeonList.isEmpty {

@@ -34,7 +34,13 @@ class Account: Identifiable, Codable, ObservableObject {
     @Published public private(set) var tasksCompleted: Int = 0
     
     // Dungeon Data
+    /// The ID of the currently active `Dungeon`.
+    ///
+    /// A value of 0 means that no dungeon is active at the moment.
+    @Published var dungeonActiveId: Int = 0
     /// The time when the current dungeon session is completed.
+    ///
+    /// Before using this, you should check and make sure that `dungeonActiveId` is not 0.
     @Published var dungeonEndTime: Date?
     //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
     /// The number of dungeons that the user has completed.
