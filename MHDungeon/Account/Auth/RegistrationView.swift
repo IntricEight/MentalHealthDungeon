@@ -99,7 +99,7 @@ struct RegistrationView: View {
                 
                 // Logic to process account creation attempt
                 _Concurrency.Task {
-                    try await authModel.createUser(withEmail: email, displayName: customName, password: password)
+                    try await authModel.CreateUser(withEmail: email, displayName: customName, password: password)
                 }
                 
             }) {

@@ -11,6 +11,10 @@ enum DungeonError: Error, LocalizedError {
     case NotFound
     /// Thrown when an error is encountered during the decoding process.
     case DecodeError
+    /// Thrown when there is an attempt to start an adventure when another one is already in progress
+    case AlreadyActive
+    /// Thrown when the user tries to start a `Dungeon` that they cannot afford to enter.
+    case NotEnoughIP
     
     /// The useful description of each error used by `LocalizedError`.
     var errorDescription: String? {
@@ -19,6 +23,10 @@ enum DungeonError: Error, LocalizedError {
                 return "No dungeon was found with that name."
             case .DecodeError:
                 return "Failed to properly decode the dungeon's JSON file."
+            case .AlreadyActive:
+                return "Cannot begin another adventure when one is already active."
+            case .NotEnoughIP:
+                return "User does not own enough IP to begin this dungeon."
         }
     }
 }
@@ -125,12 +133,20 @@ struct Dungeon: Decodable, Identifiable {
     ///   - dungeonID: The ID of the `Dungeon` where the adventure is starting.
     ///   - auth: The `AuthModel` that manages access to the `Firebase` records.
     @MainActor
-    static func BeginDungeon(id dungeonID: Int, authAccess auth: AuthModel) {
-        
-        
-        
+    static func BeginDungeon(dungeonName name: String, authAccess auth: AuthModel) {
+        do {
+            // Begin the adventure through the auth model
+            try auth.BeginAdventure(dungeonName: name)
+        } catch {
+            print("Failed to begin dungeon \"\(name)\"")
+        }
     }
     
-    
+    /// `@MainActor` static function that completes an adventure within a `Dungeon`.
+    @MainActor
+    static func CompleteDungeon(dungeonName name: String, authAccess auth: AuthModel) {
+        // Complete the adventure through the auth model
+        auth.CompleteAdventure(dungeonName: name)
+    }
     
 }

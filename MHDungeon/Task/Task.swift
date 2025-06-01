@@ -139,10 +139,10 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     ///   - auth: The `AuthModel` that manages access to the `Firebase` records.
     ///   - isCompleted: Whether the `Task` was completed successfully, or was failed and is being removed.
     @MainActor
-    static func deleteTask(id taskUID: UUID?, authAccess auth: AuthModel, isCompleted: Bool)
+    static func DeleteTask(id taskUID: UUID?, authAccess auth: AuthModel, isCompleted: Bool)
     {
         // This function largely exists at present to abstract away the AuthModel access from views.
-        auth.deleteTask(id: taskUID, isCompleted: isCompleted)
+        auth.DeleteTask(id: taskUID, isCompleted: isCompleted)
     }
     
     

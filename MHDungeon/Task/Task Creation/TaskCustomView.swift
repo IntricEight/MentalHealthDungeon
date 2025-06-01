@@ -90,8 +90,9 @@ struct TaskCustomView: View {
                     }
 
                     do {
+                        // TODO: Make a static function inside Task and hide the authModel inside
                         // Attempt to create a task using the data provided by the user
-                        try authModel.addTask(name: name, details: details, points: points, hours: hours)
+                        try authModel.AddTask(name: name, details: details, points: points, hours: hours)
                         
                         // Dismiss the view.
                         print("< Created a new Task of {\(name), \(details), \(points), \(hours)}")

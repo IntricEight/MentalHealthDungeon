@@ -84,8 +84,9 @@ struct DungeonLandingView: View {
                     // Change the color of the button based on whether the user can use it or not
                         .foregroundColor( (currentPoints >= dungeonCost) ? Color.green : Color.orange)
                         .overlay {
-                            Text("\(currentPoints) / \(dungeonCost) points collected")
-                                .foregroundColor(.white)
+                            Text(authModel.currentAccount?.dungeonActiveId ?? 0 > 0
+                                 ? "Adventure in progress"
+                                 : "\(currentPoints) / \(dungeonCost) points collected")                                .foregroundColor(.white)
                                 .fontWeight(.semibold)
                                 .font(.title)
                                 .frame(alignment: .center)

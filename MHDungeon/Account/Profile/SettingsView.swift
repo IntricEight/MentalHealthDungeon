@@ -30,7 +30,7 @@ struct SettingsView: View {
                     Button {
                         print("Signing out.")
                         
-                        authModel.signOut()
+                        authModel.SignOut()
                     } label: {
                         Text("Sign out")
                     }
@@ -41,7 +41,7 @@ struct SettingsView: View {
                         
                         // Logic to process deleting an account
                         _Concurrency.Task {
-                            await authModel.deleteUser()
+                            await authModel.DeleteUser()
                         }
                     } label: {
                         Text("Delete account")

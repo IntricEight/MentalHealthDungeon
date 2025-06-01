@@ -10,6 +10,19 @@ struct DungeonAdventureView: View {
     @EnvironmentObject var authModel: AuthModel
     @Environment(DungeonState.self) private var dungeonState: DungeonState
     
+    /// A visual countdown of the time remaining before the `Task` expires.
+    @State private var timeRemaining: String = "Completes in <LOADING>"
+    
+    // TODO: Decide if I should end up writing anything before the timer
+    /// A template to base the `timeRemaining` display value off of.
+    private let timeRemainingTemplate: String = ""
+    /// Controls how frequently the visual countdown updates (In seconds).
+    private let timeInterval: Double = 1
+    /// Message to show that the countdown has elapsed
+    private let expiredMessage: String = "Dungeon complete!"
+    
+    // Get a timer to convert the remanining time into Days, Hours, Minutes, Seconds format
+    private let dhmsTimer: DHMSTimer = DHMSTimer()
     
     var body: some View {
         /// The name of the current active `Dungeon`.
@@ -18,7 +31,6 @@ struct DungeonAdventureView: View {
         let dungeonCost = dungeonState.currentDungeon?.cost ?? 999
         /// The current number of `Inspiration Points` that the user has in their `Account`.
         let currentPoints = authModel.currentAccount?.inspirationPoints ?? -1
-        
         
         // Main screen view
         VStack {
@@ -59,22 +71,31 @@ struct DungeonAdventureView: View {
                 print("Attempting to begin \(dungeonName) - \(currentPoints)/\(dungeonCost) IP owned.")
                 
                 // Begin the dungeon's timer
-                Dungeon.BeginDungeon(id: dungeonState.currentDungeon?.id ?? 0, authAccess: authModel)
-                
-                
+                Dungeon.BeginDungeon(dungeonName: dungeonName, authAccess: authModel)
                 
             } label: {
                 RoundedRectangle(cornerRadius: 20)
                     .frame(height: 70)
                     .foregroundColor(Color.green)
                     .overlay {
-                        Text("Begin the Adventure!")
+                        // If an adventure has begun, display the remaining time in a sporatic countdown. Otherwise, allow it to begin, and start displaying the remaining time
+                        Text(authModel.currentAccount?.dungeonActiveId ?? 0 > 0
+                             ? timeRemaining
+                             : "Begin the Adventure!")
                             .foregroundColor(.white)
                             .fontWeight(.semibold)
                             .font(.title)
                             .frame(alignment: .center)
                     }
                     .contentShape(Rectangle())
+                    .onAppear {
+                        // Ensure that the time until completion is displayed upon loading
+                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: expiredMessage)
+                    }
+                    .onReceive(Timer.publish(every: timeInterval, on: .main, in: .common).autoconnect()) { _ in
+                        // After timeInterval second(s) have passed, this takes over the remaining time display
+                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: expiredMessage)
+                        }
             }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
             
             

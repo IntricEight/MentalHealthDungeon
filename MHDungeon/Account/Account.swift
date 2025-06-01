@@ -24,7 +24,7 @@ class Account: Identifiable, Codable, ObservableObject {
     /// The user's current `Inspiration Points` counter.
     @Published var inspirationPoints: Int = 0
     /// The user's maximum `Inspiration Points` allowed.
-    var maxIP: Int = STARTING_MAX_IP
+    @Published var maxIP: Int = STARTING_MAX_IP
     
     // Task Data
     /// A list of the user's tasks. Ordered from oldest to newest.
@@ -41,14 +41,13 @@ class Account: Identifiable, Codable, ObservableObject {
     /// The time when the current dungeon session is completed.
     ///
     /// Before using this, you should check and make sure that `dungeonActiveId` is not 0.
-    @Published var dungeonEndTime: Date?
+    @Published var dungeonEndTime: Date = Date.distantPast
     //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
+    
     /// The number of dungeons that the user has completed.
     @Published public private(set) var dungeonsCompleted: Int = 0
     /// Tracks the user's progression through the dungeon.
     var dungeonProgression: [Int] = [1,1]
-    
-    
     
     /// Create a new account with no points. Adds the default tasks to the user's account.
     /// - Parameters:
@@ -86,6 +85,7 @@ class Account: Identifiable, Codable, ObservableObject {
         case tasksCompleted
         
         // Dungeon data
+        case dungeonActiveId
         case dungeonEndTime
         case dungeonsCompleted
         case dungeonProgression
@@ -112,7 +112,8 @@ class Account: Identifiable, Codable, ObservableObject {
         try container.encode(tasksCompleted, forKey: CodingKeys.tasksCompleted)
         
         // Dungeon data
-        try container.encodeIfPresent(dungeonEndTime, forKey: CodingKeys.dungeonEndTime)
+        try container.encode(dungeonActiveId, forKey: CodingKeys.dungeonActiveId)
+        try container.encode(dungeonEndTime, forKey: CodingKeys.dungeonEndTime)
         try container.encode(dungeonsCompleted, forKey: CodingKeys.dungeonsCompleted)
         try container.encode(dungeonProgression, forKey: CodingKeys.dungeonProgression)
     }
@@ -136,7 +137,8 @@ class Account: Identifiable, Codable, ObservableObject {
         tasksCompleted = try container.decode(Int.self, forKey: CodingKeys.tasksCompleted)
         
         // Dungeon data
-        dungeonEndTime = try container.decodeIfPresent(Date.self, forKey: CodingKeys.dungeonEndTime)
+        dungeonActiveId = try container.decode(Int.self, forKey: CodingKeys.dungeonActiveId)
+        dungeonEndTime = try container.decode(Date.self, forKey: CodingKeys.dungeonEndTime)
         dungeonsCompleted = try container.decode(Int.self, forKey: CodingKeys.dungeonsCompleted)
         dungeonProgression = try container.decode([Int].self, forKey: CodingKeys.dungeonProgression)
     }
@@ -190,11 +192,62 @@ class Account: Identifiable, Codable, ObservableObject {
         // This function accesses the current dungeon, and checks how many stages it has. If the user is not on the final stage, then progress them to the next stage.
         // If the user is on the final stage, then progress them to the next dungeon.
         // If the user is on the final stage of the final dungeon, then the adventure has been completed, and we will need to inform them of such.
+        
+        // [0] = Dungeon level, [1] = Level's stage
+        
+        
+        // IDEAFEST
+        dungeonProgression[0] += 1
+        
     }
     
+    /// Set an adventure's timer within the user's account.
+    ///
+    /// The `Account`'s timer is only valid when the active dungeon Id is a nonzero value.
+    ///
+    /// - Parameters:
+    ///   - dungeon: The dungeon that the user is adventuring within.
+    func BeginAdventure(dungeon: Dungeon) throws {
+        // Check if an adventure is already in progress
+        if dungeonActiveId != 0 {
+            throw DungeonError.AlreadyActive
+        }
+        
+        // Make sure the proper number of points are owned. If not, throw back an error
+        if dungeon.cost < inspirationPoints {
+            
+        }
+        
+        // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
+        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours * 3600))
+        // IDEAFEST
+//        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours))
+        
+        // Store the completion timestamp of the adventure
+        dungeonEndTime = endTime
+        
+        // Set the active dungeon Id
+        dungeonActiveId = dungeon.id
+    }
     
-    
-    
+    /// Set an adventure's timer within the user's account.
+    ///
+    /// The `Account`'s timer is only valid when the active dungeon Id is a nonzero value.
+    ///
+    /// - Parameters:
+    ///   - dungeon: The dungeon that the user was adventuring within.
+    func CompleteAdventure(dungeon: Dungeon) {
+        // TODO: Use this to reward the user once rewards are implemented
+        
+        dungeonsCompleted += 1
+        
+        
+        // TODO: Lock progression behind checking if the furthest dungeon was completed. Decide whether this should be done here or inside the function? Probably here, that way the stage-level progression logic can be separated from the checking
+        self.ProgressDungeon()
+        
+        // Reset the active dungeon Id. Setting it to 0 means the Timer is now invalid and should not be used
+        dungeonActiveId = 0
+    }
     
     
     
