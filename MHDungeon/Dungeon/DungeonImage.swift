@@ -11,12 +11,15 @@ struct DungeonImage: View {
     @EnvironmentObject private var authModel: AuthModel
     @Environment(DungeonState.self) private var dungeonState: DungeonState
     
-    
+    /// The stage of the dungeon's image that we wish to display.
+    ///
+    /// Currently, this allows numbers between 0 and 3.
     @State var stage: Int = 0
     
     var body: some View {
         /// The name of the current active `Dungeon`.
         let dungeonName: String = dungeonState.currentDungeon?.name ?? "Dungeon failed to load"
+        let dungeonImages: [String] = dungeonState.currentDungeon?.imageNames ?? []
         
         ZStack {
             // The Image Section
@@ -27,34 +30,23 @@ struct DungeonImage: View {
                 //      During IDEAFest version, this should change depending on the percentage of completion the current adventure is at.
                 //      TODO: In final version, have this change depending on the Stage of the Dungeon's Level that we are in
                 
-                // TODO: Add the image feature here, and remove the testing text display
-                switch stage {
-                    case 0:
-                        
-                        Text("In the starting zone")
-                        
-                    case 1:
-                        
-                        Text("Just beginning, are we?")
-                        
-                    case 2:
-                        
-                        Text("You're partway there!")
-                        
-                    case 3:
-                        
-                        Text("Almost done! You've got this!")
-                        
-                    default:
-                        
-                        Text("The default is being displayed?? Uh oh!")
-                        
+                if dungeonImages.count != 0 || stage < dungeonImages.count {
+                    Image(dungeonImages[stage])
+                        .resizable()
+                        .aspectRatio(contentMode: ContentMode.fill)
+                } else {
+                    VStack {
+                        Text("Image failed to load.")
+                            .foregroundColor(.white)
+                            .font(.title2)
+                    }
                 }
+                
             }.zIndex(1)
             
             //The Label Section
             VStack {
-                Spacer()
+//                Spacer()
                 
                 // The opaque background of the text
                 VStack {
@@ -63,9 +55,11 @@ struct DungeonImage: View {
                         .font(.largeTitle)
                         .foregroundColor(.white)
                 }
-                .frame(alignment: .bottom)
+                .frame(alignment: .top)
                 .frame(maxWidth: .infinity, maxHeight: 80)
                 .background(.gray.opacity(0.75))
+                
+                Spacer()
                 
             }.zIndex(10)
         }

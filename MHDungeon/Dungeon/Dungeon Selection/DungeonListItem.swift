@@ -19,6 +19,8 @@ struct DungeonListItem: View {
     // TODO: Implement the locking feature that prevents the user from accessing dungeons that they haven't yet unlocked
     /// Whether the displayed `Dungeon` should be locked to the user.
     private let locked: Bool = false
+    /// An image that shows what kind of dungeon is being displayed on offer
+    private let dungeonImage: String
     
     // Official init, this is what should be used when this view is actually being called by lists.
     /// Initialize the list visual with a `Dungeon` item.
@@ -27,6 +29,7 @@ struct DungeonListItem: View {
         
         self.name = dungeon.name
         self.cost = dungeon.cost
+        self.dungeonImage = dungeon.imageNames[1]
     }
     
     var body: some View {
@@ -42,8 +45,6 @@ struct DungeonListItem: View {
             if !locked {
                 // Change the active dungeon
                 dungeonState.ChangeDungeon(to: name)
-                
-                
                 
                 // Return the user to the dungeon landing page with the newly selected dungeon
                 dungeonState.ChangeView(to: DungeonPage.landing)
@@ -63,6 +64,12 @@ struct DungeonListItem: View {
                     .frame(width: picWidth, height: picWidth, alignment: .bottom)
                     .overlay {
                         // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
+                        
+                        
+                        Image(dungeonImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                        
                         
                     }.padding(.trailing, 20)
                 

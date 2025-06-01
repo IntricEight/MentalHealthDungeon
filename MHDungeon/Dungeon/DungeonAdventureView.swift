@@ -76,7 +76,7 @@ struct DungeonAdventureView: View {
             
             
             // Dungeon Unlock Progress section
-            DungeonImage(stage: 0)
+            DungeonImage(stage: 1)
             
             
             // Begin the Adventure section

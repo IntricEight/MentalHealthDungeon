@@ -47,7 +47,13 @@ struct ProfileView: View {
                         } label: {
                             Circle()
                                 .frame(width: circleDiameter, height: circleDiameter, alignment: .leading)
-                                .foregroundColor(Color.yellow)
+                                .foregroundColor(Color.black)
+                                .overlay {
+                                    Image("blank-profile")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(.circle)
+                                }
                         }
                         .padding([.leading], 10)
                         .contentShape(Circle())
