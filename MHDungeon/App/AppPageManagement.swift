@@ -21,7 +21,7 @@ public enum AppPage {
 }
 
 // MARK: Set the default values of the application here
-private let DEFAULT_DUNGEON_VIEW: AppPage = .dungeon
+private let DEFAULT_DUNGEON_VIEW: AppPage = .profile
 
 /// Manages the current major page(s) section of the application.
 ///

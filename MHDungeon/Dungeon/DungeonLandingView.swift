@@ -38,14 +38,33 @@ struct DungeonLandingView: View {
                     Button {
                         print("Dungeon Selection selected")
                         
-                        // Navigate to the Dungeon Selection page
-                        dungeonState.ChangeView(to: .selection)
+                        // Check if a dungeon adventure is active
+                        if authModel.currentAccount?.dungeonActiveId ?? 0 <= 0 {
+                            // Navigate to the Dungeon Selection page
+                            dungeonState.ChangeView(to: .selection)
+                        } else {
+                            // TODO: Alert the user that they cannot change dungeons when an adventure is active
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
-                            .frame(height: 50)
+                            .frame(width: 225, height: 50)
                             .foregroundColor(Color.red)
                             .contentShape(Rectangle())
-                    }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "list.triangle")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 30))
+                                    
+                                    Text("Selection")
+                                        .foregroundColor(.white)
+                                        .fontWeight(.semibold)
+                                        .font(.title)
+                                }
+                                .frame(alignment: .center)
+                        }
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 26, bottom: 0, trailing: 16))
                     
                     Spacer()
                     
@@ -53,7 +72,7 @@ struct DungeonLandingView: View {
                     SmallProfileImage()
                         .frame(alignment: .trailing)
                 }
-                .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
+                .padding(EdgeInsets(top: 64, leading: 16, bottom: 10, trailing: 16))
                 
                 
                 // Perhaps add a title line for the level name + stage #?
@@ -66,10 +85,10 @@ struct DungeonLandingView: View {
                 // Enter Dungeon section
                 // TODO: Implement gradually filling the bar based on current IP score
                 Button {
-                    print("Attempting to begin \(dungeonName) - \(currentPoints)/\(dungeonCost) IP owned.")
-                    
                     // Check if the user has enough points to begin the adventure
                     if currentPoints >= dungeonCost {
+                        print("Attempting to begin \(dungeonName) - \(currentPoints)/\(dungeonCost) IP owned.")
+                        
                         // Allow the user to enter the dungeon adventure view
                         dungeonState.ChangeView(to: .adventure)
                         
@@ -81,12 +100,13 @@ struct DungeonLandingView: View {
                 } label: {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .frame(height: 70)
-                    // Change the color of the button based on whether the user can use it or not
+                        // Change the color of the button based on whether the user can use it or not
                         .foregroundColor( (currentPoints >= dungeonCost) ? Color.green : Color.orange)
                         .overlay {
                             Text(authModel.currentAccount?.dungeonActiveId ?? 0 > 0
                                  ? "Adventure in progress"
-                                 : "\(currentPoints) / \(dungeonCost) points collected")                                .foregroundColor(.white)
+                                 : "\(currentPoints) / \(dungeonCost) points collected")
+                                .foregroundColor(.white)
                                 .fontWeight(.semibold)
                                 .font(.title)
                                 .frame(alignment: .center)

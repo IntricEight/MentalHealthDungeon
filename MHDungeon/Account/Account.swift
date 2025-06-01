@@ -37,11 +37,11 @@ class Account: Identifiable, Codable, ObservableObject {
     /// The ID of the currently active `Dungeon`.
     ///
     /// A value of 0 means that no dungeon is active at the moment.
-    @Published var dungeonActiveId: Int = 0
+    @Published public private(set) var dungeonActiveId: Int = 0
     /// The time when the current dungeon session is completed.
     ///
     /// Before using this, you should check and make sure that `dungeonActiveId` is not 0.
-    @Published var dungeonEndTime: Date = Date.distantPast
+    @Published public private(set) var dungeonEndTime: Date = Date.distantPast
     //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
     
     /// The number of dungeons that the user has completed.
@@ -239,8 +239,7 @@ class Account: Identifiable, Codable, ObservableObject {
     func CompleteAdventure(dungeon: Dungeon) {
         // TODO: Use this to reward the user once rewards are implemented
         
-        dungeonsCompleted += 1
-        
+        self.IncreaseDungeonCompletions()
         
         // TODO: Lock progression behind checking if the furthest dungeon was completed. Decide whether this should be done here or inside the function? Probably here, that way the stage-level progression logic can be separated from the checking
         self.ProgressDungeon()

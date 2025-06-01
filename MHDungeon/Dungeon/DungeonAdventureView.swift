@@ -19,7 +19,7 @@ struct DungeonAdventureView: View {
     /// Controls how frequently the visual countdown updates (In seconds).
     private let timeInterval: Double = 1
     /// Message to show that the countdown has elapsed
-    private let expiredMessage: String = "Dungeon complete!"
+    private let completedMessage: String = "Dungeon complete!"
     
     // Get a timer to convert the remanining time into Days, Hours, Minutes, Seconds format
     private let dhmsTimer: DHMSTimer = DHMSTimer()
@@ -43,12 +43,25 @@ struct DungeonAdventureView: View {
                     // Navigate to the Dungeon Landing page
                     dungeonState.ChangeView(to: .landing)
                 } label: {
-                    // TODO: Add a back arrow to the button
                     RoundedRectangle(cornerRadius: 20)
-                        .frame(height: 50)
+                        .frame(width: 150, height: 50)
                         .foregroundColor(Color.blue)
                         .contentShape(Rectangle())
-                }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
+                        .overlay {
+                            HStack {
+                                Image(systemName: "arrowshape.turn.up.right.fill")
+                                    .foregroundColor(.white)
+                                    .rotationEffect(.degrees(180))
+                                    .fontWeight(.heavy)
+                                
+                                Text("Back")
+                                    .foregroundColor(.white)
+                                    .fontWeight(.semibold)
+                                    .font(.title)
+                            }
+                            .frame(alignment: .center)
+                        }
+                }.padding(EdgeInsets(top: 0, leading: 42, bottom: 0, trailing: 16))
                 
                 Spacer()
                 
@@ -70,8 +83,26 @@ struct DungeonAdventureView: View {
             Button {
                 print("Attempting to begin \(dungeonName) - \(currentPoints)/\(dungeonCost) IP owned.")
                 
-                // Begin the dungeon's timer
-                Dungeon.BeginDungeon(dungeonName: dungeonName, authAccess: authModel)
+                // Check if the dungeon has been completed, or can be started
+                if authModel.currentAccount?.dungeonActiveId ?? 0 > 0 {
+                    // Check if the current adventure has been finished
+                    if timeRemaining == completedMessage {
+                        print("Completing the current adventure in \(dungeonName) [\(authModel.currentAccount?.dungeonActiveId ?? -1)].")
+                        
+                        Dungeon.CompleteDungeon(dungeonName: dungeonName, authAccess: authModel)
+                        
+                        // Return the user to the landing page dungeon
+                        dungeonState.ChangeView(to: .landing)
+                    } else {
+                        print("Cannot begin a new dungeon, one is already in progress.")
+                    }
+                    
+                } else {
+                    print("Beginning an adventure in \(dungeonName).")
+                    
+                    // Begin the dungeon's adventure timer
+                    Dungeon.BeginDungeon(dungeonName: dungeonName, authAccess: authModel)
+                }
                 
             } label: {
                 RoundedRectangle(cornerRadius: 20)
@@ -90,11 +121,11 @@ struct DungeonAdventureView: View {
                     .contentShape(Rectangle())
                     .onAppear {
                         // Ensure that the time until completion is displayed upon loading
-                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: expiredMessage)
+                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: completedMessage)
                     }
                     .onReceive(Timer.publish(every: timeInterval, on: .main, in: .common).autoconnect()) { _ in
                         // After timeInterval second(s) have passed, this takes over the remaining time display
-                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: expiredMessage)
+                        dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: authModel.currentAccount?.dungeonEndTime ?? Date.distantPast, template: timeRemainingTemplate, message: completedMessage)
                         }
             }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
             

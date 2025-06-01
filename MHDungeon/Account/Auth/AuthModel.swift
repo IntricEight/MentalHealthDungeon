@@ -223,7 +223,7 @@ class AuthModel: ObservableObject {
         let updatedTaskList = account.taskList.map{ $0.toDictionary() }
     
         // Remove the task from the database, and update the user's inspiration points
-        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints ])
+        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints, "tasksCompleted": account.tasksCompleted ])
         
 //        print("Task at index \(index) with UID \(String(describing: taskUID)) removed from database. Please confirm in Firebase")
     }
@@ -317,7 +317,7 @@ class AuthModel: ObservableObject {
         account.CompleteAdventure(dungeon: activeDungeon)
         
         // Update the database with the now-inactive dungeon Id
-        Firestore.firestore().collection("users").document(uid).updateData(["dungeonActiveId": account.dungeonActiveId ])
+        Firestore.firestore().collection("users").document(uid).updateData(["dungeonActiveId": account.dungeonActiveId, "dungeonsCompleted": account.dungeonsCompleted ])
         
         print("Completed the dungeon in the Auth Model!")
     }

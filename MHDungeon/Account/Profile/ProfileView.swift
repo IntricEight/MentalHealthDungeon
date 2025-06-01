@@ -70,6 +70,18 @@ struct ProfileView: View {
                                 )
                                 .ignoresSafeArea(edges: .trailing)
                                 .contentShape(Rectangle())
+                                .overlay {
+                                    HStack (spacing: 0) {
+                                        Image(systemName: "chevron.compact.backward")
+                                            .imageScale(.large)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                        Image(systemName: "chevron.compact.backward")
+                                            .imageScale(.large)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                    }
+                                }
                         }
                     }
                     .frame(maxHeight: circleDiameter)
@@ -91,6 +103,16 @@ struct ProfileView: View {
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.brown)
                                 .contentShape(Rectangle())
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "envelope.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Messages")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
                         }
                         
                         
@@ -107,6 +129,16 @@ struct ProfileView: View {
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.indigo)
                                 .contentShape(Rectangle())
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "person.2.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Friends")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -133,9 +165,18 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(width: 200, height: 30, alignment: .top)
                                 .foregroundColor(Color.orange)
-                                .padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
                                 .contentShape(Rectangle())
-                        }
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "gearshape.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Settings")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
+                        }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
                         
                         Spacer(minLength: 10)
                         

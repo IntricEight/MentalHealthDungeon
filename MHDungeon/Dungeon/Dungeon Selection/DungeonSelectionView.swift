@@ -28,7 +28,7 @@ struct DungeonSelectionView: View {
                     .frame(height: 50)
                     .foregroundColor(Color.orange)
                     .overlay {
-                        Text("Back")
+                        Text("Cancel")
                             .foregroundColor(.white)
                             .fontWeight(.semibold)
                             .font(.title)

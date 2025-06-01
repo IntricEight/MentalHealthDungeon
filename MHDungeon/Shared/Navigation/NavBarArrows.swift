@@ -22,11 +22,11 @@ struct NavBarArrows: View {
         VStack {
             Image(systemName: "chevron.compact.\(iconDirection)")
                 .imageScale(IMAGE_SIZE)
-                .foregroundStyle(CHEVRON_COLOR)
+                .foregroundColor(CHEVRON_COLOR)
                 .bold()
             Image(systemName: "chevron.compact.\(iconDirection)")
                 .imageScale(IMAGE_SIZE)
-                .foregroundStyle(CHEVRON_COLOR)
+                .foregroundColor(CHEVRON_COLOR)
                 .bold()
         }
         

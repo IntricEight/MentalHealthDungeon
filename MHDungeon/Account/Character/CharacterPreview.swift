@@ -23,9 +23,11 @@ struct CharacterPreview: View {
                 .foregroundColor(Color.green)
                 .overlay {
                     // TODO: Remove the following text when beginning implementation attempts
-                    Text("WIP")
-                        .font(.custom("", size: 100))
-                        .foregroundColor(Color.black)
+                    
+                    // IDEAFEST
+//                    Text("WIP")
+//                        .font(.custom("", size: 100))
+//                        .foregroundColor(Color.black)
                 }
                 .contentShape(Rectangle())
         }
