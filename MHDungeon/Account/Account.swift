@@ -41,7 +41,7 @@ class Account: Identifiable, Codable, ObservableObject {
     /// The time when the current dungeon session is completed.
     ///
     /// Before using this, you should check and make sure that `dungeonActiveId` is not 0.
-    @Published public private(set) var dungeonEndTime: Date = Date.distantPast
+    @Published public private(set) var dungeonEndTime: Date = Date.now
     //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
     
     /// The number of dungeons that the user has completed.

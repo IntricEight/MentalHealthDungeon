@@ -6,13 +6,33 @@
 import SwiftUI
 
 struct DungeonSelectionView: View {
+    @EnvironmentObject var authModel: AuthModel
     @Environment(DungeonState.self) private var dungeonState: DungeonState
     
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
         
+        // IDEAFEST - Show the IP that the user currently owns
+        let currentPoints: Int = authModel.currentAccount?.inspirationPoints ?? -1
+        let maxPoints: Int = authModel.currentAccount?.maxIP ?? -1
+        
         VStack {
+            RoundedRectangle(cornerRadius: buttonRadius)
+                .frame(height: 50)
+                .foregroundColor(Color.blue)
+                .overlay {
+                    Text("Current Points: \(currentPoints) / \(maxPoints)")
+                        .foregroundColor(.white)
+                        .fontWeight(.semibold)
+                        .font(.title)
+                        .frame(alignment: .center)
+                }
+                .contentShape(Rectangle())
+                .frame(alignment: .top)
+                .padding(EdgeInsets(top: 0, leading: 32, bottom: 0, trailing: 32))
+            
+            
             // Display a list of the existing Dungeons
             DungeonListView()
             
