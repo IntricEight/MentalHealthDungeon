@@ -287,9 +287,8 @@ class AuthModel: ObservableObject {
         // Start the dungeon timer through the account
         try account.BeginAdventure(dungeon: activeDungeon)
         
-        // Save the timer's state within Firebase
-        Firestore.firestore().collection("users").document(uid).updateData(["dungeonActiveId": account.dungeonActiveId, "dungeonEndTime": account.dungeonEndTime ])
-        
+        // Save the timer's state within Firebase alongside the point reduction and dungeon Id
+        Firestore.firestore().collection("users").document(uid).updateData(["inspirationPoints": account.inspirationPoints,  "dungeonActiveId": account.dungeonActiveId, "dungeonEndTime": account.dungeonEndTime ])
         
         print("Beginning adventure in Auth Model")
     }

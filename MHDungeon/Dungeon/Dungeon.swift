@@ -138,7 +138,7 @@ struct Dungeon: Decodable, Identifiable {
             // Begin the adventure through the auth model
             try auth.BeginAdventure(dungeonName: name)
         } catch {
-            print("Failed to begin dungeon \"\(name)\"")
+            print("Failed to begin dungeon \"\(name)\": \(error.localizedDescription)")
         }
     }
     

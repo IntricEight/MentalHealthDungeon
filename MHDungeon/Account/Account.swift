@@ -213,15 +213,16 @@ class Account: Identifiable, Codable, ObservableObject {
             throw DungeonError.AlreadyActive
         }
         
-        // Make sure the proper number of points are owned. If not, throw back an error
+        // Make sure the proper number of points are owned. If so, remove those points from the user. If not, throw back an error.
         if dungeon.cost < inspirationPoints {
-            
+            inspirationPoints -= dungeon.cost
+        } else {
+            throw DungeonError.NotEnoughIP
         }
         
         // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
         let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours * 3600))
-        // IDEAFEST
-//        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours))
+        // IDEAFEST - Right now, the times inside Dungeons.JSON are extremely short. Grow these to match the project description
         
         // Store the completion timestamp of the adventure
         dungeonEndTime = endTime
