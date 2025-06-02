@@ -93,9 +93,19 @@ struct DungeonLandingView: View {
                         dungeonState.ChangeView(to: .adventure)
                         
                     } else {
-                        // The user does not have enough points to begin the adventure
-                        
-                        // TODO: Provide the user with an Alert that they cannot start the adventure
+                        // Check if the user is trying to check an in-progress adventure
+                        if authModel.currentAccount?.dungeonActiveId ?? 0 > 0 {
+                            print("Checking on adventure in \(dungeonName)")
+                            
+                            // Allow the user to enter the dungeon adventure view
+                            dungeonState.ChangeView(to: .adventure)
+                        } else {
+                            // The user does not have enough points to begin the adventure
+                            
+                            
+                            // TODO: Provide the user with an Alert that they cannot start the adventure
+                            
+                        }
                     }
                 } label: {
                     RoundedRectangle(cornerRadius: buttonRadius)
