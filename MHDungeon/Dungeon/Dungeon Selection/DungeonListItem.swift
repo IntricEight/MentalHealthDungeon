@@ -38,8 +38,6 @@ struct DungeonListItem: View {
         // The dungeon's summary image and selection button
         Button {
             print("Dungeon \"\(name)\" has been selected.")
-            
-            // TODO: Change the user's current dungeon to be the new one that the user has selected, unless they are seclecting the currently active one
 
             // Check if the user has permission to access their desired dungeon.
             if !locked {
@@ -48,35 +46,33 @@ struct DungeonListItem: View {
                 
                 // Return the user to the dungeon landing page with the newly selected dungeon
                 dungeonState.ChangeView(to: DungeonPage.landing)
-                
+               
             } else {
                 print("User attempted to access a locked dungeon")
                 
                 // TODO: Cause a popup telling the user that they cannot use a locked dungeon? "<name> is locked."
             }
-                
-                
-            
         } label: {
             HStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: picWidth, height: picWidth, alignment: .bottom)
-                    .overlay {
-                        // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
-                        
-                        
-                        Image(dungeonImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                        
-                        
-                    }.padding(.trailing, 20)
+                // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
+                Image(dungeonImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: picWidth, height: picWidth)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.gray)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.trailing, 15)
                 
                 VStack(alignment: .leading) {
                     Text("\(name)")
                         .font(.title)
                     
                     Divider()
+                        .frame(height: 2)
+                        .overlay(Color.black)
                     
                     Text("Cost: \(cost)")
                 }
