@@ -38,9 +38,6 @@ class DungeonState {
         // Ensure that the default dungeon is created correctly
         do {
             currentDungeon = try Dungeon(name: dungeonName)
-            
-            // TODO: REMOVE after testing
-            print("Dungeon state's dungeon successfully made.")
         } catch {
             print("DUNGEON - Failed to create the default dungeon.")
         }

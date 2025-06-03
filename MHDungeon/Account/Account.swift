@@ -63,12 +63,6 @@ class Account: Identifiable, Codable, ObservableObject {
         self.taskList = createSampleTasks()
     }
     
-    // TODO: Saved in case I figure out how to get Firestore to ignore certain attributes
-//    var description: String {       // Allows me to control what gets printed to the Console
-//        return "Account: \(displayName) : \(email). Contains \(taskList.count) tasks."
-//    }
-    
-    
     /// Custom CodingKeys to match property names during [en/de]coding
     private enum CodingKeys: String, CodingKey {
         // Personal data
@@ -214,15 +208,17 @@ class Account: Identifiable, Codable, ObservableObject {
         }
         
         // Make sure the proper number of points are owned. If so, remove those points from the user. If not, throw back an error.
-        if dungeon.cost < inspirationPoints {
+        if dungeon.cost <= inspirationPoints {
             inspirationPoints -= dungeon.cost
         } else {
             throw DungeonError.NotEnoughIP
         }
         
         // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
-        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours * 3600))
-        // IDEAFEST - Right now, the times inside Dungeons.JSON are extremely short. Grow these to match the project description
+//        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours * 3600))
+        // IDEAFEST
+        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours))
+        
         
         // Store the completion timestamp of the adventure
         dungeonEndTime = endTime

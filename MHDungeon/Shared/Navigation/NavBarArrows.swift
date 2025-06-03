@@ -29,37 +29,6 @@ struct NavBarArrows: View {
                 .foregroundColor(CHEVRON_COLOR)
                 .bold()
         }
-        
-        // TODO: Figure out a way to get the arrows to change on click, so that there doesn't seem to be issues with overlapping
-        // Hide the icons once clicked to prevent the weird overlap visual with the navigation bar
-//        ZStack {
-//            // Down Arrows
-//            VStack {
-//                Image(systemName: "chevron.compact.down")
-//                    .imageScale(IMAGE_SIZE)
-//                    .foregroundStyle(CHEVRON_COLOR)
-//                    .bold()
-//                Image(systemName: "chevron.compact.down")
-//                    .imageScale(IMAGE_SIZE)
-//                    .foregroundStyle(CHEVRON_COLOR)
-//                    .bold()
-//            }
-//            .opacity(navBarVisible ? 1 : 0)
-//
-//            // Up Arrows
-//            VStack {
-//                Image(systemName: "chevron.compact.up")
-//                    .imageScale(IMAGE_SIZE)
-//                    .foregroundStyle(CHEVRON_COLOR)
-//                    .bold()
-//                Image(systemName: "chevron.compact.up")
-//                    .imageScale(IMAGE_SIZE)
-//                    .foregroundStyle(CHEVRON_COLOR)
-//                    .bold()
-//            }
-//            .opacity(navBarVisible ? 0 : 1)
-//        }
-//        .animation(.easeInOut(duration: 0.5), value: navBarVisible)
     }
 }
 

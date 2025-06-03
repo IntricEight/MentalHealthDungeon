@@ -11,7 +11,6 @@ struct DungeonView: View {
     
     var body: some View {
         Group {
-            // TODO: Develop a hosting view page for the dungeon system. This allows the ContentView navigation to work without interacting with the AppPage enum
             switch dungeonState.currentView {
                 case .landing:
                     DungeonLandingView()

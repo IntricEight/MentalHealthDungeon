@@ -90,9 +90,6 @@ struct DungeonAdventureView: View {
                         print("Completing the current adventure in \(dungeonName) [\(authModel.currentAccount?.dungeonActiveId ?? -1)].")
                         
                         Dungeon.CompleteDungeon(dungeonName: dungeonName, authAccess: authModel)
-                        
-                        // Return the user to the landing page dungeon
-                        dungeonState.ChangeView(to: .landing)
                     } else {
                         print("Cannot begin a new dungeon, one is already in progress.")
                     }
@@ -102,6 +99,7 @@ struct DungeonAdventureView: View {
                     
                     // Begin the dungeon's adventure timer
                     Dungeon.BeginDungeon(dungeonName: dungeonName, authAccess: authModel)
+                    dungeonState.ChangeView(to: .landing)
                 }
                 
             } label: {

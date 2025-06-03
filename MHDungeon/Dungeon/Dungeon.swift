@@ -119,11 +119,6 @@ struct Dungeon: Decodable, Identifiable {
         // Sort the dungeon array using their IDs in ascending order
         dungeons = dungeons.sorted { $0.id < $1.id }
         
-        // TODO: Remove after testing
-        dungeons.forEach { dungeon in
-            print("\(dungeon.name) - \(dungeon.cost)")
-        }
-        
         return dungeons
     }
     

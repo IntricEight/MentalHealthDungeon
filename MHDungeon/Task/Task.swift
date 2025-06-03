@@ -102,15 +102,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
 
     }
     
-    
-    
-    
-    
-    /// Error checking that should be performed during initialization.
-    func InitErrorChecking(points: Int) -> Void {
-        // TODO: Either figure out how to call functions in init before setting all variables, or trash this function
-    }
-    
     /// Get the remaining time before the `Task` expires.
     func GetRemainingTime() -> TimeInterval {
         return expirationTime.timeIntervalSinceNow

@@ -3,8 +3,6 @@
 //  MHDungeon
 //
 
-// TODO: Implement an override button that reduces the timer of the first task to 5 seconds. This will be useful in demonstrating that ask feature to the audience
-
 import SwiftUI
 
 /// A view page that provides the user an interface menu that they can use to interact with various task-related systems.

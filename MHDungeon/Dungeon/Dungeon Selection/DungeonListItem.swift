@@ -59,7 +59,6 @@ struct DungeonListItem: View {
             
         } label: {
             HStack {
-                // TODO: Display the topical image of the dungeon. Replace the rounded rectangle with a rounded image?
                 RoundedRectangle(cornerRadius: 20)
                     .frame(width: picWidth, height: picWidth, alignment: .bottom)
                     .overlay {
