@@ -19,13 +19,14 @@ struct DHMSTimer {
     ///   - template: Modify the returned DHMS `String` by added a preface to it. The format is [template]DHMS.
     ///   - message: The `String` that should replace the remaining time once the expiration `Date` has been passed.
     func UpdateTimeRemaining(timeRemaining remaining: inout String, expirationTime expiration: Date, template: String = "", message: String = "") -> Void {
-        // NOTE: To my knowledge, I cannot return values within the onAppear that this is used in. If this changes, consider returning a string instead of using timeRemaining (inout)
+        // NOTE: To my knowledge, I cannot return values within the onAppear() that this is used in. If this changes, consider returning a string instead of using timeRemaining (inout)
         
         /// Record the present time to stop the value changing from now until execution time.
         let now = Date.now
         
         // Ensure that the expiration time hasn't already passed.
-        guard expiration >= now else {
+        // Removed 1 second to remove "0 seconds" from the display. At this time, let's just let them complete it
+        guard expiration.addingTimeInterval(-1) > now else {
             remaining = message
             return
         }

@@ -22,6 +22,7 @@ let appFont1 = 0
 struct ContentView: View {
     @EnvironmentObject private var authModel: AuthModel
     @Environment(AppState.self) private var appState: AppState
+    
     @State private var dungeonState: DungeonState = DungeonState()
     
     var body: some View {
@@ -32,22 +33,29 @@ struct ContentView: View {
                     // If the user is logged in, allow them to navigate around the app
                     if authModel.userSession != nil && authModel.currentAccount != nil {
                         //Select the view to display using appState's navigation status
-                        switch appState.currentView {
-                            // Displays the dungeon view system.
-                            case AppPage.dungeon:
-                                DungeonView()
-                                    .environment(dungeonState)
-                            // Displays the profile view system.
-                            case AppPage.profile:
-                                ProfileView()
-                            // Displays the task view system.
-                            case AppPage.taskList:
-                                TaskView()
-                            // Displays the minimal viable code page
-                            case AppPage.minimal:
-                                MinimalParent()
-                            default:
-                                SettingsView()    //Fallback in case something about the authentication goes wrong
+                        Group {
+                            switch appState.currentView {
+                                    // Displays the dungeon view system.
+                                case AppPage.dungeon:
+                                    DungeonView()
+                                        .environment(dungeonState)
+                                    // Displays the profile view system.
+                                case AppPage.profile:
+                                    ProfileView()
+                                    // Displays the task view system.
+                                case AppPage.taskList:
+                                    TaskView()
+                                    // Displays the minimal viable code page
+                                case AppPage.minimal:
+                                    MinimalParent()
+                                default:
+                                    SettingsView()    //Fallback in case something about the authentication goes wrong
+                            }
+                        }.onAppear {    // Run any functions that are needed after the user logs in
+                            // If the user is currently in a dungeon, load that dungeon in
+                            if !(authModel.currentAccount?.activeDungeonName.isEmpty ?? true) {
+                                dungeonState.ChangeDungeon(to: authModel.currentAccount?.activeDungeonName ?? "Dark Cave")
+                            }
                         }
                         
                     } else {    //If user is not logged in, bring them to the log in view

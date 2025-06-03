@@ -37,10 +37,10 @@ class Account: Identifiable, Codable, ObservableObject {
     /// The ID of the currently active `Dungeon`.
     ///
     /// A value of 0 means that no dungeon is active at the moment.
-    @Published public private(set) var dungeonActiveId: Int = 0
+    @Published public private(set) var activeDungeonName: String = ""
     /// The time when the current dungeon session is completed.
     ///
-    /// Before using this, you should check and make sure that `dungeonActiveId` is not 0.
+    /// Before using this, you should check and make sure that `activeDungeonName` is not empty.
     @Published public private(set) var dungeonEndTime: Date = Date.now
     //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
     
@@ -79,7 +79,7 @@ class Account: Identifiable, Codable, ObservableObject {
         case tasksCompleted
         
         // Dungeon data
-        case dungeonActiveId
+        case activeDungeonName
         case dungeonEndTime
         case dungeonsCompleted
         case dungeonProgression
@@ -106,7 +106,7 @@ class Account: Identifiable, Codable, ObservableObject {
         try container.encode(tasksCompleted, forKey: CodingKeys.tasksCompleted)
         
         // Dungeon data
-        try container.encode(dungeonActiveId, forKey: CodingKeys.dungeonActiveId)
+        try container.encode(activeDungeonName, forKey: CodingKeys.activeDungeonName)
         try container.encode(dungeonEndTime, forKey: CodingKeys.dungeonEndTime)
         try container.encode(dungeonsCompleted, forKey: CodingKeys.dungeonsCompleted)
         try container.encode(dungeonProgression, forKey: CodingKeys.dungeonProgression)
@@ -131,7 +131,7 @@ class Account: Identifiable, Codable, ObservableObject {
         tasksCompleted = try container.decode(Int.self, forKey: CodingKeys.tasksCompleted)
         
         // Dungeon data
-        dungeonActiveId = try container.decode(Int.self, forKey: CodingKeys.dungeonActiveId)
+        activeDungeonName = try container.decode(String.self, forKey: CodingKeys.activeDungeonName)
         dungeonEndTime = try container.decode(Date.self, forKey: CodingKeys.dungeonEndTime)
         dungeonsCompleted = try container.decode(Int.self, forKey: CodingKeys.dungeonsCompleted)
         dungeonProgression = try container.decode([Int].self, forKey: CodingKeys.dungeonProgression)
@@ -197,13 +197,13 @@ class Account: Identifiable, Codable, ObservableObject {
     
     /// Set an adventure's timer within the user's account.
     ///
-    /// The `Account`'s timer is only valid when the active dungeon Id is a nonzero value.
+    /// The `Account`'s timer is only valid when the active dungeon name is an empty string.
     ///
     /// - Parameters:
     ///   - dungeon: The dungeon that the user is adventuring within.
     func BeginAdventure(dungeon: Dungeon) throws {
         // Check if an adventure is already in progress
-        if dungeonActiveId != 0 {
+        if !activeDungeonName.isEmpty {
             throw DungeonError.AlreadyActive
         }
         
@@ -223,13 +223,13 @@ class Account: Identifiable, Codable, ObservableObject {
         // Store the completion timestamp of the adventure
         dungeonEndTime = endTime
         
-        // Set the active dungeon Id
-        dungeonActiveId = dungeon.id
+        // Set the active dungeon name
+        activeDungeonName = dungeon.name
     }
     
     /// Set an adventure's timer within the user's account.
     ///
-    /// The `Account`'s timer is only valid when the active dungeon Id is a nonzero value.
+    /// The `Account`'s timer is only valid when the active dungeon name is an empty string.
     ///
     /// - Parameters:
     ///   - dungeon: The dungeon that the user was adventuring within.
@@ -241,8 +241,8 @@ class Account: Identifiable, Codable, ObservableObject {
         // TODO: Lock progression behind checking if the furthest dungeon was completed. Decide whether this should be done here or inside the function? Probably here, that way the stage-level progression logic can be separated from the checking
         self.ProgressDungeon()
         
-        // Reset the active dungeon Id. Setting it to 0 means the Timer is now invalid and should not be used
-        dungeonActiveId = 0
+        // Reset the active dungeon name. Setting it to 0 means the Timer is now invalid and should not be used
+        activeDungeonName = ""
     }
     
     

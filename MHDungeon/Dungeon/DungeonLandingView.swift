@@ -39,7 +39,7 @@ struct DungeonLandingView: View {
                         print("Dungeon Selection selected")
                         
                         // Check if a dungeon adventure is active
-                        if authModel.currentAccount?.dungeonActiveId ?? 0 <= 0 {
+                        if authModel.currentAccount?.activeDungeonName.isEmpty ?? true {
                             // Navigate to the Dungeon Selection page
                             dungeonState.ChangeView(to: .selection)
                         } else {
@@ -94,7 +94,7 @@ struct DungeonLandingView: View {
                         
                     } else {
                         // Check if the user is trying to check an in-progress adventure
-                        if authModel.currentAccount?.dungeonActiveId ?? 0 > 0 {
+                        if !(authModel.currentAccount?.activeDungeonName.isEmpty ?? true) {
                             print("Checking on adventure in \(dungeonName)")
                             
                             // Allow the user to enter the dungeon adventure view
@@ -113,12 +113,12 @@ struct DungeonLandingView: View {
                         // Change the color of the button based on whether the user can use it or not
                         .foregroundColor( (currentPoints >= dungeonCost) ? Color.green : Color.orange)
                         .overlay {
-                            Text(authModel.currentAccount?.dungeonActiveId ?? 0 > 0
-                                 ? "Adventure in progress"
-                                 : "\(currentPoints) / \(dungeonCost) points collected")
+                            Text(authModel.currentAccount?.activeDungeonName.isEmpty ?? true
+                                 ? "\(currentPoints) / \(dungeonCost) points collected"
+                                 : "Adventure in progress")
                                 .foregroundColor(.white)
                                 .fontWeight(.semibold)
-                                .font(.title)
+                                .font(.system(size: 25))    //Shrinking the text just a little to fit inside the button
                                 .frame(alignment: .center)
                         }
                         .contentShape(Rectangle())

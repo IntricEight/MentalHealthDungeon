@@ -31,12 +31,17 @@ class DungeonState {
     public private(set) var currentDungeon: Dungeon?
     
     /// Init which allows the caller to override the default landing page when creating the instance
+    ///
+    /// - Parameters:
+    ///   - page: The enum identifier of the page that the dungeon system should land on when entering the system.
+    ///   - dungeonName: The `String` name of the Dungeon that should be loaded when entering the system.
     init(_ page: DungeonPage = DEFAULT_DUNGEON_VIEW, dungeonName: String = DEFAULT_DUNGEON_NAME) {
         // Set the active page of the dungeon system
         self.currentView = page
         
         // Ensure that the default dungeon is created correctly
         do {
+            // If a proper name has been passed in, use that. Otherwise, use the default dungeon name
             currentDungeon = try Dungeon(name: dungeonName)
         } catch {
             print("DUNGEON - Failed to create the default dungeon.")

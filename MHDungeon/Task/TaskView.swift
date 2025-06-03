@@ -35,13 +35,8 @@ struct TaskView: View {
     
     // Tab controls
     private let tabRadius: CGFloat = 30
-
     
     var body: some View {
-        // Use a .sheet (iExpense, look up Paul Hudson's tutorial) to display the Task details / Task Creation
-        //  OR
-        // Use a NavigationStack with NavigationLink
-        
         NavigationStack {
             // One layer for the main app stuff, and one for the overlay tab feature
             ZStack {
@@ -49,7 +44,6 @@ struct TaskView: View {
                 VStack {
                     // Account details section
                     HStack {
-                        
                         Spacer(minLength: 15)
                         
                         
@@ -117,15 +111,7 @@ struct TaskView: View {
                     
                     
                     // Show the user's current tasks
-                    if authModel.currentAccount != nil {
-                        TaskListView(account: authModel.currentAccount!)
-                    } else {
-                        // The user should not be able to see this
-                        Text("Account failed to create. You should not be able to see this. Please report this with any helpful information.")
-                            .background(Color.white)
-                            .foregroundColor(Color.red)
-                            .fontWeight(.bold)
-                    }
+                    TaskListView(account: authModel.currentAccount!)
                     
                     // Navigation section
                     HStack {
