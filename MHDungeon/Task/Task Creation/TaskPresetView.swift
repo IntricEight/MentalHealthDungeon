@@ -61,7 +61,7 @@ struct TaskPresetView: View {
                         }
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+            .padding(EdgeInsets(top: -8, leading: 16, bottom: 8, trailing: 16))
         }
     }
 }

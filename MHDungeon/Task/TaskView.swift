@@ -161,8 +161,15 @@ struct TaskListView: View {
         if account.taskList.isEmpty {
             // Show that no tasks exist, and direct them to the task creation button
             // TODO: Style this and include instructions on how to create a task
-            Text("No tasks found in account")
-                .font(.title3)
+            VStack {
+                Text("No tasks found in account.")
+                    .font(.title3)
+
+                Text("Perhaps try creating your own?")
+                    .font(.title3)
+            }.frame(alignment: .top)
+            
+            Spacer()
         } else {
             // List of active tasks
             List(account.taskList) { task in

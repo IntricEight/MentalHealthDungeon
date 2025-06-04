@@ -46,7 +46,7 @@ struct DungeonSelectionView: View {
             } label: {
                 RoundedRectangle(cornerRadius: buttonRadius)
                     .frame(height: 50)
-                    .foregroundColor(Color.orange)
+                    .foregroundColor(Color.brown)
                     .overlay {
                         Text("Cancel")
                             .foregroundColor(.white)
