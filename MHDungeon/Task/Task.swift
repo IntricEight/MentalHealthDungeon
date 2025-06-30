@@ -37,7 +37,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     ///
     /// Can be empty, but not nil. User submission should be optional.
     let details: String
-    // TODO: Convert into an unsigned int
     /// The number of `Inspiration Points` that the `Task` will reward.
     let points: Int
     /// Tracks the time when the `Task` was created.
@@ -47,17 +46,9 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     
     // 5-arg constructor which allows the expiration time of the task to be directly provided.
     /// Initialize a `Task` with the expiration time directly provided.
-    init(name: String, details: String = "", inspirationPoints ip: Int, expirationTime: Date) throws(TaskCreationError) {
-        // Error checking
-        // Ensure the IP suggested in within the valid range
-        if ip == 0 {
-            // Throw an exception - Points cannot be 0
-            throw TaskCreationError.ZeroPoints
-            
-        } else if ip < 0 {
-            // Throw an exception - Points cannot be negative
-            throw TaskCreationError.NegativePoints
-        }
+    init(name: String, details: String = "", inspirationPoints ip: Int, expirationTime: Date) throws {
+        // Ensure that proper values are being used to create this task. Does not include time in this instance, that is handled below.
+        try Task.ValidateTask(inspirationPoints: ip)
         
         // Ensure the expiration time provided is in the future
         guard expirationTime > Date.now else {
@@ -65,6 +56,7 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
             throw TaskCreationError.InvalidExpiration
         }
         
+        // Fill out the task's non-calculated values
         self.name = name
         self.details = details
         self.points = ip
@@ -75,6 +67,53 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     // 5-arg constructor which allows the number of hours the task will be active to be provided.
     /// Initialize a `Task` with the number of hours until expiration provided.
     init(name: String, details: String, inspirationPoints ip: Int, hoursToExpiration expiresIn: Double) throws {
+        // Ensure that proper values are being used to create this task
+        try Task.ValidateTask(inspirationPoints: ip, hoursToExpiration: expiresIn)
+        
+        // Fill out the task's non-calculated values
+        self.name = name
+        self.details = details
+        self.points = ip
+        self.creationTime = Date.now
+        
+        // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
+        self.expirationTime = creationTime.addingTimeInterval(TimeInterval(expiresIn * 3600))
+    }
+    
+    /// Initialize a `Task` using a `TaskFramework` structures created from decoding a JSON file.
+    init(using framework: TaskFramework) throws {
+        // Ensure that proper values are being used to create this task
+        try Task.ValidateTask(validating: framework)
+        
+        // Fill out the task's non-calculated values
+        self.name = framework.name
+        self.details = framework.details
+        self.points = framework.inspirationPoints
+        self.creationTime = Date.now
+        
+        // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
+        self.expirationTime = creationTime.addingTimeInterval(TimeInterval(framework.hoursToExpire * 3600))
+    }
+    
+    /// Check the values that are being used to create a `Task` to prevent using bad data.
+    ///
+    /// Uses a `TaskFramework` that probably contains data taken directly from a JSON file. As a result, bad data is unlikely, but not impossible. This should still be called regardless.
+    ///
+    /// - Parameters:
+    ///   - framework: The `TaskFramework` instance that is being validated.
+    private static func ValidateTask(validating framework: TaskFramework) throws {
+        try Task.ValidateTask(inspirationPoints: framework.inspirationPoints, hoursToExpiration: framework.hoursToExpire)
+    }
+    
+    // Default values are set to succeed so users don't have to input every variable each time
+    /// Check the values that are being used to create a `Task` to prevent using bad data.
+    ///
+    /// - Parameters:
+    ///   - name:
+    ///   - details:
+    ///   - ip: The number of points that
+    ///
+    private static func ValidateTask(name: String = "", details: String = "", inspirationPoints ip: Int = 1, hoursToExpiration expiresIn: Double = 1) throws(TaskCreationError) {
         // Error checking
         // Ensure the IP suggested in within the valid range
         if ip == 0 {
@@ -91,15 +130,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
             // Throw an exception - Expiration time must be in the future
             throw TaskCreationError.InvalidExpiration
         }
-        
-        self.name = name
-        self.details = details
-        self.points = ip
-        self.creationTime = Date.now
-        
-        // Calculate the expiration time using the creationTime and number of allowed hours (3600 seconds in an hour)
-        self.expirationTime = creationTime.addingTimeInterval(TimeInterval(expiresIn * 3600))
-
     }
     
     /// Get the remaining time before the `Task` expires.
@@ -137,6 +167,12 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     }
     
     
+    
+    
+    
+    
+    
+    
     // TODO: Make this more useful after initial testing is complete
     /// The description of the `Task`, to be used when printing to the console or stored within a `String`.
     var description: String {       // Allows me to control what gets printed to the Console
@@ -144,3 +180,47 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     }
     
 }
+
+/// Represents a `Task` that has not yet been created.
+///
+/// Used when decoding premade tasks from JSON files.
+struct TaskFramework : Decodable, Identifiable {
+    // TODO: When the task system is reworked to use difficulties instead of straight points and hours, you'll have to adjust the PresetTasks.json and the decoding inside this function. Don't forget about it
+    
+    /// Generate a unique ID of the `TaskFramework` instance.
+    ///
+    /// This will not be maintained if a `Task` is created using the `TaskFramework`.
+    let id: UUID = UUID()
+    /// The task's descriptive name.
+    let name: String
+    /// A brief description of the task's expectation.
+    let details: String
+    /// The number of points that the `Task` will reward when completed.
+    let inspirationPoints: Int
+    /// The hours that the `Task` is active for.
+    let hoursToExpire: Double
+    
+    /// Custom CodingKeys to match property names during [en/de]coding
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case details
+        case inspirationPoints
+        case hoursToExpire
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.name = try container.decode(String.self, forKey: .name)
+        self.details = try container.decode(String.self, forKey: .details)
+        self.inspirationPoints = try container.decode(Int.self, forKey: .inspirationPoints)
+        self.hoursToExpire = try container.decode(Double.self, forKey: .hoursToExpire)
+    }
+    
+    
+    
+    
+    
+    
+}
+

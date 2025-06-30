@@ -33,7 +33,7 @@ struct NavBarButton: View {
             // Only navigate if the user isn't already on the desired page
             if appState.currentView != dest {
                 //Print the destination notification message to the console
-                print(message)
+//                print(message)
             
                 // Navigate to the destination view
                 appState.ChangeView(to: dest)
