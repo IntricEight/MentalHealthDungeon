@@ -9,6 +9,8 @@ import Foundation
 enum DungeonError: Error, LocalizedError {
     /// Thrown when a search is made for a `Dungeon` that does not exist.
     case NotFound
+    /// Thrown when the file containing the `Dungeon`s cannot be found.
+    case FileNotFound
     /// Thrown when an error is encountered during the decoding process.
     case DecodeError
     /// Thrown when there is an attempt to start an adventure when another one is already in progress
@@ -21,6 +23,8 @@ enum DungeonError: Error, LocalizedError {
         switch self {
             case .NotFound:
                 return "No dungeon was found with that name."
+            case .FileNotFound:
+                return "Failed to locate the dungeon's JSON file."
             case .DecodeError:
                 return "Failed to properly decode the dungeon's JSON file."
             case .AlreadyActive:
@@ -61,7 +65,7 @@ struct Dungeon: Decodable, Identifiable {
         guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
             print("Dungeon file was not found.")
             
-            throw DungeonError.NotFound
+            throw DungeonError.FileNotFound
         }
         
         // We want to avoid decoding the JSON until we've separated out the Dungeon whose name matches the given name. This way, we avoid creating more dungeons than we need by only decoding the one that we are looking for.
@@ -91,7 +95,7 @@ struct Dungeon: Decodable, Identifiable {
         self = try JSONDecoder().decode(Dungeon.self, from: matchJSON)
     }
  
-    /// `@MainActor` static function that returns an array of all of the `Dungeons` stored on the local JSON file.
+    /// `@MainActor` static function that returns an array of all of the `Dungeon`s stored on the local JSON file.
     ///
     /// The array of dungeons has been sorted by the ID of each dungeon, from least to greatest.
     @MainActor
@@ -102,7 +106,7 @@ struct Dungeon: Decodable, Identifiable {
         guard let dungeonUrl = Bundle.main.url(forResource: "Dungeons", withExtension: "json") else {
             print("Dungeon file was not found.")
             
-            throw DungeonError.NotFound
+            throw DungeonError.FileNotFound
         }
         
         // Get the data from within the dungeons JSON file

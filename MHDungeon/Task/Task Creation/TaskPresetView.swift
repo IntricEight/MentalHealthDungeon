@@ -24,7 +24,7 @@ struct TaskPresetView: View {
             
             Spacer()
             
-            Text("Display a list of premade tasks")
+            TaskListView()
             
             Spacer()
             
@@ -65,6 +65,38 @@ struct TaskPresetView: View {
         }
     }
 }
+
+/// Display the preset `Task`s inside of a list
+private struct TaskListView: View {
+    var taskList: [TaskFramework] = Task.GetAllPresetTasks()
+    
+    // TODO: Figure out why the phone day/night setting background won't go away, and make it go away
+    // TODO: Figure out how to get the animation when removing a task back to appear on the list
+    
+    var body: some View {
+        if taskList.isEmpty {
+            // Show that no tasks exist, and direct them to the task creation button
+            // TODO: Style this and show the time remaining until Tasks reset
+            VStack {
+                Text("No tasks remaining.")
+                    .font(.title3)
+
+                Text("More tasks will become available tomorrow!")
+                    .font(.title3)
+            }.frame(alignment: .top)
+            
+            Spacer()
+        } else {
+            // List of active tasks
+            List(taskList) { task in
+                TaskPresetListItem(task)
+            }
+            .scrollContentBackground(.hidden)
+            .listStyle(.plain)
+        }
+    }
+}
+
 
 #Preview {
     TaskPresetView()

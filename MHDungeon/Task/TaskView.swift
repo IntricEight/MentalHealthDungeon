@@ -151,7 +151,8 @@ struct TaskView: View {
     TaskView()
 }
 
-struct TaskListView: View {
+/// Display the user's `Task`s inside of a list
+private struct TaskListView: View {
     @ObservedObject var account: Account
     
     // TODO: Figure out why the white background won't go away, and make it go away

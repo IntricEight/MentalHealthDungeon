@@ -19,7 +19,7 @@ struct TaskPresetListItem: View {
     private let details: String
     /// The number of `Inspiration Points` that the `Task` will reward.
     private let points: Int
-    /// Tracks the time when the `Task` expires.
+    /// Displays the hours the `Task` will be active.
     private let hoursToExpire: Double
     
     /// A visual countdown of the time remaining before the `Task` expires.
@@ -64,7 +64,7 @@ struct TaskPresetListItem: View {
                                 .frame(width: 80, height: 80, alignment: .topLeading)
                                 .overlay {
                                     // Show an icon of a Plus symbol
-                                    Image(systemName: "plus.square.fill")
+                                    Image(systemName: "plus")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 60, height: 60, alignment: .center)

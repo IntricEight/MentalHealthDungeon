@@ -13,6 +13,10 @@ enum TaskCreationError: Error, LocalizedError {
     case NegativePoints
     /// Thrown when a `Task` is made who's expiration time is in the past.
     case InvalidExpiration
+    /// Thrown when an error is encountered during the decoding process.
+    case DecodeError
+    /// Thrown when the file containing the `Dungeon`s cannot be found.
+    case FileNotFound
     
     /// The useful description of each error used by `LocalizedError`.
     var errorDescription: String? {
@@ -23,6 +27,10 @@ enum TaskCreationError: Error, LocalizedError {
                 return "Cannot reward negative inspiration points."
             case .InvalidExpiration:
                 return "The expiration time must be beyond the present."
+            case .DecodeError:
+                return "Failed to properly decode the task's JSON file."
+            case .FileNotFound:
+                return "Failed to locate the task's JSON file."
         }
     }
 }
@@ -166,7 +174,38 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         auth.DeleteTask(id: taskUID, isCompleted: isCompleted)
     }
     
-    
+    /// `@MainActor` static function that returns an array of all of the `Task`s stored on the local JSON file.
+    @MainActor
+    static func GetAllPresetTasks() -> [TaskFramework] {
+        print("Attempting to get all preset tasks.")
+        
+        do {
+            // Get the url for the PresetTasks file, or throw a NotFound error if it does not exist.
+            guard let taskUrl = Bundle.main.url(forResource: "PresetTasks", withExtension: "json") else {
+                print("Task file was not found.")
+                
+                throw TaskCreationError.FileNotFound
+            }
+            
+            // Get the data from within the tasks JSON file
+            let taskData: Data = try Data(contentsOf: taskUrl)
+            
+            // Decode the data and store it within an immutable array
+            let taskJSON: [String: [TaskFramework]] = try JSONDecoder().decode([String: [TaskFramework]].self, from: taskData)
+            guard let tasks: [TaskFramework] = taskJSON["tasks"] else {
+                print("Failed to extract Task array from String:[TaskFramework] dictionary")
+                
+                throw TaskCreationError.DecodeError
+            }
+            
+            return tasks
+            
+        } catch {
+            print("Error encountered: \(error.localizedDescription)")
+            
+            return []
+        }
+    }
     
     
     

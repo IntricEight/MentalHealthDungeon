@@ -157,7 +157,7 @@ class AuthModel: ObservableObject {
     /// Add a new `Task` to the user's `Firestore` storage and the local `Account` instance
     func AddTask(name: String, details: String, points: Int, hours: Double) throws {
         // Attempt to create the new task and get its ID
-        var newTask: Task = try Task(name: name, details: details, inspirationPoints: points, hoursToExpiration: hours)
+        let newTask: Task = try Task(name: name, details: details, inspirationPoints: points, hoursToExpiration: hours)
         let taskUID: UUID = newTask.id
         
         print("Adding Task UUID: \(taskUID)).")
