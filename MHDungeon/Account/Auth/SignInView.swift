@@ -32,6 +32,7 @@ struct SignInView: View {
                 // Email input field
                 TextField("Email", text: $email)
                     .autocapitalization(.none)
+                    .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.emailAddress)
                     .padding(.horizontal)
@@ -41,8 +42,10 @@ struct SignInView: View {
                     Group {
                         if isSecure {
                             SecureField("Password", text: $password)
+                                .disableAutocorrection(true)
                         } else {
                             TextField("Password", text: $password)
+                                .disableAutocorrection(true)
                         }
                     }
                     .textFieldStyle(RoundedBorderTextFieldStyle())
