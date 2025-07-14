@@ -70,8 +70,6 @@ struct TaskListItem: View {
                     HStack {
                         // Checkmark button to mark the task as complete
                         Button {
-                            print("\(name) checked!")
-                            
                             // Mark the Task as either failed or completed and remove it from the user
                             Task.DeleteTask(id: task?.id, authAccess: authModel, isCompleted: timeRemaining != expiredMessage)
                         } label: {

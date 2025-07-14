@@ -12,7 +12,9 @@ struct SettingsView: View {
     @EnvironmentObject private var authModel: AuthModel
     
     var body: some View {
-        // TODO: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it
+        
+        
+        // MARK: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it
         
         VStack {
             Text("Settings")

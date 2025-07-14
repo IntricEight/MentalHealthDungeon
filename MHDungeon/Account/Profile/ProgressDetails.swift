@@ -6,8 +6,9 @@
 import SwiftUI
 
 // Displayed features (Find 3):
-//  - Total dungeon stages/runs completed.
-//  - Tasks completed
+//  - Total dungeon adventures completed.
+//  - Tasks completed.
+//  - Lifetime points acquired.
 
 /// A subview which displays several details about the user's progression through the application.
 struct ProgressDetails: View {

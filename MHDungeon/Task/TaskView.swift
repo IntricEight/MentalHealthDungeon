@@ -51,8 +51,6 @@ struct TaskView: View {
                         // TODO: After I get the sheet working, see if I can break this button into its own View
                         if !isExpanded {
                             Button {
-                                print("Task Creation selected")
-                                
                                 // Show the two buttons that allow users to create new tasks
                                 isExpanded.toggle()
                             } label: {

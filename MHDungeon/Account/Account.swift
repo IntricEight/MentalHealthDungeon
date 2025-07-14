@@ -28,8 +28,7 @@ class Account: Identifiable, Codable, ObservableObject {
     
     // Task Data
     /// A list of the user's tasks. Ordered from oldest to newest.
-    // TODO: Make this variable only readable, hide the adding/removing features behind a function
-    @Published var taskList: [Task] = []
+    @Published public private(set) var taskList: [Task] = []
     /// The number of tasks that the user has completed.
     @Published public private(set) var tasksCompleted: Int = 0
     
@@ -42,10 +41,11 @@ class Account: Identifiable, Codable, ObservableObject {
     ///
     /// Before using this, you should check and make sure that `activeDungeonName` is not empty.
     @Published public private(set) var dungeonEndTime: Date = Date.now
-    //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair
+    //@Published var dungeonTimer: Pair<Int, Date>? TODO: Uncomment this declaration after creating the Pair containing the dungeon's endTime and activeName (May need to add Stage to it as well)
     
     /// The number of dungeons that the user has completed.
     @Published public private(set) var dungeonsCompleted: Int = 0
+    // TODO: Perhaps convert this into a Pair as well? <String, Int> to avoid the number issue that came with the original activeDungeonName from earlier
     /// Tracks the user's progression through the dungeon.
     var dungeonProgression: [Int] = [1,1]
     
@@ -59,7 +59,7 @@ class Account: Identifiable, Codable, ObservableObject {
         self.displayName = name
         self.email = email
         
-        // TODO: Remove after task creation process is properly tutorialized. Modify the function's description when this is done.
+        // TODO: Remove after task creation process is properly tutorialized. Modify this init function's description when this is done.
         self.taskList = createSampleTasks()
     }
     
@@ -137,6 +137,53 @@ class Account: Identifiable, Codable, ObservableObject {
         dungeonProgression = try container.decode([Int].self, forKey: CodingKeys.dungeonProgression)
     }
     
+    /// Create a new `Task` and add it to the user's `Account`.
+    ///
+    /// - Parameters:
+    ///   - name: The name of the `Task`.
+    ///   - details: An explanation of the `Task`. This can include notes, instructions, or anything else the user wants to record about the task.
+    ///   - points: The numbers of `Inspiration Points` that completing the `Task` will reward.
+    ///   - hoursToExpiration: The hours until the `Task` expires and cannot be completed.
+    ///
+    ///   - Returns: The unqiue ID of the newly created `Task`.
+    func AddTask(name: String, details: String, inspirationPoints points: Int, hours: Double) throws -> UUID {
+        // Create the new Task using the parameters
+        let newTask: Task = try Task(name: name, details: details, inspirationPoints: points, hoursToExpiration: hours)
+        
+        // Add a task to the user's account
+        taskList.append(newTask)
+        
+        // Return the new task's ID
+        return newTask.id
+    }
+    
+    /// Remove a `Task` from the user's `Account`.
+    ///
+    /// - Parameters:
+    ///   - taskUID: The unique ID of the target `Task`.
+    ///   - isCompleted: Whether the Task `was` removed before or after its expiration time.
+    func RemoveTask(id taskUID: UUID?, isCompleted: Bool) {
+        // Determine the index of the task within the user's list
+        guard let index = taskList.firstIndex(where: {
+            $0.id == taskUID
+        }) else {
+            print("No Task with UID \(String(describing: taskUID)) found")
+            return
+        }
+        
+        // Reward the user if the task was completed before the expiration time
+        if isCompleted {
+            // Reward the user for completing the task
+            self.RewardPoints(index: index)
+            
+            // Increase the user's total number of completed tasks
+            self.IncreaseTaskCompletions()
+        }
+        
+        // Remove the task from the user's account
+        taskList.remove(at: index)
+    }
+    
     /// Reward the user with points from a completed `Task`.
     ///
     /// - Parameters:
@@ -167,41 +214,16 @@ class Account: Identifiable, Codable, ObservableObject {
         }
     }
     
-    /// Increases the number of dungeon runs that have been completed by the user throughout their account's lifespan by `1`.
-    ///
-    /// Increments by a default of 1, which should only be overriden in special circumstances.
-    ///
-    /// - Parameters:
-    ///   - count: An integer of how much the completion counter should be increased by. Default value of 1.
-    func IncreaseDungeonCompletions(count: Int = 1) {
-        // Make sure that no overflow error occurs before increasing the dungeon completion count.
-        if dungeonsCompleted < type(of: dungeonsCompleted).max && count > 0 {
-            dungeonsCompleted += 1;
-        }
-    }
-    
-    /// Progresses the user to the next dungeon stage or level, depending on their progress.
-    func ProgressDungeon() {
-        // TODO: Once the dungeon layout is complete, implement this function.
-        // This function accesses the current dungeon, and checks how many stages it has. If the user is not on the final stage, then progress them to the next stage.
-        // If the user is on the final stage, then progress them to the next dungeon.
-        // If the user is on the final stage of the final dungeon, then the adventure has been completed, and we will need to inform them of such.
-        
-        // [0] = Dungeon level, [1] = Level's stage
-        
-        
-        // IDEAFEST
-        dungeonProgression[0] += 1
-        
-    }
-    
     /// Set an adventure's timer within the user's account.
     ///
     /// The `Account`'s timer is only valid when the active dungeon name is an empty string.
     ///
     /// - Parameters:
-    ///   - dungeon: The dungeon that the user is adventuring within.
-    func BeginAdventure(dungeon: Dungeon) throws {
+    ///   - name: The `String` name of the `Dungeon` that the adventure will be in.
+    func BeginAdventure(dungeonName name: String) throws {
+        // Get the dungeon that the adventure will take place in
+        let dungeon = try Dungeon(name: name)
+        
         // Check if an adventure is already in progress
         if !activeDungeonName.isEmpty {
             throw DungeonError.AlreadyActive
@@ -218,7 +240,6 @@ class Account: Identifiable, Codable, ObservableObject {
 //        let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours * 3600))
         // IDEAFEST
         let endTime: Date = Date.now.addingTimeInterval(TimeInterval(dungeon.hours))
-        
         
         // Store the completion timestamp of the adventure
         dungeonEndTime = endTime
@@ -244,6 +265,37 @@ class Account: Identifiable, Codable, ObservableObject {
         // Reset the active dungeon name. Setting it to 0 means the Timer is now invalid and should not be used
         activeDungeonName = ""
     }
+    
+    /// Increases the number of dungeon runs that have been completed by the user throughout their account's lifespan by `1`.
+    ///
+    /// Increments by a default of 1, which should only be overriden in special circumstances.
+    ///
+    /// - Parameters:
+    ///   - count: An integer of how much the completion counter should be increased by. Default value of 1.
+    func IncreaseDungeonCompletions(count: Int = 1) {
+        // Make sure that no overflow error occurs before increasing the dungeon completion count.
+        if dungeonsCompleted < type(of: dungeonsCompleted).max && count > 0 {
+            dungeonsCompleted += 1;
+        }
+    }
+    
+    /// Progresses the user to the next dungeon stage or level, depending on their progress.
+    func ProgressDungeon() {
+        // TODO: Once the dungeon layout is complete, implement this function.
+        // This function accesses the current dungeon, and checks how many stages it has. If the user is not on the final stage, then progress them to the next stage.
+        // If the user is on the final stage, then progress them to the next dungeon.
+        // If the user is on the final stage of the final dungeon, then the adventure has been completed, and we will need to inform them of such.
+        
+        // [0] = Dungeon level, [1] = Level's stage
+        
+        
+        // IDEAFEST
+        dungeonProgression[0] += 1
+    }
+    
+    
+    
+    
     
     
     

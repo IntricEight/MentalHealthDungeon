@@ -41,7 +41,8 @@ struct ProfileView: View {
                     // User progress info section
                     HStack {
                         // Profile Image button
-                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create a list of premade images to choose from
+                        // TODO: Implement selection of an image to use as a profile image.
+                        // Current plan is to create a list of premade images to choose from, so I don't need to implement proper image storage
                         Button {
                             print("Profile Image selected")
                         } label: {
@@ -155,6 +156,7 @@ struct ProfileView: View {
                     
                     // Character Creation section
                     // TODO: Wrap in a button to navigate to Cosmetics page
+                    // The Character Preview is only a created image - Don't built the Cosmetics page in this view, use a new one
                     CharacterPreview()
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     

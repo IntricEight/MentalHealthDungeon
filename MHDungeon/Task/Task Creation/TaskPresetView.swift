@@ -16,11 +16,14 @@ struct TaskPresetView: View {
     var body: some View {
         // TODO: Create a list of preset tasks that the user can choose from. They can choose as little or as many items as they want. Display should look like the TaskListItem, except the check mark is replaced with a plus symbol that adds it to the user
         // List is stored within PresetTasks.json
+        // TODO: Instead of having a list to add, then clicking Add, it might be better to just add it immediately once the Plus is clicked. We can use the bottom button space for Stats like remaining choices before you run out of X difficulty for the day
         
         VStack {
             // TODO: Display a list of task items that can be added to the user's list. These presets should have the ability to set a timer so that once they are completed, they enter a cooldown
-
-            Text("Choose up to 5 tasks to add")
+            
+            
+            
+            Text("Choose tasks to add")
             
             Spacer()
             
@@ -49,7 +52,9 @@ struct TaskPresetView: View {
                 
                 // Create the new task
                 Button {
-                    print("Create the New Task selected")
+                    print("Add the Selected Task selected")
+                    
+                    // Think about what could replace this button if I remove it in favor of using the Task list items directly
                 } label: {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .frame(height: buttonHeight)
@@ -66,29 +71,27 @@ struct TaskPresetView: View {
     }
 }
 
-/// Display the preset `Task`s inside of a list
+/// A subview which displays the user's `Task`s if any exist, and instructions them to do so otherwise.
 private struct TaskListView: View {
-    var taskList: [TaskFramework] = Task.GetAllPresetTasks()
-    
-    // TODO: Figure out why the phone day/night setting background won't go away, and make it go away
-    // TODO: Figure out how to get the animation when removing a task back to appear on the list
+    // TODO: Test converting into a set once the initial list is working. Also, if it needs privating
+    /// The list of the user's `Task`s.
+    @State var tasks: [TaskFramework] = Task.GetAllPresetTasks()
     
     var body: some View {
-        if taskList.isEmpty {
-            // Show that no tasks exist, and direct them to the task creation button
-            // TODO: Style this and show the time remaining until Tasks reset
+        if tasks.isEmpty {
+            // Show that no tasks exist, and suggest that they progress through the app until they unlock some
             VStack {
-                Text("No tasks remaining.")
+                Text("No tasks unlocked to add.")
                     .font(.title3)
 
-                Text("More tasks will become available tomorrow!")
+                Text("Perhaps try creating your own?")
                     .font(.title3)
             }.frame(alignment: .top)
             
             Spacer()
         } else {
             // List of active tasks
-            List(taskList) { task in
+            List(tasks) { task in
                 TaskPresetListItem(task)
             }
             .scrollContentBackground(.hidden)
@@ -96,7 +99,6 @@ private struct TaskListView: View {
         }
     }
 }
-
 
 #Preview {
     TaskPresetView()

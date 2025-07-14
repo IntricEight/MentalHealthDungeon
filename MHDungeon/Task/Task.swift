@@ -36,7 +36,7 @@ enum TaskCreationError: Error, LocalizedError {
 }
 
 /// A model which manages the identity of an objective that the user can complete within an established time frame to earn `Inspiration Points`.
-struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
+struct Task : Codable, Hashable, Identifiable {
     /// Store a unique ID of the `Task` instance.
     var id: UUID = UUID()
     /// The name of the `Task`, which should summarize the objective in a few words.
@@ -74,6 +74,12 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     
     // 5-arg constructor which allows the number of hours the task will be active to be provided.
     /// Initialize a `Task` with the number of hours until expiration provided.
+    ///
+    /// - Parameters:
+    ///   - name: The name of the `Task`.
+    ///   - details: An explanation of the `Task`. This can include notes, instructions, or anything else the user wants to record about the task.
+    ///   - inspirationPoints: The numbers of `Inspiration Points` that completing the `Task` will reward.
+    ///   - hoursToExpiration: The hours until the `Task` expires and cannot be completed.
     init(name: String, details: String, inspirationPoints ip: Int, hoursToExpiration expiresIn: Double) throws {
         // Ensure that proper values are being used to create this task
         try Task.ValidateTask(inspirationPoints: ip, hoursToExpiration: expiresIn)
@@ -117,10 +123,10 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     /// Check the values that are being used to create a `Task` to prevent using bad data.
     ///
     /// - Parameters:
-    ///   - name:
-    ///   - details:
-    ///   - ip: The number of points that
-    ///
+    ///   - name: The desired name of the `Task`. At present, is not used in any error checking.
+    ///   - details: The desired details of the `Task`. At present, is not used in any error checking.
+    ///   - ip: The number of points that the `Task` will reward if completed before it expires.
+    ///   - expiresIn: The number of hours until the `Task` expires after creation, and can no longer be completed for `Inspiration Points`.
     private static func ValidateTask(name: String = "", details: String = "", inspirationPoints ip: Int = 1, hoursToExpiration expiresIn: Double = 1) throws(TaskCreationError) {
         // Error checking
         // Ensure the IP suggested in within the valid range
@@ -157,8 +163,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
         ]
     }
     
-    // TODO: Check if I can remove the ? on UUID? without breaking anything?
-    
     /// `@MainActor` static function that removes the provided `Task` from the application and `Firebase` storage.
     ///
     /// If the `Task` was completed successfully, rewards the player with the appropriate points.
@@ -177,8 +181,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
     /// `@MainActor` static function that returns an array of all of the `Task`s stored on the local JSON file.
     @MainActor
     static func GetAllPresetTasks() -> [TaskFramework] {
-        print("Attempting to get all preset tasks.")
-        
         do {
             // Get the url for the PresetTasks file, or throw a NotFound error if it does not exist.
             guard let taskUrl = Bundle.main.url(forResource: "PresetTasks", withExtension: "json") else {
@@ -206,18 +208,6 @@ struct Task : Codable, CustomStringConvertible, Hashable, Identifiable {
             return []
         }
     }
-    
-    
-    
-    
-    
-    
-    // TODO: Make this more useful after initial testing is complete
-    /// The description of the `Task`, to be used when printing to the console or stored within a `String`.
-    var description: String {       // Allows me to control what gets printed to the Console
-        return "Task: \(name). Expires at \(expirationTime)"
-    }
-    
 }
 
 /// Represents a `Task` that has not yet been created.
@@ -255,11 +245,5 @@ struct TaskFramework : Decodable, Identifiable {
         self.inspirationPoints = try container.decode(Int.self, forKey: .inspirationPoints)
         self.hoursToExpire = try container.decode(Double.self, forKey: .hoursToExpire)
     }
-    
-    
-    
-    
-    
-    
 }
 
