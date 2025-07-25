@@ -39,6 +39,7 @@ struct RegistrationView: View {
             // Email input field
             TextField("Email", text: $email)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.emailAddress)
                 .padding(.horizontal)
@@ -46,6 +47,7 @@ struct RegistrationView: View {
             // Display name input field
             TextField("Display name", text: $customName)
                 .autocapitalization(.words)
+                .disableAutocorrection(true)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
             
@@ -54,8 +56,10 @@ struct RegistrationView: View {
                 Group {
                     if isSecure {
                         SecureField("Password", text: $password)
+                            .disableAutocorrection(true)
                     } else {
                         TextField("Password", text: $password)
+                            .disableAutocorrection(true)
                     }
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -76,8 +80,10 @@ struct RegistrationView: View {
                 Group {
                     if isSecureConfirm {
                         SecureField("Confirm Password", text: $confirmPassword)
+                            .disableAutocorrection(true)
                     } else {
                         TextField("Confirm Password", text: $confirmPassword)
+                            .disableAutocorrection(true)
                     }
                 }
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -99,7 +105,7 @@ struct RegistrationView: View {
                 
                 // Logic to process account creation attempt
                 _Concurrency.Task {
-                    try await authModel.createUser(withEmail: email, displayName: customName, password: password)
+                    try await authModel.CreateUser(withEmail: email, displayName: customName, password: password)
                 }
                 
             }) {

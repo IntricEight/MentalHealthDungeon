@@ -11,16 +11,22 @@ import SwiftUI
 /// - Choosing which dungeon level the user wants to adventure through.
 /// - Entering a dungeon once the user has enough Inspiration Points.
 struct DungeonLandingView: View {
+    @EnvironmentObject var authModel: AuthModel
     @Environment(DungeonState.self) private var dungeonState: DungeonState
     
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
     
-//    var testDungeon = try! Dungeon(name: "Dark Cave")
-    
     var body: some View {
         // Dungeon button controls
         let buttonRadius: CGFloat = 20
+        
+        /// The name of the current active `Dungeon`.
+        let dungeonName: String = dungeonState.currentDungeon?.name ?? "Dungeon failed to load"
+        /// The inspiration point cost of the current `Dungeon`.
+        let dungeonCost = dungeonState.currentDungeon?.cost ?? 999
+        /// The current number of `Inspiration Points` that the user has in their `Account`.
+        let currentPoints = authModel.currentAccount?.inspirationPoints ?? -1
         
         // One layer for the main app stuff, and one for the overlay tab feature
         ZStack {
@@ -29,18 +35,36 @@ struct DungeonLandingView: View {
                 // Account details section
                 HStack {
                     // Dungeon selection button
-                    // TODO: Implement Dungeon selection feature (Popup or new page?)
                     Button {
                         print("Dungeon Selection selected")
                         
-                        // Navigate to the Dungeon Selection page
-                        dungeonState.ChangeView(to: DungeonPage.selection)
+                        // Check if a dungeon adventure is active
+                        if authModel.currentAccount?.activeDungeonName.isEmpty ?? true {
+                            // Navigate to the Dungeon Selection page
+                            dungeonState.ChangeView(to: .selection)
+                        } else {
+                            // TODO: Alert the user that they cannot change dungeons when an adventure is active
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: buttonRadius)
-                            .frame(height: 50)
+                            .frame(width: 225, height: 50)
                             .foregroundColor(Color.red)
                             .contentShape(Rectangle())
-                    }.padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 32))
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "list.triangle")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 30))
+                                    
+                                    Text("Selection")
+                                        .foregroundColor(.white)
+                                        .fontWeight(.semibold)
+                                        .font(.title)
+                                }
+                                .frame(alignment: .center)
+                        }
+                    }
+                    .padding(EdgeInsets(top: 0, leading: 26, bottom: 0, trailing: 16))
                     
                     Spacer()
                     
@@ -48,7 +72,7 @@ struct DungeonLandingView: View {
                     SmallProfileImage()
                         .frame(alignment: .trailing)
                 }
-                .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
+                .padding(EdgeInsets(top: 64, leading: 16, bottom: 10, trailing: 16))
                 
                 
                 // Perhaps add a title line for the level name + stage #?
@@ -61,16 +85,40 @@ struct DungeonLandingView: View {
                 // Enter Dungeon section
                 // TODO: Implement gradually filling the bar based on current IP score
                 Button {
-                    print("Enter dungeon selected")
+                    // Check if the user has enough points to begin the adventure
+                    if currentPoints >= dungeonCost {
+                        print("Attempting to begin \(dungeonName) - \(currentPoints)/\(dungeonCost) IP owned.")
+                        
+                        // Allow the user to enter the dungeon adventure view
+                        dungeonState.ChangeView(to: .adventure)
+                        
+                    } else {
+                        // Check if the user is trying to check an in-progress adventure
+                        if !(authModel.currentAccount?.activeDungeonName.isEmpty ?? true) {
+                            print("Checking on adventure in \(dungeonName)")
+                            
+                            // Allow the user to enter the dungeon adventure view
+                            dungeonState.ChangeView(to: .adventure)
+                        } else {
+                            // The user does not have enough points to begin the adventure
+                            
+                            
+                            // TODO: Provide the user with an Alert that they cannot start the adventure
+                            
+                        }
+                    }
                 } label: {
                     RoundedRectangle(cornerRadius: buttonRadius)
                         .frame(height: 70)
-                        .foregroundColor(Color.orange)
+                        // Change the color of the button based on whether the user can use it or not
+                        .foregroundColor( (currentPoints >= dungeonCost) ? Color.green : Color.orange)
                         .overlay {
-                            Text("\(dungeonState.currentDungeon?.name ?? "No dungeon connected!")")
+                            Text(authModel.currentAccount?.activeDungeonName.isEmpty ?? true
+                                 ? "\(currentPoints) / \(dungeonCost) points collected"
+                                 : "Adventure in progress")
                                 .foregroundColor(.white)
                                 .fontWeight(.semibold)
-                                .font(.title)
+                                .font(.system(size: 25))    //Shrinking the text just a little to fit inside the button
                                 .frame(alignment: .center)
                         }
                         .contentShape(Rectangle())

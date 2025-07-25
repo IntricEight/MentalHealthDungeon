@@ -19,6 +19,8 @@ struct DungeonListItem: View {
     // TODO: Implement the locking feature that prevents the user from accessing dungeons that they haven't yet unlocked
     /// Whether the displayed `Dungeon` should be locked to the user.
     private let locked: Bool = false
+    /// An image that shows what kind of dungeon is being displayed on offer
+    private let dungeonImage: String
     
     // Official init, this is what should be used when this view is actually being called by lists.
     /// Initialize the list visual with a `Dungeon` item.
@@ -27,6 +29,7 @@ struct DungeonListItem: View {
         
         self.name = dungeon.name
         self.cost = dungeon.cost
+        self.dungeonImage = dungeon.imageNames[1]
     }
     
     var body: some View {
@@ -35,42 +38,41 @@ struct DungeonListItem: View {
         // The dungeon's summary image and selection button
         Button {
             print("Dungeon \"\(name)\" has been selected.")
-            
-            // TODO: Change the user's current dungeon to be the new one that the user has selected, unless they are seclecting the currently active one
 
             // Check if the user has permission to access their desired dungeon.
             if !locked {
                 // Change the active dungeon
                 dungeonState.ChangeDungeon(to: name)
                 
-                
-                
                 // Return the user to the dungeon landing page with the newly selected dungeon
                 dungeonState.ChangeView(to: DungeonPage.landing)
-                
+               
             } else {
                 print("User attempted to access a locked dungeon")
                 
                 // TODO: Cause a popup telling the user that they cannot use a locked dungeon? "<name> is locked."
             }
-                
-                
-            
         } label: {
             HStack {
-                // TODO: Display the topical image of the dungeon. Replace the rounded rectangle with a rounded image?
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: picWidth, height: picWidth, alignment: .bottom)
-                    .overlay {
-                        // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
-                        
-                    }.padding(.trailing, 20)
+                // TODO: Implement the greying out and locked appearance of dungeons that have not been unlocked yet
+                Image(dungeonImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: picWidth, height: picWidth)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.gray)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding(.trailing, 15)
                 
                 VStack(alignment: .leading) {
                     Text("\(name)")
                         .font(.title)
                     
                     Divider()
+                        .frame(height: 2)
+                        .overlay(Color.black)
                     
                     Text("Cost: \(cost)")
                 }

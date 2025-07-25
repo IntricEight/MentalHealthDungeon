@@ -29,8 +29,6 @@ struct NavBarTab: View {
         )
         .ignoresSafeArea()
         .onTapGesture {
-            print("Navigation selected")
-            
             // Bring up the Navigation Bar when touched
             // This animation controls the animation of the navigation bar as it appears
             withAnimation(.easeInOut(duration: 0.5)) {

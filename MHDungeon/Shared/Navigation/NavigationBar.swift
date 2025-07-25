@@ -49,18 +49,18 @@ struct NavigationBar: View {
             HStack {
                 Spacer()
                 
-                // Tasks Navigation button
-                NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, consoleMessage: "Task Nav selected")
+                // Tasks Navigation button                  heart.text.clipboard.fill
+                NavBarButton(icon: "heart.text.clipboard.fill", destination: AppPage.taskList, consoleMessage: "Task Nav selected")
                 
                 Spacer()
                 
                 // Dungeon Navigation button
-                NavBarButton(icon: "triangle.circle.fill", destination: AppPage.dungeon, consoleMessage: "Dungeon Nav selected")
+                NavBarButton(icon: "figure.climbing", destination: AppPage.dungeon, consoleMessage: "Dungeon Nav selected")
                 
                 Spacer()
                 
                 // Profile Navigation button
-                NavBarButton(icon: "square.circle.fill", destination: AppPage.profile, consoleMessage: "Profile Nav selected")
+                NavBarButton(icon: "person.crop.circle.fill", destination: AppPage.profile, consoleMessage: "Profile Nav selected")
                 
                 Spacer()
             }
