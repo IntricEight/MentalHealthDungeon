@@ -14,7 +14,13 @@ struct SmallProfileImage: View {
     var body: some View {
         Circle()
             .frame(width: 60, height: 60)
-            .foregroundColor(Color.yellow)
+            .foregroundColor(Color.black)
+            .overlay {
+                Image("blank-profile")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(.circle)
+            }
     }
 }
 

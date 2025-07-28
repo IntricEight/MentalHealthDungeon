@@ -2,121 +2,121 @@
   "tasks": [
     {
       "name": "Morning Run",
-      "description": "Go for a 5K run to start the day strong.",
+      "details": "Go for a 5K run to start the day strong.",
       "inspirationPoints": 10,
       "hoursToExpire": 12
     },
     {
       "name": "Read a Book",
-      "description": "Read at least 20 pages of a book.",
+      "details": "Read at least 20 pages of a book.",
       "inspirationPoints": 5,
       "hoursToExpire": 24
     },
     {
       "name": "Practice Coding",
-      "description": "Spend an hour coding in Swift.",
+      "details": "Spend an hour coding in Swift.",
       "inspirationPoints": 15,
       "hoursToExpire": 8
     },
     {
       "name": "Meditation",
-      "description": "Meditate for 15 minutes to clear your mind.",
+      "details": "Meditate for 15 minutes to clear your mind.",
       "inspirationPoints": 7,
       "hoursToExpire": 6
     },
     {
       "name": "Write a Journal",
-      "description": "Write about your day and reflections.",
+      "details": "Write about your day and reflections.",
       "inspirationPoints": 8,
       "hoursToExpire": 10
     },
     {
       "name": "Complete a Workout",
-      "description": "Do a full-body workout at the gym.",
+      "details": "Do a full-body workout at the gym.",
       "inspirationPoints": 12,
       "hoursToExpire": 14
     },
     {
       "name": "Cook a Healthy Meal",
-      "description": "Prepare a nutritious homemade meal.",
+      "details": "Prepare a nutritious homemade meal.",
       "inspirationPoints": 9,
       "hoursToExpire": 12
     },
     {
       "name": "Drink Water",
-      "description": "Drink at least 8 glasses of water.",
+      "details": "Drink at least 8 glasses of water.",
       "inspirationPoints": 4,
       "hoursToExpire": 24
     },
     {
       "name": "Declutter Your Desk",
-      "description": "Organize and clean your workspace.",
+      "details": "Organize and clean your workspace.",
       "inspirationPoints": 6,
       "hoursToExpire": 5
     },
     {
       "name": "Call a Friend",
-      "description": "Catch up with a friend or family member.",
+      "details": "Catch up with a friend or family member.",
       "inspirationPoints": 7,
       "hoursToExpire": 16
     },
     {
       "name": "Complete a Side Project Task",
-      "description": "Make progress on a personal project.",
+      "details": "Make progress on a personal project.",
       "inspirationPoints": 15,
       "hoursToExpire": 48
     },
     {
       "name": "Stretch",
-      "description": "Perform a 10-minute stretching routine.",
+      "details": "Perform a 10-minute stretching routine.",
       "inspirationPoints": 5,
       "hoursToExpire": 3
     },
     {
       "name": "Plan Your Day",
-      "description": "Write down a to-do list for tomorrow.",
+      "details": "Write down a to-do list for tomorrow.",
       "inspirationPoints": 6,
       "hoursToExpire": 12
     },
     {
       "name": "Help Someone",
-      "description": "Do a small act of kindness today.",
+      "details": "Do a small act of kindness today.",
       "inspirationPoints": 10,
       "hoursToExpire": 18
     },
     {
       "name": "Listen to a Podcast",
-      "description": "Learn something new from a podcast.",
+      "details": "Learn something new from a podcast.",
       "inspirationPoints": 8,
       "hoursToExpire": 20
     },
     {
       "name": "Take a Walk",
-      "description": "Go for a 20-minute walk outside.",
+      "details": "Go for a 20-minute walk outside.",
       "inspirationPoints": 7,
       "hoursToExpire": 6
     },
     {
       "name": "Limit Screen Time",
-      "description": "Avoid screens for one hour before bed.",
+      "details": "Avoid screens for one hour before bed.",
       "inspirationPoints": 9,
       "hoursToExpire": 24
     },
     {
       "name": "Sketch or Doodle",
-      "description": "Draw something creative for fun.",
+      "details": "Draw something creative for fun.",
       "inspirationPoints": 6,
       "hoursToExpire": 8
     },
     {
       "name": "Try a New Hobby",
-      "description": "Spend time exploring a new interest.",
+      "details": "Spend time exploring a new interest.",
       "inspirationPoints": 12,
       "hoursToExpire": 48
     },
     {
       "name": "Organize Digital Files",
-      "description": "Sort and clean up your computer files.",
+      "details": "Sort and clean up your computer files.",
       "inspirationPoints": 10,
       "hoursToExpire": 24
     }

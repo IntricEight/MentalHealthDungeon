@@ -8,7 +8,7 @@ import _Concurrency
 
 /// A view page that allows the user to log into an existing account to use in the application.
 struct SignInView: View {
-    @EnvironmentObject var authModel: AuthModel
+    @EnvironmentObject private var authModel: AuthModel
     
     // Gather the user's sign up information
     /// The user's unique email.
@@ -32,6 +32,7 @@ struct SignInView: View {
                 // Email input field
                 TextField("Email", text: $email)
                     .autocapitalization(.none)
+                    .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.emailAddress)
                     .padding(.horizontal)
@@ -41,8 +42,10 @@ struct SignInView: View {
                     Group {
                         if isSecure {
                             SecureField("Password", text: $password)
+                                .disableAutocorrection(true)
                         } else {
                             TextField("Password", text: $password)
+                                .disableAutocorrection(true)
                         }
                     }
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -65,7 +68,7 @@ struct SignInView: View {
                     // Logic to process login attempt
                     // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
                     _Concurrency.Task {
-                        try await authModel.signIn(withEmail: email, password: password)
+                        try await authModel.SignIn(withEmail: email, password: password)
                     }
                               
                 } label: {

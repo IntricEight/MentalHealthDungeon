@@ -8,6 +8,7 @@ import SwiftUI
 struct MinimalParent: View {
     /// Controls visibility of app navigation bar.
     @State private var navBarVisible: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -31,6 +32,7 @@ struct MinimalParent: View {
 struct MinimalNavBar: View {
     /// Allow the navigation bar to reset the host's NavBar state before leaving
     @Binding var visible: Bool
+    
     var body: some View {
         VStack (spacing: 0) {
             HStack {
@@ -60,6 +62,7 @@ struct MinimalNavBar: View {
 struct MinimalNavOpen: View {
     /// The visibility toggle for the external feature.
     @Binding var navBarVisible: Bool
+    
     var body: some View {
         // Navigation tab button
         Button {

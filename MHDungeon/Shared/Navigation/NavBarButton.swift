@@ -7,44 +7,48 @@ import SwiftUI
 
 /// A button which will direct the user into the selected major section of the application.
 struct NavBarButton: View {
-    @Environment(AppState.self) var appState: AppState
+    @Environment(AppState.self) private var appState: AppState
     
     /// The name of the `SF Symbols` icon that adorns the button.
-    let icon: String
+    private let icon: String
     /// The section destination that the button will direct the user to.
-    var dest: AppPage
+    private var dest: AppPage
     /// A message to be printed to the console when the button is pressed.
-    let message: String
+    private let message: String
+    
+    /// If the icon needs to be shrunken to fit inside the block (Looking at you, Clipboard) then set this to true.
+    private let shrink: Bool
     
     /// Instantiates the button with the icon and destination, alongside a message to be printed to the console during navigation.
-    init(icon: String, destination: AppPage, consoleMessage message: String = "") {
+    init(icon: String, destination: AppPage, consoleMessage message: String = "", shrinkIcon shrink: Bool = false) {
         self.icon = icon
         self.dest = destination
         self.message = message
+        self.shrink = shrink
     }
     
     var body: some View {
         // The button which contains the action and visual display for the operation
         Button {
-            //Print the destination notification message to the console
-            print(message)
+            // Only navigate if the user isn't already on the desired page
+            if appState.currentView != dest {
+                //Print the destination notification message to the console
+//                print(message)
             
-            // Navigate to the destination view
-            appState.currentView = dest
-            
-            print(appState.currentView)
+                // Navigate to the destination view
+                appState.ChangeView(to: dest)
+            }
             
         } label: {
             // A slightly rounded rectangle with an icon from SF Symbols in the center
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color.red)
+                .foregroundColor(Color.teal)
                 .frame(width: 80, height: 80)
                 .overlay {
                     Image(systemName: icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 60, height: 60, alignment: .center)
                         .foregroundColor(Color.white)
+                        .font(.system(size: 60))
+                        .frame(alignment: .center)
                 }
         }
     }

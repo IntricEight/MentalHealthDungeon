@@ -41,16 +41,24 @@ struct ProfileView: View {
                     // User progress info section
                     HStack {
                         // Profile Image button
-                        // TODO: Implement selection of an image to use as a profile image. Current plan is to create a list of premade images to choose from
+                        // TODO: Implement selection of an image to use as a profile image.
+                        // Current plan is to create a list of premade images to choose from, so I don't need to implement proper image storage
                         Button {
                             print("Profile Image selected")
                         } label: {
                             Circle()
                                 .frame(width: circleDiameter, height: circleDiameter, alignment: .leading)
-                                .foregroundColor(Color.yellow)
-                                .padding([.leading], 10)
+                                .foregroundColor(Color.black)
+                                .overlay {
+                                    Image("blank-profile")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .clipShape(.circle)
+                                }
                         }
-                        
+                        .padding([.leading], 10)
+                        .contentShape(Circle())
+
                         Spacer()
                         
                         // Account Progress tab button
@@ -68,6 +76,19 @@ struct ProfileView: View {
                                     )
                                 )
                                 .ignoresSafeArea(edges: .trailing)
+                                .contentShape(Rectangle())
+                                .overlay {
+                                    HStack (spacing: 0) {
+                                        Image(systemName: "chevron.compact.backward")
+                                            .imageScale(.large)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                        Image(systemName: "chevron.compact.backward")
+                                            .imageScale(.large)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                    }
+                                }
                         }
                     }
                     .frame(maxHeight: circleDiameter)
@@ -88,6 +109,17 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.brown)
+                                .contentShape(Rectangle())
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "envelope.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Messages")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
                         }
                         
                         
@@ -103,6 +135,17 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(height: buttonHeight)
                                 .foregroundColor(Color.indigo)
+                                .contentShape(Rectangle())
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "person.2.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Friends")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -113,6 +156,7 @@ struct ProfileView: View {
                     
                     // Character Creation section
                     // TODO: Wrap in a button to navigate to Cosmetics page
+                    // The Character Preview is only a created image - Don't built the Cosmetics page in this view, use a new one
                     CharacterPreview()
                         .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     
@@ -129,8 +173,18 @@ struct ProfileView: View {
                             RoundedRectangle(cornerRadius: buttonRadius)
                                 .frame(width: 200, height: 30, alignment: .top)
                                 .foregroundColor(Color.orange)
-                                .padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
-                        }
+                                .contentShape(Rectangle())
+                                .overlay {
+                                    HStack {
+                                        Image(systemName: "gearshape.fill")
+                                            .foregroundColor(.white)
+                                        
+                                        Text("Settings")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.heavy)
+                                    }
+                                }
+                        }.padding(EdgeInsets(top: 0, leading: 16, bottom: 20, trailing: 0))
                         
                         Spacer(minLength: 10)
                         

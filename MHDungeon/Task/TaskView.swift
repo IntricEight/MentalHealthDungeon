@@ -3,8 +3,6 @@
 //  MHDungeon
 //
 
-// TODO: Implement an override button that reduces the timer of the first task to 5 seconds. This will be useful in demonstrating that ask feature to the audience
-
 import SwiftUI
 
 /// A view page that provides the user an interface menu that they can use to interact with various task-related systems.
@@ -26,24 +24,19 @@ struct TaskView: View {
     /// This controls whether the menu-like button is present, or if the button has been split apart into the Custom and Preset options.
     @State var isExpanded: Bool = false
     
-    // TODO: Test converting into a set once the initial list is working
+    // TODO: Test converting into a set once the initial list is working. Also, if it needs privating
     /// The list of the user's `Task`s.
     @State var tasks: [Task] = []
     
-    // Dungeon button controls
+    // Task button controls
     // TODO: Make some environmental file where this stuff can be stored
-    let buttonRadius: CGFloat = 20
-    let buttonHeight: CGFloat = 50
+    private let buttonRadius: CGFloat = 20
+    private let buttonHeight: CGFloat = 50
     
     // Tab controls
-    let tabRadius: CGFloat = 30
-
+    private let tabRadius: CGFloat = 30
     
     var body: some View {
-        // Use a .sheet (iExpense, look up Paul Hudson's tutorial) to display the Task details / Task Creation
-        //  OR
-        // Use a NavigationStack with NavigationLink
-        
         NavigationStack {
             // One layer for the main app stuff, and one for the overlay tab feature
             ZStack {
@@ -51,7 +44,6 @@ struct TaskView: View {
                 VStack {
                     // Account details section
                     HStack {
-                        
                         Spacer(minLength: 15)
                         
                         
@@ -59,8 +51,6 @@ struct TaskView: View {
                         // TODO: After I get the sheet working, see if I can break this button into its own View
                         if !isExpanded {
                             Button {
-                                print("Task Creation selected")
-                                
                                 // Show the two buttons that allow users to create new tasks
                                 isExpanded.toggle()
                             } label: {
@@ -119,15 +109,7 @@ struct TaskView: View {
                     
                     
                     // Show the user's current tasks
-                    if authModel.currentAccount != nil {
-                        TaskListView(account: authModel.currentAccount!)
-                    } else {
-                        // The user should not be able to see this
-                        Text("Account failed to create. You should not be able to see this. Please report this with any helpful information.")
-                            .background(Color.white)
-                            .foregroundColor(Color.red)
-                            .fontWeight(.bold)
-                    }
+                    TaskListView(account: authModel.currentAccount!)
                     
                     // Navigation section
                     HStack {
@@ -167,7 +149,8 @@ struct TaskView: View {
     TaskView()
 }
 
-struct TaskListView: View {
+/// Display the user's `Task`s inside of a list
+private struct TaskListView: View {
     @ObservedObject var account: Account
     
     // TODO: Figure out why the white background won't go away, and make it go away
@@ -177,8 +160,15 @@ struct TaskListView: View {
         if account.taskList.isEmpty {
             // Show that no tasks exist, and direct them to the task creation button
             // TODO: Style this and include instructions on how to create a task
-            Text("No tasks found in account")
-                .font(.title3)
+            VStack {
+                Text("No tasks found in account.")
+                    .font(.title3)
+
+                Text("Perhaps try creating your own?")
+                    .font(.title3)
+            }.frame(alignment: .top)
+            
+            Spacer()
         } else {
             // List of active tasks
             List(account.taskList) { task in

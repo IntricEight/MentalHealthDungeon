@@ -13,24 +13,31 @@ struct TaskListItem: View {
     @EnvironmentObject var authModel: AuthModel
     
     /// The `Task` being displayed.
-    var task: Task?
+    private var task: Task?
     
-    // Features from the `Task` that have been brought out into their own variables.
+    // Features from the Task that have been brought out into their own variables.
     /// The name of the `Task`.
-    let name: String
+    private let name: String
     /// The number of `Inspiration Points` that the `Task` will reward.
-    let points: Int
+    private let points: Int
     /// Tracks the time when the `Task` expires.
-    let expirationTime: Date
+    private let expirationTime: Date
 
     /// A visual countdown of the time remaining before the `Task` expires.
     @State private var timeRemaining: String = "Expires in <LOADING>"
     
-    /// Controls how frequently the visual countdown updates.
-    let timeInterval: Double = 40
+    /// A template to base the `timeRemaining` display value off of.
+    private let timeRemainingTemplate: String = "Expires in "
+    /// Controls how frequently the visual countdown updates (In seconds).
+    private let timeInterval: Double = 1
+    /// Message to show that the countdown has elapsed
+    private let expiredMessage: String = "Expired"
+    
+    // Get a timer to convert the remanining time into Days, Hours, Minutes, Seconds format
+    private let dhmsTimer: DHMSTimer = DHMSTimer()
 
-    // Official init, this is what should be used when this view is actually being called
-    /// Initialize the visual with a `Task` item.
+    // Official init, this is what should be used when this view is actually being called by lists.
+    /// Initialize the list visual with a `Task` item.
     init(_ task: Task) {
         self.task = task
         
@@ -50,33 +57,34 @@ struct TaskListItem: View {
     
     var body: some View {
         
+        // TODO: Bring the name and other task details into here to bring them out of Struct variable status.
+        // This will require changing the preview, which is why I haven't done it yet myself.
+        
         // Task display bar with buttons
-        // TODO: Figure out why the checkmark button code executes wherever you click on the task
         RoundedRectangle(cornerRadius: 20)
             .foregroundColor(Color.green)
             .frame(width: screenWidth * 0.9, height: 140, alignment: .bottom)
             .overlay {
-                VStack{
+                VStack {
                     // Checkmark and name
                     HStack {
                         // Checkmark button to mark the task as complete
                         Button {
-                            print("\(name) checked!")
-                            
-                            // TODO: Remove after testing, and replace with a completion method instead
-                            authModel.deleteTask(id: task?.id)
+                            // Mark the Task as either failed or completed and remove it from the user
+                            Task.DeleteTask(id: task?.id, authAccess: authModel, isCompleted: timeRemaining != expiredMessage)
                         } label: {
                             RoundedRectangle(cornerRadius: 20)
                                 .foregroundColor(Color.black)
                                 .frame(width: 80, height: 80, alignment: .topLeading)
                                 .overlay {
-                                    Image(systemName: "checkmark")
+                                    // Change the icon to show whether the task will be completed successfully or has failed
+                                    Image(systemName: timeRemaining != expiredMessage ? "checkmark" : "xmark")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 60, height: 60, alignment: .center)
                                         .foregroundColor(Color.white)
                                 }
-                        }
+                        }.buttonStyle(.borderless)
                         
                         Spacer(minLength: 16)
                         
@@ -94,103 +102,19 @@ struct TaskListItem: View {
                         
                         // Display the remaining time in a sporatic countdown. onAppear() runs the update on loading, while onReceive() runs it every 'timeInterval' after
                         Text("\(timeRemaining)")
-                            .onAppear(perform: updateTimeRemaining)
+                            .onAppear {
+                                // Ensure that the time until expiration is displayed upon loading
+                                dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: expirationTime,  template: timeRemainingTemplate, message: expiredMessage)
+                            }
                             .onReceive(Timer.publish(every: timeInterval, on: .main, in: .common).autoconnect()) { _ in
-                                    updateTimeRemaining()
+                                // After timeInterval second(s) have passed, this takes over the remaining time display
+                                dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: expirationTime, template: timeRemainingTemplate, message: expiredMessage)
                                 }
                     }
                     
                 }.padding()
             }
             .listRowBackground(Color.clear)
-    }
-    
-    /// Updates and formats the remaining time for the display.
-    func updateTimeRemaining() -> Void {
-        /// Record the present time to stop the value changing from now until execution time.
-        let now = Date.now
-        
-        // Ensure that the expiration time hasn't already passed.
-        guard expirationTime > now else {
-            timeRemaining = "Expired"
-            return
-        }
-        
-        /// Store the time remaining in a formatted string.
-        var formatting: String = ""
-        
-        // Record whether the segment was used for format assistance.
-        var hasDays: Bool = false
-        var hasHours: Bool = false
-        var hasMinutes: Bool = false
-        
-        // Calculate the time difference
-        let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: now, to: expirationTime)
-        
-        // Add the days remaining if there are any
-        if let daysRemaining = components.day, daysRemaining > 0 {
-            // Record that our string will contain days
-            hasDays = true
-            
-            formatting += "\(daysRemaining) day"
-            
-            // Show the plurality
-            if daysRemaining > 1 {
-                formatting += "s"
-            }
-        }
-        
-        // Add the hours remaining if there are any
-        if let hoursRemaining = components.hour, hoursRemaining > 0 {
-            // Format the days segment to account for the hours segment
-            if hasDays {
-                formatting += ", "
-            }
-            
-            // Record that our string will contain hours
-            hasHours = true
-            
-            formatting += "\(hoursRemaining) hour"
-            
-            // Show the plurality
-            if hoursRemaining > 1 {
-                formatting += "s"
-            }
-        }
-        
-        // Add the minutes remaining if there are any, so long as no days remain either
-        if !hasDays {
-            if let minutesRemaining = components.minute, minutesRemaining > 0 {
-                // Format the hours segment to account for the minutes segment
-                if hasHours {
-                    formatting += ", "
-                }
-                
-                // Record that our string will contain minutes
-                hasMinutes = true
-                
-                formatting += "\(minutesRemaining) minute"
-                
-                // Show the plurality
-                if minutesRemaining > 1 {
-                    formatting += "s"
-                }
-            }
-        }
-        
-        // If there are no days, hours, or minutes, then there is likely only seconds left on the clock and we will display that
-        if !hasDays && !hasHours && !hasMinutes {
-            if let secondsRemaining = components.second, secondsRemaining > 0 {
-                formatting = "\(secondsRemaining) second"
-                
-                // Show the plurality
-                if secondsRemaining > 1 {
-                    formatting += "s"
-                }
-            }
-        }
-        
-        timeRemaining = "Expires in \(formatting)"
     }
 }
 

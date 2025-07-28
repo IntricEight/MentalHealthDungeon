@@ -9,10 +9,12 @@ import SwiftUI
 
 /// A view page thats allows users to view and change their account details.
 struct SettingsView: View {
-    @EnvironmentObject var authModel: AuthModel
+    @EnvironmentObject private var authModel: AuthModel
     
     var body: some View {
-        // TODO: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it
+        
+        
+        // MARK: Current version of the settings was used in a auth lesson to display the user information, allow account deletion, and signing out. Refine it
         
         VStack {
             Text("Settings")
@@ -30,7 +32,7 @@ struct SettingsView: View {
                     Button {
                         print("Signing out.")
                         
-                        authModel.signOut()
+                        authModel.SignOut()
                     } label: {
                         Text("Sign out")
                     }
@@ -41,7 +43,7 @@ struct SettingsView: View {
                         
                         // Logic to process deleting an account
                         _Concurrency.Task {
-                            await authModel.deleteUser()
+                            await authModel.DeleteUser()
                         }
                     } label: {
                         Text("Delete account")
