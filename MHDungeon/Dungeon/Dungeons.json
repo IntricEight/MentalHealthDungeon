@@ -1,0 +1,36 @@
+{
+    "dungeons": [
+        {
+            "id": 1,
+            "name": "Dark Cave",
+            "description": "A dark cave, filled with stalactites and stalagmites. The light from your lantern glints off of water dripping down the walls. You can't see more than.",
+            "imageNames": [ "1_0_dark-cave", "1_1_dark-cave", "1_2_dark-cave", "1_3_dark-cave" ],
+            "rewards": [],
+            "cost": 5,
+            "hours": 10
+        },
+        {
+            "id": 2,
+            "name": "Mushroom Grove",
+            "description": "This cave has a vibrant atmosphere, with a slight haze in the air. Neon mushrooms line the walls.",
+            "imageNames": [ "2_0_mushroom-grove", "2_1_mushroom-grove", "2_2_mushroom-grove", "2_3_mushroom-grove" ],
+            "rewards": [
+                {
+                    "item": "ipMaxIncrease",
+                    "value": "30"
+                }
+            ],
+            "cost": 15,
+            "hours": 15
+        },
+        {
+            "id": 3,
+            "name": "Forest Trail",
+            "description": "At the exit of the cave lies a light forest. An animal trail guides your path upwards.",
+            "imageNames": [ "3_0_forest-trail", "3_1_forest-trail", "3_1_forest-trail", "3_1_forest-trail" ],
+            "rewards": [],
+            "cost": 20,
+            "hours": 15
+        },
+    ]
+}
