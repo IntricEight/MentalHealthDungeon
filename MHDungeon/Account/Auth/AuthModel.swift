@@ -10,6 +10,9 @@ import FirebaseAuth
 // TODO: Make sure that authentication protocols around the app use Regex to make sure emails are in proper format
 /// Utilized by extensions on `Views` to ensure that proper conditions are met before allowing an authentication form to be submitted.
 protocol AuthenticationFormProtocol {
+    var emailStatus: EmailAuthStatus { get }
+    var passwordStatus: PasswordAuthStatus { get }
+    
     /// Checks and records whether the current form has met the conditions to be submitted.
     var formIsValid: Bool { get }
 }
