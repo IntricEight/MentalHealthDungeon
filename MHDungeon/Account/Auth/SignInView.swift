@@ -72,7 +72,8 @@ struct SignInView: View {
                         // Logic to process login attempt
                         // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
                         _Concurrency.Task {
-                            try await authModel.SignIn(withEmail: email, password: password)
+                            // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                            try await authModel.SignIn(withEmail: email.lowercased(), password: password)
                         }
                         
                     } label: {
@@ -120,7 +121,7 @@ extension SignInView: AuthenticationFormProtocol {
     /// Checks if the user has satisfied the conditions to attempt to sign in.
     var formIsValid: Bool {
         // TODO: Implement bool logic for conditions I want the user's submission details to meet
-        return !email.isEmpty && email.contains("@") && !password.isEmpty && password.count > 5
+        return !email.isEmpty && email.contains("@") && !password.isEmpty
     }
 }
 

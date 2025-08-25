@@ -120,7 +120,8 @@ struct RegistrationView: View {
                     
                     // Logic to process account creation attempt
                     _Concurrency.Task {
-                        try await authModel.CreateUser(withEmail: email, displayName: customName, password: password)
+                        // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                        try await authModel.CreateUser(withEmail: email.lowercased(), displayName: customName, password: password)
                     }
                     
                 }) {
