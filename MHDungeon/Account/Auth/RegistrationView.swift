@@ -6,6 +6,9 @@
 import SwiftUI
 import _Concurrency
 
+/// The percentage of the screen that it taken by the border images (Between 0 and 1)
+private let IMAGE_BORDER: Double = 0.2
+
 /// A view page that allows the user to register a new account in the application.
 ///
 /// - Note: Intended to be used as a part of a `NavigationStack`
@@ -29,127 +32,138 @@ struct RegistrationView: View {
     @State private var isSecureConfirm: Bool = true
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Title for the create account view
-            Text("Create Account")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+        VStack {
+            Rectangle().fill(Color.blue).frame(height: screenHeight * IMAGE_BORDER)
             
-            // Email input field
-            TextField("Email", text: $email)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.emailAddress)
-                .padding(.horizontal)
-            
-            // Display name input field
-            TextField("Display name", text: $customName)
-                .autocapitalization(.words)
-                .disableAutocorrection(true)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            
-            // Password input field with visibility toggle
-            HStack {
-                Group {
-                    if isSecure {
-                        SecureField("Password", text: $password)
-                            .disableAutocorrection(true)
-                    } else {
-                        TextField("Password", text: $password)
-                            .disableAutocorrection(true)
+            VStack(spacing: 20) {
+                // Title for the create account view
+                Text("Lets change your life!")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .multilineTextAlignment(.center)
+                
+                // Email input field
+                TextField("Email", text: $email)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.emailAddress)
+                    .padding(.horizontal)
+                
+                // Display name input field
+                TextField("Display name", text: $customName)
+                    .autocapitalization(.words)
+                    .disableAutocorrection(true)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                
+                // Password input field with visibility toggle
+                HStack {
+                    Group {
+                        if isSecure {
+                            SecureField("Password", text: $password)
+                                .disableAutocorrection(true)
+                        } else {
+                            TextField("Password", text: $password)
+                                .disableAutocorrection(true)
+                        }
                     }
-                }
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                
-                // Visibility toggle
-                Button {
-                    isSecure.toggle()
-                } label: {
-                    Image(systemName: isSecure ? "eye.slash" : "eye")
-                        .foregroundColor(Color.gray)
-                }
-            }
-            .padding(.horizontal)
-            
-            // Confirm Password input field with visibility toggle
-            HStack {
-                Group {
-                    if isSecureConfirm {
-                        SecureField("Confirm Password", text: $confirmPassword)
-                            .disableAutocorrection(true)
-                    } else {
-                        TextField("Confirm Password", text: $confirmPassword)
-                            .disableAutocorrection(true)
-                    }
-                }
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                
-                // Visibility toggle
-                Button {
-                    isSecureConfirm.toggle()
-                } label: {
-                    Image(systemName: isSecureConfirm ? "eye.slash" : "eye")
-                        .foregroundColor(Color.gray)
-                }
-            }
-            .padding(.horizontal)
-            
-            // Error field to inform the user of proper form
-            VStack(alignment: .leading, spacing: 20) {
-                Text("\(emailStatus)")
-                    .font(.subheadline)
-                    .foregroundColor(Color.red)
-                
-                Text("\(passwordStatus)")
-                    .font(.subheadline)
-                    .foregroundColor(Color.red)
-            }
-//            .frame(alignment: .leading)
-            
-            Spacer()
-            
-            // Navigation buttons
-            VStack {
-                // Create Account button
-                Button(action: {
-                    print("Create Account tapped with email: '\(email)' and password: '\(password)'")
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
                     
-                    // Logic to process account creation attempt
-                    _Concurrency.Task {
-                        // Only pass in the email in a lowercase form, to allow the user to write it however they like
-                        try await authModel.CreateUser(withEmail: email.lowercased(), displayName: customName, password: password)
+                    // Visibility toggle
+                    Button {
+                        isSecure.toggle()
+                    } label: {
+                        Image(systemName: isSecure ? "eye.slash" : "eye")
+                            .foregroundColor(Color.gray)
                     }
-                    
-                }) {
-                    Text("Create Account")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                .disabled(!formIsValid)
-                .opacity(formIsValid ? 1.0 : 0.5)
                 
-                // Move to sign in with an existing account button
-                Button {
-                    // Move down the NavigationStack and back to the Sign In page
-                    // TODO: If I choose to swap around the order of pages, this and the code in SignInView will need to be swapped
-                    dismiss()
-                } label: {
-                    Text("Sign in with an existing account")
+                // Confirm Password input field with visibility toggle
+                HStack {
+                    Group {
+                        if isSecureConfirm {
+                            SecureField("Confirm Password", text: $confirmPassword)
+                                .disableAutocorrection(true)
+                        } else {
+                            TextField("Confirm Password", text: $confirmPassword)
+                                .disableAutocorrection(true)
+                        }
+                    }
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
+                    
+                    // Visibility toggle
+                    Button {
+                        isSecureConfirm.toggle()
+                    } label: {
+                        Image(systemName: isSecureConfirm ? "eye.slash" : "eye")
+                            .foregroundColor(Color.gray)
+                    }
+                }
+                .padding(.horizontal)
+                
+                // Error field to inform the user of proper form
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("\(emailStatus)")
                         .font(.subheadline)
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color.red)
+                    
+                    Text("\(passwordStatus)")
+                        .font(.subheadline)
+                        .foregroundColor(Color.red)
                 }
-            }.frame(alignment: .bottom)
+                
+                Spacer()
+                
+                // Navigation buttons
+                VStack {
+                    // Create Account button
+                    Button(action: {
+                        print("Create Account tapped with email: '\(email)' and password: '\(password)'")
+                        
+                        // Logic to process account creation attempt
+                        _Concurrency.Task {
+                            // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                            try await authModel.CreateUser(withEmail: email.lowercased(), displayName: customName, password: password)
+                        }
+                        
+                    }) {
+                        Text("Create Account")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    .disabled(!formIsValid)
+                    .opacity(formIsValid ? 1.0 : 0.5)
+                    
+                    // Move to sign in with an existing account button
+                    Button {
+                        // Move down the NavigationStack and back to the Sign In page
+                        // TODO: If I choose to swap around the order of pages, this and the code in SignInView will need to be swapped
+                        dismiss()
+                    } label: {
+                        Text("Sign in with an existing account")
+                            .font(.subheadline)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.top, 10)
+                }
+                .frame(alignment: .bottom)
+            }
+            .padding()
+            .frame(height: screenHeight * (1 - IMAGE_BORDER * 2) )
+            
+            Rectangle().fill(Color.blue).frame(height: screenHeight * IMAGE_BORDER)
         }
-        .padding()
+        .ignoresSafeArea()
     }
 }
 

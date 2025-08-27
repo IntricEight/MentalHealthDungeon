@@ -6,6 +6,9 @@
 import SwiftUI
 import _Concurrency
 
+/// The percentage of the screen that it taken by the border images (Between 0 and 1)
+private let IMAGE_BORDER: Double = 0.2
+
 /// A view page that allows the user to log into an existing account to use in the application.
 struct SignInView: View {
     @EnvironmentObject private var authModel: AuthModel
@@ -21,87 +24,95 @@ struct SignInView: View {
 
     var body: some View {
         NavigationStack {
-            
-            VStack(spacing: 20) {
+            VStack {
+                Rectangle().fill(Color.blue).frame(height: screenHeight * IMAGE_BORDER)
                 
-                // Title of the sign in view
-                Text("Sign In")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                // Email input field
-                TextField("Email", text: $email)
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .keyboardType(.emailAddress)
-                    .padding(.horizontal)
-                
-                // Password input field with visibility toggle
-                HStack {
-                    Group {
-                        if isSecure {
-                            SecureField("Password", text: $password)
-                                .disableAutocorrection(true)
-                        } else {
-                            TextField("Password", text: $password)
-                                .disableAutocorrection(true)
+                // The main content of the login page
+                VStack(spacing: 20) {
+                    // Title of the sign in view
+                    Text("Welcome back!")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .frame(alignment: .center)
+                    
+                    // Email input field
+                    TextField("Email", text: $email)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.emailAddress)
+                        .padding(.horizontal)
+                    
+                    // Password input field with visibility toggle
+                    HStack {
+                        Group {
+                            if isSecure {
+                                SecureField("Password", text: $password)
+                                    .disableAutocorrection(true)
+                            } else {
+                                TextField("Password", text: $password)
+                                    .disableAutocorrection(true)
+                            }
+                        }
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                        
+                        // Visibility toggle
+                        Button {
+                            isSecure.toggle()
+                        } label: {
+                            Image(systemName: isSecure ? "eye.slash" : "eye")
+                                .foregroundColor(Color.gray)
                         }
                     }
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
+                    .padding(.horizontal)
                     
-                    // Visibility toggle
-                    Button {
-                        isSecure.toggle()
-                    } label: {
-                        Image(systemName: isSecure ? "eye.slash" : "eye")
-                            .foregroundColor(Color.gray)
+                    Spacer()
+                    
+                    // Navigation buttons
+                    VStack {
+                        // Login button
+                        Button {
+                            print("Log In tapped with email: '\(email)' and password: '\(password)'")
+                            
+                            // Logic to process login attempt
+                            // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
+                            _Concurrency.Task {
+                                // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                                try await authModel.SignIn(withEmail: email.lowercased(), password: password)
+                            }
+                            
+                        } label: {
+                            Text("Log In")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        .padding(.horizontal)
+                        .disabled(!formIsValid)
+                        .opacity(formIsValid ? 1.0 : 0.5)
+                        
+                        // Create new account button
+                        NavigationLink {
+                            RegistrationView()
+                                .navigationBarBackButtonHidden()
+                        } label: {
+                            Text("Don't have an account? Register!")
+                                .font(.subheadline)
+                                .foregroundColor(.blue)
+                        }
+                        .padding(.top, 10)
                     }
+                    .frame(alignment: .bottom)
                 }
-                .padding(.horizontal)
+                .padding()
+                .frame(height: screenHeight * (1 - IMAGE_BORDER * 2) )
                 
-                Spacer()
-                
-                // Navigation buttons
-                VStack {
-                    // Login button
-                    Button {
-                        print("Log In tapped with email: '\(email)' and password: '\(password)'")
-                        
-                        // Logic to process login attempt
-                        // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
-                        _Concurrency.Task {
-                            // Only pass in the email in a lowercase form, to allow the user to write it however they like
-                            try await authModel.SignIn(withEmail: email.lowercased(), password: password)
-                        }
-                        
-                    } label: {
-                        Text("Log In")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    .disabled(!formIsValid)
-                    .opacity(formIsValid ? 1.0 : 0.5)
-                    
-                    // Create new account button
-                    NavigationLink {
-                        RegistrationView()
-                            .navigationBarBackButtonHidden()
-                    } label: {
-                        Text("Create New Account")
-                            .font(.subheadline)
-                            .foregroundColor(.blue)
-                    }
-                    .padding(.top, 10)
-                }.frame(alignment: .bottom)
-            }
-            .padding()
+                Rectangle().fill(Color.blue).frame(height: screenHeight * IMAGE_BORDER)
+            }.ignoresSafeArea()
         }
     }
 }
