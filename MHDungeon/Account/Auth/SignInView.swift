@@ -29,43 +29,77 @@ struct SignInView: View {
                 
                 // The main content of the login page
                 VStack(spacing: 20) {
-                    // Title of the sign in view
-                    Text("Welcome back!")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(alignment: .center)
-                    
-                    // Email input field
-                    TextField("Email", text: $email)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.emailAddress)
-                        .padding(.horizontal)
-                    
-                    // Password input field with visibility toggle
-                    HStack {
-                        Group {
-                            if isSecure {
-                                SecureField("Password", text: $password)
-                                    .disableAutocorrection(true)
-                            } else {
-                                TextField("Password", text: $password)
-                                    .disableAutocorrection(true)
+                    // Credentials section
+                    VStack {
+                        // Title of the sign in view
+                        Text("Welcome back!")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .frame(alignment: .center)
+                        
+                        // Email input field
+                        TextField("Email", text: $email)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.emailAddress)
+                            .padding(.horizontal)
+                        
+                        // Password input field with visibility toggle
+                        HStack {
+                            Group {
+                                if isSecure {
+                                    SecureField("Password", text: $password)
+                                        .disableAutocorrection(true)
+                                } else {
+                                    TextField("Password", text: $password)
+                                        .disableAutocorrection(true)
+                                }
+                            }
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            
+                            // Visibility toggle
+                            Button {
+                                isSecure.toggle()
+                            } label: {
+                                Image(systemName: isSecure ? "eye.slash" : "eye")
+                                    .foregroundColor(Color.gray)
                             }
                         }
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
+                        .padding(.horizontal)
+                    }
+                    
+                    // TODO: Remove before releasing as a proper app, if ever
+                    // A developer-use button to sign in without creating an account
+                    Spacer()
+                    VStack {
+                        Text("Developer's Use Only")
+                            .font(.title2)
+                            .frame(alignment: .center)
                         
-                        // Visibility toggle
+                        Text("Sign in using a premade account")
+                            .font(.subheadline)
+                            .frame(alignment: .center)
+                        
                         Button {
-                            isSecure.toggle()
+                            // Log the user in using a premade account
+                            _Concurrency.Task {
+                                // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                                try await authModel.SignIn(withEmail: "premade@dev.test", password: "cool!Catz98")
+                            }
                         } label: {
-                            Image(systemName: isSecure ? "eye.slash" : "eye")
-                                .foregroundColor(Color.gray)
+                            Text("Use Premade Account")
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                         }
                     }
-                    .padding(.horizontal)
+                    .padding()
+                    .border(Color.orange)
                     
                     Spacer()
                     
