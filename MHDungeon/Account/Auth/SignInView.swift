@@ -71,6 +71,7 @@ struct SignInView: View {
                     }
                     
                     // TODO: Remove before releasing as a proper app, if ever
+                    // TODO: Update the listed credentials once database modifications are over
                     // A developer-use button to sign in without creating an account
                     Spacer()
                     VStack {

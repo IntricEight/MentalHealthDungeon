@@ -32,7 +32,6 @@ struct ProfileView: View {
         let buttonRadius: CGFloat = 20
         let buttonHeight: CGFloat = 40
 
-        
         NavigationStack {
             // One layer for the main app stuff, and one for the overlay tab feature
             ZStack {
@@ -62,32 +61,24 @@ struct ProfileView: View {
                         Spacer()
                         
                         // Account Progress tab button
-                        // TODO: Implement popout bar with details about the user's adventure
+                        // TODO: Convert the entire button into the rectangle shape, instead of using the label? Could then place the arrows inside instead of needing the rectangle and overlay combination
                         Button {
-                            print("Progress Tab selected")
+                            print("Open the progress tab")
+                            
+                            // Display the progress tab
+                            progressTabVisible = true
                         } label: {
                             Rectangle()
                                 .frame(width: 50, alignment: .trailing)
                                 .foregroundColor(Color.blue)
                                 .clipShape(
-                                    .rect(
-                                        topLeadingRadius: tabRadius,
-                                        bottomLeadingRadius: tabRadius
-                                    )
+                                    .rect(topLeadingRadius: tabRadius, bottomLeadingRadius: tabRadius)
                                 )
                                 .ignoresSafeArea(edges: .trailing)
                                 .contentShape(Rectangle())
                                 .overlay {
-                                    HStack (spacing: 0) {
-                                        Image(systemName: "chevron.compact.backward")
-                                            .imageScale(.large)
-                                            .foregroundColor(.white)
-                                            .bold()
-                                        Image(systemName: "chevron.compact.backward")
-                                            .imageScale(.large)
-                                            .foregroundColor(.white)
-                                            .bold()
-                                    }
+                                    TabArrows(direction: "backward")
+                                        .frame(alignment: .center)
                                 }
                         }
                     }
@@ -198,7 +189,10 @@ struct ProfileView: View {
                 VStack {
                     // Show or hide the progress details bar
                     if progressTabVisible {
-                        //TODO: Implement ProgressDetails subview, and implement it here
+                        ProgressDetails(visible: $progressTabVisible)
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(EdgeInsets(top: 64, leading: 0, bottom: 0, trailing: 0))
+                            .transition(.move(edge: .trailing))
                     }
                     
                     Spacer()
@@ -206,7 +200,6 @@ struct ProfileView: View {
                     // Show or hide the navigation bar
                     if navBarVisible {
                         NavigationBar(visible: $navBarVisible)
-                            .frame(alignment: .bottom)
                             .transition(.move(edge: .bottom))
                     }
                 }.zIndex(10)

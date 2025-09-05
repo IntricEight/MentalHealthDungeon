@@ -65,9 +65,8 @@ struct TaskPresetView: View {
                                 .foregroundColor(Color.white)
                         }
                 }
-            }
-            .padding(EdgeInsets(top: -8, leading: 16, bottom: 8, trailing: 16))
-        }
+            }.padding(EdgeInsets(top: 6, leading: 16, bottom: 8, trailing: 16))
+        }.navigationBarBackButtonHidden(true)
     }
 }
 

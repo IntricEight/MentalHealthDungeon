@@ -25,17 +25,19 @@ class Account: Identifiable, Codable, ObservableObject {
     @Published var inspirationPoints: Int = 0
     /// The user's maximum `Inspiration Points` allowed.
     @Published var maxIP: Int = STARTING_MAX_IP
+    /// The number of `Inspiration Points` earned across the account's lifetime.
+    public private(set) var lifetimeIP: Int = 0
     
     // Task Data
     /// A list of the user's tasks. Ordered from oldest to newest.
     @Published public private(set) var taskList: [Task] = []
     /// The number of tasks that the user has completed.
-    @Published public private(set) var tasksCompleted: Int = 0
+    public private(set) var tasksCompleted: Int = 0
     
     // Dungeon Data
-    /// The ID of the currently active `Dungeon`.
+    /// The name of the currently active `Dungeon`.
     ///
-    /// A value of 0 means that no dungeon is active at the moment.
+    /// An empty string means that no dungeon is active at the moment.
     @Published public private(set) var activeDungeonName: String = ""
     /// The time when the current dungeon session is completed.
     ///
@@ -73,6 +75,7 @@ class Account: Identifiable, Codable, ObservableObject {
         // Points data
         case inspirationPoints
         case maxIP
+        case lifetimeIP
         
         // Task data
         case taskList
@@ -100,6 +103,7 @@ class Account: Identifiable, Codable, ObservableObject {
         // Points data
         try container.encode(inspirationPoints, forKey: CodingKeys.inspirationPoints)
         try container.encode(maxIP, forKey: CodingKeys.maxIP)
+        try container.encode(lifetimeIP, forKey: CodingKeys.lifetimeIP)
         
         // Task data
         try container.encode(taskList, forKey: CodingKeys.taskList)
@@ -125,6 +129,7 @@ class Account: Identifiable, Codable, ObservableObject {
         // Points data
         inspirationPoints = try container.decode(Int.self, forKey: CodingKeys.inspirationPoints)
         maxIP = try container.decode(Int.self, forKey: CodingKeys.maxIP)
+        lifetimeIP = try container.decode(Int.self, forKey: CodingKeys.lifetimeIP)
         
         // Task data
         taskList = try container.decode([Task].self, forKey: CodingKeys.taskList)
@@ -198,6 +203,11 @@ class Account: Identifiable, Codable, ObservableObject {
         }
         else {
             inspirationPoints += points
+        }
+        
+        // Make sure that no overflow error occurs before increasing the lifetime IP rewards count
+        if lifetimeIP < type(of: lifetimeIP).max && points > 0 {
+            lifetimeIP += 1;
         }
     }
     

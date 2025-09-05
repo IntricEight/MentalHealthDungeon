@@ -132,7 +132,6 @@ struct DungeonLandingView: View {
                 HStack {
                     Spacer()
                     
-                    
                     // Navigation tab button
                     NavBarTab(navBarVisible: $navBarVisible)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 32))

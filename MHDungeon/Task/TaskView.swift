@@ -141,7 +141,6 @@ struct TaskView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
