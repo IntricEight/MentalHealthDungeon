@@ -21,23 +21,20 @@ struct ProgressDetails: View {
         
         HStack {
             HStack (spacing: 0) {
-                Button {
-                    print("Closing progress tab")
-                    
-                    // Tell the parent view to close the progress tab
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        visible = false
-                    }
-                    
-                    // TODO: Implement the animation on popping in and out of activeness. Use NavBar for reference.
-                } label: {
-                    // Arrows to display which direction you can slide the view
-                    TabArrows(direction: "forward")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        .contentShape(Rectangle())
-                }
+                // Arrows to display which direction you can slide the view
+                TabArrows(direction: "forward")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .contentShape(Rectangle())
             }
             .frame(width: 50, alignment: .leading)
+            .onTapGesture {
+                print("Closing progress tab")
+                
+                // Tell the parent view to close the progress tab
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    visible = false
+                }
+            }
             
             Spacer()
             
@@ -50,7 +47,7 @@ struct ProgressDetails: View {
         }
         .ignoresSafeArea(edges: .trailing)
         .frame(width: screenWidth * 0.9, height: screenWidth * 0.6)
-        .background(Color.red)
+        .background(Color.blue)
         .clipShape(
             .rect(topLeadingRadius: tabRadius, bottomLeadingRadius: tabRadius)
         )
