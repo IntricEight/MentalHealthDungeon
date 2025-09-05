@@ -25,7 +25,9 @@ struct ProgressDetails: View {
                     print("Closing progress tab")
                     
                     // Tell the parent view to close the progress tab
-                    visible = false
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        visible = false
+                    }
                     
                     // TODO: Implement the animation on popping in and out of activeness. Use NavBar for reference.
                 } label: {

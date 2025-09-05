@@ -66,7 +66,9 @@ struct ProfileView: View {
                             print("Open the progress tab")
                             
                             // Display the progress tab
-                            progressTabVisible = true
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                progressTabVisible = true
+                            }
                         } label: {
                             Rectangle()
                                 .frame(width: 50, alignment: .trailing)
