@@ -10,6 +10,9 @@ import FirebaseAuth
 // TODO: Make sure that authentication protocols around the app use Regex to make sure emails are in proper format
 /// Utilized by extensions on `Views` to ensure that proper conditions are met before allowing an authentication form to be submitted.
 protocol AuthenticationFormProtocol {
+    var emailStatus: EmailAuthStatus { get }
+    var passwordStatus: PasswordAuthStatus { get }
+    
     /// Checks and records whether the current form has met the conditions to be submitted.
     var formIsValid: Bool { get }
 }
@@ -63,10 +66,18 @@ class AuthModel: ObservableObject {
     ///   - email: The user's unique email address, which they already own elsewhere.
     ///   - name: The user's desired visual name on the application.
     ///   - password: The user's desired password.
-    func CreateUser(withEmail email: String, displayName name: String, password: String) async throws {
-        print("User creation attempt with email '\(email)', display name '\(name)', and password '\(password)'")
+    func CreateUser(withEmail email: String, displayName: String, password: String) async throws {
+        print("User creation attempt with email '\(email)', display name '\(displayName)', and password '\(password)'")
         
         do {
+            // If the user has not provided a display name, use the name from the email
+            var name: String
+            if displayName.isEmpty {
+                name = ( email.components(separatedBy: "@") )[0]
+            } else {
+                name = displayName
+            }
+            
             // Send the auth request to Firebase and save the successful response
             let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
             

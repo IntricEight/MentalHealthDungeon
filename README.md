@@ -4,6 +4,11 @@ The Mental Health Dungeon is an iOS application that provides suers with incenti
 users can pursue mindfulness, improvements to bodily health, and more to earn points. These points can then be used to send the user on adventures, where they will advance through multiple dungeon levels
 in return for account rewards and inspirational messages.
 
+## Instructions
+
+To test out this app for yourself, clone the repository onto your local MacOS device using a method of your choice. All development and testing was done using Xcode, so some changes may be necessary to transfer the project to another IDE.
+
+Once the repository has been cloned for your usage, you will need to travel to [Google's Firebase](https://firebase.google.com/) and create a project for your database. Download the `GoogleService-Info.plist` file and store it in the top level folder of the project (Named MentalHealthDungeon by default). If your project fails to run, and the file does not appear in the Xcode file navigator, then add the file to the project by going [File] -> [Add Files to MHDungeon] and selecting `GoogleService-Info.plist` from the list. If the file already appeared in red before performing the Firebase step, don't do this or you will encounter a dupllication issue.
 
 ## Development Details
 - This application was developed for the Oregon Institute of Technology's 2025 IDEAFest.

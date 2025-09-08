@@ -331,7 +331,7 @@ class Account: Identifiable, Codable, ObservableObject {
         } catch TaskCreationError.InvalidExpiration {
             print("Failed to create tasks")
         } catch {
-            print("An unexpected error occured")
+            print("An unexpected error occured: \(error.localizedDescription)")
         }
         
         return tasks

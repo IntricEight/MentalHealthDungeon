@@ -61,39 +61,45 @@ struct SignInView: View {
                 }
                 .padding(.horizontal)
                 
-                // Login button
-                Button {
-                    print("Log In tapped with email: '\(email)' and password: '\(password)'")
-                    
-                    // Logic to process login attempt
-                    // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
-                    _Concurrency.Task {
-                        try await authModel.SignIn(withEmail: email, password: password)
-                    }
-                              
-                } label: {
-                    Text("Log In")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal)
-                .disabled(!formIsValid)
-                .opacity(formIsValid ? 1.0 : 0.5)
+                Spacer()
                 
-                // Create new account button/link
-                NavigationLink {
-                    RegistrationView()
-                        .navigationBarBackButtonHidden()
-                } label: {
-                    Text("Create New Account")
-                        .font(.subheadline)
-                        .foregroundColor(.blue)
-                }
-                .padding(.top, 10)
+                // Navigation buttons
+                VStack {
+                    // Login button
+                    Button {
+                        print("Log In tapped with email: '\(email)' and password: '\(password)'")
+                        
+                        // Logic to process login attempt
+                        // NOTE - Task was causing issues here due to conflicts with my custom Task model. Keep an eye on this if anything goes wrong. Might need to rename my Task to TaskModel or something similar
+                        _Concurrency.Task {
+                            // Only pass in the email in a lowercase form, to allow the user to write it however they like
+                            try await authModel.SignIn(withEmail: email.lowercased(), password: password)
+                        }
+                        
+                    } label: {
+                        Text("Log In")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    .disabled(!formIsValid)
+                    .opacity(formIsValid ? 1.0 : 0.5)
+                    
+                    // Create new account button
+                    NavigationLink {
+                        RegistrationView()
+                            .navigationBarBackButtonHidden()
+                    } label: {
+                        Text("Create New Account")
+                            .font(.subheadline)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.top, 10)
+                }.frame(alignment: .bottom)
             }
             .padding()
         }
@@ -101,11 +107,21 @@ struct SignInView: View {
 }
 
 // Ensure that valid information is passed into the authentication form
-// MARK: AuthenticationFormProtocol
 extension SignInView: AuthenticationFormProtocol {
+    /// Records any issues found with the user's email attempt format.
+    var emailStatus: EmailAuthStatus {
+        return .None
+    }
+    
+    /// Records any issues found with the user's password attempt format.
+    var passwordStatus: PasswordAuthStatus {
+        return .None
+    }
+    
+    /// Checks if the user has satisfied the conditions to attempt to sign in.
     var formIsValid: Bool {
         // TODO: Implement bool logic for conditions I want the user's submission details to meet
-        return !email.isEmpty && email.contains("@") && !password.isEmpty && password.count > 5
+        return !email.isEmpty && email.contains("@") && !password.isEmpty
     }
 }
 
