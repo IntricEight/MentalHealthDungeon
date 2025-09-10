@@ -206,8 +206,8 @@ class Account: Identifiable, Codable, ObservableObject {
         }
         
         // Make sure that no overflow error occurs before increasing the lifetime IP rewards count
-        if lifetimeIP < type(of: lifetimeIP).max && points > 0 {
-            lifetimeIP += 1;
+        if lifetimeIP < (type(of: lifetimeIP).max - points) {
+            lifetimeIP += points;
         }
     }
     

@@ -210,7 +210,7 @@ class AuthModel: ObservableObject {
         let updatedTaskList = account.taskList.map{ $0.toDictionary() }
     
         // Remove the task from the database, and update the user's inspiration points
-        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints, "tasksCompleted": account.tasksCompleted ])
+        Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints, "lifetimeIP": account.lifetimeIP, "tasksCompleted": account.tasksCompleted ])
     }
     
     /// Update the user's information in the `Firestore` entry.
@@ -290,6 +290,7 @@ class AuthModel: ObservableObject {
         // Mark the dungeon as complete through the user's account
         account.CompleteAdventure(dungeon: activeDungeon)
         
+        // TODO: Once rewards are implemented, don't forget to manually update Firebase with the new data from them
         // Update the database with the now-empty active dungeon name
         Firestore.firestore().collection("users").document(uid).updateData(["activeDungeonName": account.activeDungeonName, "dungeonsCompleted": account.dungeonsCompleted ])
         

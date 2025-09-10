@@ -12,6 +12,8 @@ import SwiftUI
 
 /// A subview which displays several details about the user's progression through the application.
 struct ProgressDetails: View {
+    @EnvironmentObject var authModel: AuthModel
+    
     /// Allow the progress bar to reset this popout's appearance state before leaving
     @Binding var visible: Bool
     
@@ -39,9 +41,41 @@ struct ProgressDetails: View {
             Spacer()
             
             // Statistics on the user's account history
-            VStack {
+            VStack (alignment: .leading, spacing: 0) {
+                // Total Inspiration Points
+                Text("Lifetime Inspiration Points earned:")
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(Font.title3)
+                Text("\(authModel.currentAccount?.lifetimeIP ?? -5)")
+                    .foregroundColor(Color.white)
+                    .padding(.leading, 24)
+                    .padding(.bottom, 8)
                 
-            }.frame(alignment: .center)
+                // Total Task Completions
+                Text("Lifetime Tasks completed:")
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(Font.title3)
+                Text("\(authModel.currentAccount?.tasksCompleted ?? 0)")
+                    .foregroundColor(Color.white)
+                    .padding(.leading, 24)
+                    .padding(.bottom, 8)
+                
+                // Total Dungeon Completions
+                Text("Lifetime Dungeons completed:")
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(Font.title3)
+                Text("\(authModel.currentAccount?.dungeonsCompleted ?? 0)")
+                    .foregroundColor(Color.white)
+                    .padding(.leading, 24)
+                    .padding(.bottom, 8)
+            }
+            .frame(maxHeight: screenHeight * 0.5)
             
             Spacer()
         }

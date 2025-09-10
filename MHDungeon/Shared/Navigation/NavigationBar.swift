@@ -20,7 +20,8 @@ struct NavigationBar: View {
         
         VStack (spacing: 0) {
             HStack {
-                Spacer()    // Moves the tab to the far right
+                // Moves the tab to the far right
+                Spacer()
                 
                 // Close Navigation tab button
                 HStack {
