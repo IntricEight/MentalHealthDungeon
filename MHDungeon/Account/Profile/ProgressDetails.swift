@@ -22,11 +22,11 @@ struct ProgressDetails: View {
         let tabRadius: CGFloat = 30
         
         HStack {
-            HStack (spacing: 0) {
+            HStack {
                 // Arrows to display which direction you can slide the view
                 TabArrows(direction: "forward")
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .contentShape(Rectangle())
+                    .contentShape(Rectangle())  // ContentShape and width/height required for the hitbox to expand to fill the desired space
             }
             .frame(width: 50, alignment: .leading)
             .onTapGesture {

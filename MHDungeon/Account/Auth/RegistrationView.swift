@@ -52,11 +52,18 @@ struct RegistrationView: View {
                     .padding(.horizontal)
                 
                 // Display name input field
-                TextField("Display name", text: $customName)
+                TextField("Display name (Optional)", text: $customName)
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
+                    .onChange(of: customName) {
+                        let nameCharacterLimit = 24
+                        
+                        if customName.count > nameCharacterLimit {
+                            customName = String(customName.prefix(nameCharacterLimit))
+                        }
+                    }
                 
                 // Password input field with visibility toggle
                 HStack {

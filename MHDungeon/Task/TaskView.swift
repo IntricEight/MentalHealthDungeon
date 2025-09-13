@@ -77,7 +77,7 @@ struct TaskView: View {
                                             .fontWeight(.semibold)
                                             .font(.title)
                                     )
-                            }.navigationBarBackButtonHidden(true)
+                            }
                             
                             Spacer(minLength: 10)
                             
@@ -92,7 +92,7 @@ struct TaskView: View {
                                             .fontWeight(.semibold)
                                             .font(.title)
                                     )
-                            }.navigationBarBackButtonHidden(true)
+                            }
                         }
                         
                         Spacer(minLength: 15)
@@ -100,13 +100,10 @@ struct TaskView: View {
                         // Profile image
                         SmallProfileImage()
                             .frame(alignment: .trailing)
-                        
                     }
                     .padding(EdgeInsets(top: 64, leading: 0, bottom: 10, trailing: 16))
-                    
-                    
+                
                     Spacer()
-                    
                     
                     // Show the user's current tasks
                     TaskListView(account: authModel.currentAccount!)

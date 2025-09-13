@@ -61,27 +61,25 @@ struct ProfileView: View {
                         Spacer()
                         
                         // Account Progress tab button
-                        // TODO: Convert the entire button into the rectangle shape, instead of using the label? Could then place the arrows inside instead of needing the rectangle and overlay combination
-                        Button {
+                        HStack {
+                            // Arrows to display which direction you can slide the view
+                            TabArrows(direction: "backward")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        }
+                        .frame(width: 50, height: circleDiameter, alignment: .trailing)
+                        .background(Color.blue)
+                        .contentShape(Rectangle())
+                        .clipShape(
+                            .rect(topLeadingRadius: tabRadius, bottomLeadingRadius: tabRadius)
+                        )
+                        .ignoresSafeArea(edges: .trailing)
+                        .onTapGesture {
                             print("Open the progress tab")
                             
                             // Display the progress tab
                             withAnimation(.easeInOut(duration: 0.5)) {
                                 progressTabVisible = true
                             }
-                        } label: {
-                            Rectangle()
-                                .frame(width: 50, alignment: .trailing)
-                                .foregroundColor(Color.blue)
-                                .clipShape(
-                                    .rect(topLeadingRadius: tabRadius, bottomLeadingRadius: tabRadius)
-                                )
-                                .ignoresSafeArea(edges: .trailing)
-                                .contentShape(Rectangle())
-                                .overlay {
-                                    TabArrows(direction: "backward")
-                                        .frame(alignment: .center)
-                                }
                         }
                     }
                     .frame(maxHeight: circleDiameter)
