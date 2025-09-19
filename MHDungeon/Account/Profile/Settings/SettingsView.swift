@@ -14,8 +14,8 @@ struct SettingsView: View {
         // If this page has somehow been navigated to without a user being signed in, display an error
         if let user = authModel.currentAccount {
             VStack {
-                // The user's dislay name and a button to change it
                 HStack {
+                    // The user's display name
                     Text(user.displayName)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -23,7 +23,8 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: SettingsView()) {
+                    // Change Display Name button
+                    NavigationLink(destination: ChangeNameView()) {
                         Image(systemName: "pencil")
                             .foregroundColor(.black)
                             .font(.system(size: 40))
@@ -46,26 +47,32 @@ struct SettingsView: View {
     * Log out
     * Delete account
  */
-//                List {
-//                    <#code#>
-//                }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                Button {
-                    print("Signing out.")
-
-                    authModel.SignOut()
-                } label: {
-                    Text("Sign out")
+                List {
+                    // TODO: Fill out with the account options, and create the pages for each
+                    
+                    // TODO: Figure out if I can even do this, given I'm using Firebase
+                    SettingsListItem(text: "Change Password", icon: "lock") {
+                        DeleteAccountView()
+                    }
+                    
+                    // Delete the current account
+                    SettingsListItem(text: "Delete Account", icon: "trash") {
+                        DeleteAccountView()
+                    }
+                    
+                    // Log out of the current account
+                    SettingsListItem(text: "Log Out", icon: "rectangle.portrait.and.arrow.forward") {
+                        authModel.SignOut()
+                    }
                 }
-                .padding(10)
+                .scrollContentBackground(.hidden)
+                .listStyle(.plain)
+                
+                
+                
+                
+                
+                
                 
                 
                 

@@ -14,6 +14,8 @@ import SwiftUI
 /// - The friendship system.
 /// - Access to and a preview of the user's character cosmetics.
 struct ProfileView: View {
+    @EnvironmentObject var authModel: AuthModel
+    
     // Control visiblity of various features
     /// Controls visibility of dungeon progress statistics tab that overlays profile image.
     @State private var progressTabVisible: Bool = false
