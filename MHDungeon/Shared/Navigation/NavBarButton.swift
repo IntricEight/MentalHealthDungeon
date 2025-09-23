@@ -56,7 +56,7 @@ struct NavBarButton: View {
 
 #Preview {
     /// The destination of the button in the Preview
-    var p_appState: AppState = AppState(.profile)
+    let p_appState: AppState = AppState(.profile)
     
     NavBarButton(icon: "circle.circle.fill", destination: AppPage.taskList, consoleMessage: "Preview Button selected")
                     .environment(p_appState)

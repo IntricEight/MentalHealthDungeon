@@ -11,6 +11,7 @@ import FirebaseAuth
 /// Utilized by extensions on `Views` to ensure that proper conditions are met before allowing an authentication form to be submitted.
 protocol AuthenticationFormProtocol {
     var emailStatus: EmailAuthStatus { get }
+    var displayNameStatus: DisplayNameAuthStatus { get }
     var passwordStatus: PasswordAuthStatus { get }
     
     /// Checks and records whether the current form has met the conditions to be submitted.
@@ -97,6 +98,22 @@ class AuthModel: ObservableObject {
         }
     }
     
+    /// Retrieve the current user's `Account` data from `Firestore` and store it in a local instance inside `currentAccount`.
+    func FetchUser() async {
+        // Retrieve the user's UID from the local auth state
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        // Retrieve the user's account data from the "users" collection
+        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
+            return
+        }
+        
+        // Store the snapshot of the user's data in the local account
+        self.currentAccount = try? snapshot.data(as: Account.self)
+    }
+    
     /// Sign out of the current `Firebase` session and remove their data from the local storage.
     func SignOut() {
         print("Sign out attempt registered")
@@ -136,22 +153,6 @@ class AuthModel: ObservableObject {
         } catch {
             print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
         }
-    }
-    
-    /// Retrieve the current user's `Account` data from `Firestore` and store it in a local instance inside `currentAccount`.
-    func FetchUser() async {
-        // Retrieve the user's UID from the local auth state
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-        
-        // Retrieve the user's account data from the "users" collection
-        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {
-            return
-        }
-        
-        // Store the snapshot of the user's data in the local account
-        self.currentAccount = try? snapshot.data(as: Account.self)
     }
     
     /// Add a new `Task` to the user's `Firestore` storage and the local `Account` instance.
@@ -213,11 +214,76 @@ class AuthModel: ObservableObject {
         Firestore.firestore().collection("users").document(uid).updateData(["taskList": updatedTaskList, "inspirationPoints": account.inspirationPoints, "lifetimeIP": account.lifetimeIP, "tasksCompleted": account.tasksCompleted ])
     }
     
-    /// Update the user's information in the `Firestore` entry.
+    /// Checks if an email is valid.
     ///
     /// - Parameters:
-    ///   - name: The user's chosen display name.
-    func UpdateUser(displayName name: String) {
+    ///   - email: An email.
+    func AuthenticateEmail(_ email: String) -> EmailAuthStatus {
+        // If the user has not attempted to fill in the email field, then there is no issue at present
+        if email.isEmpty {
+            return .None
+        }
+        
+        // Separate the email using the @ character
+        let parts = email.split(separator: "@", omittingEmptySubsequences: false)
+        
+        // Check the number of @ symbols using the size of the parts array
+        if parts.count < 2 {
+            return .MissingAtSymbol
+        } else if parts.count > 2 {
+            return .TooManyAtSymbols
+        }
+        
+        // Check if either of the sections are empty
+        if parts[0].isEmpty {
+            return .MissingName
+        }
+        if parts[1].isEmpty {
+            return .MissingDomain
+        }
+        
+        // Ensure that the email name only uses allowed characters
+        let localRegex = #"^[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+$"#
+        let localTest = NSPredicate(format: "SELF MATCHES %@", localRegex)
+        if !localTest.evaluate(with: parts[0]) {
+            return .InvalidName
+        }
+
+        // Ensure that the domain name follows the correct format, and only uses allowed characters
+        let domainRegex = #"^(?!.*\.\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#  // #"^[A-Za-z0-9.-]+.[A-Za-z]{2,}$"#
+        let domainTest = NSPredicate(format: "SELF MATCHES %@", domainRegex)
+        if !domainTest.evaluate(with: parts[1]) {
+            return .InvalidDomain
+        }
+        
+        // If we reach this point in the code, there is no issue with the email
+        return .None
+    }
+    
+    /// Checks if a display name is valid.
+    ///
+    /// - Parameters:
+    ///   - name: A display name.
+    func AuthenticateDisplayName(_ name: String) -> DisplayNameAuthStatus {
+        // TODO: Implement this function to check the status of the Display Name
+        
+        // Check the size
+        // Allow if empty, because we will use the email (pre-@) as the name
+        // Otherwise, make sure it is between 1 and MAX_DISPLAY_NAME_LENGTH characters
+        
+        // Prevent the user from typing a longer string than the display name's maximum length
+        if name.count > MAX_DISPLAY_NAME_LENGTH {
+            return .InvalidLength
+        }
+        
+        return .None
+    }
+    
+    /// Update the user's display name information in the `Firestore` entry.
+    ///
+    /// - Parameters:
+    ///   - name: The user's new chosen display name.
+    func UpdateDisplayName(_ name: String) {
         /// The name that used to be associated with the current user's account
         let oldName: String = currentAccount?.displayName ?? "No old name found"
         
@@ -241,6 +307,71 @@ class AuthModel: ObservableObject {
         }
         
         print("Changed user display name from \"\(oldName)\" to \"\(name)\"")
+    }
+    
+    /// Checks if a password is valid.
+    ///
+    /// - Parameters:
+    ///   - password: A password.
+    func AuthenticatePassword(password: String, confirmPassword: String) -> PasswordAuthStatus {
+        // If the user has not attempted to fill in the password field, then there is no issue at present
+        if password.isEmpty {
+            return .None
+        }
+        
+        // Make sure the password is the proper length
+        if password.count < MIN_PASSWORD_LENGTH || password.count > MAX_PASSWORD_LENGTH {
+            return .InvalidLength
+        }
+
+        // Make sure there is a capital character in the password
+        if !password.contains(where: { $0.isUppercase }) {
+            return .MissingCapitalLetter
+        }
+        
+        // Make sure there is a lowercase character in the password
+        if !password.contains(where: { $0.isLowercase }) {
+            return .MissingLowercaseLetter
+        }
+        
+        // Ensure that only allowed special characters are in the password
+        // Define the special characters allowed
+        let allowedSpecialCharacters = CharacterSet(charactersIn: #"!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~"#)
+        if password.rangeOfCharacter(from: allowedSpecialCharacters) == nil {
+            return .MissingSpecialCharacter
+        }
+        
+        // Ensure no forbidden characters are in the password
+        let allowedCharacters = #"^[A-Za-z0-9!@#$%^&*()_=+\[\]{}|;:'",.<>?\/`~\-]+$"#
+        let forbiddenTest = NSPredicate(format: "SELF MATCHES %@", allowedCharacters)
+        if !forbiddenTest.evaluate(with: password) {
+            return .ForbiddenCharacter
+        }
+
+        // Finally, make sure that the confirmation password matches the original password suggestion
+        // To avoid early/unnecessary warnings, wait until there is something in the confirmation field before throwing this
+        if !confirmPassword.isEmpty && password != confirmPassword {
+            return .DifferentConfirmationPassword
+        }
+        
+        // If we reach this point in the code, there is no issue with the password
+        return .None
+    }
+    
+    /// Update the user's password information in the `Firestore` user entry.
+    ///
+    /// - Parameters:
+    ///   - name: The user's new chosen display name.
+    func UpdatePassword(_ password: String) {
+        // Retrieve the user's UID from the local auth state
+        guard (Auth.auth().currentUser?.uid) != nil else {
+            return
+        }
+        
+        // Update the user's password
+        Auth.auth().currentUser?.updatePassword(to: password)
+        
+        print("Successfully updated the user's password")
     }
     
     /// Begin an adventure inside a `Dungeon` on the user's `Account`.

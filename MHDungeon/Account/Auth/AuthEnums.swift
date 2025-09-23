@@ -8,12 +8,14 @@ import Foundation
 // Realistically, I'm just going to find some online Regex statement to validate both, so I probably won't end up actually using these. That said, it doesn't hurt to include them for future use
 
 // MARK: Password length requirements
-/// The minimum length of a password
+/// The minimum length of a password.
 let MIN_PASSWORD_LENGTH: Int = 6
-/// The maximum length of a password
+/// The maximum length of a password.
 let MAX_PASSWORD_LENGTH: Int = 32
+/// The maximum length of a display name.
+let MAX_DISPLAY_NAME_LENGTH: Int = 24
 
-/// Errors that can occur when adding an email while creating an `Account`.
+/// Errors that can occur when choosing an email while creating an `Account`.
 enum EmailAuthStatus: CustomStringConvertible {
     // The status flagged when a part of the email is missing or improperly written
     /// Nothing is wrong with the email, let the user proceed.
@@ -52,9 +54,31 @@ enum EmailAuthStatus: CustomStringConvertible {
     }
 }
 
-/// Errors that can occur when adding an email while creating an `Account`.
+/// Errors that can occur when choosing a display name while creating an `Account`.
+enum DisplayNameAuthStatus: CustomStringConvertible {
+    /// Nothing is wrong with the display name, let the user proceed.
+    case None
+    /// The display name is too long.
+    case InvalidLength
+    /// The display name has a character that is not allowed.
+    case ForbiddenCharacter
+    
+    /// A description of the authentication status that will appear and inform the user of their current issue with their password creation.
+    var description: String {
+        switch self {
+                // TODO: Update the return values to match the Display Name
+            case .None:
+                return ""   // Leave this message empty so that nothing appears in the error section
+            case .InvalidLength:
+                return "The display name can only have \(MAX_DISPLAY_NAME_LENGTH) characters."
+            case .ForbiddenCharacter:
+                return "The password cannot include the SPACE or TAB characters."
+        }
+    }
+}
+
+/// Errors that can occur when choosing a password while creating an `Account`.
 enum PasswordAuthStatus: CustomStringConvertible {
-    // The status flagged when a part of the password is missing or improperly written
     /// Nothing is wrong with the password, let the user proceed.
     case None
     /// The password is either too short or too long.

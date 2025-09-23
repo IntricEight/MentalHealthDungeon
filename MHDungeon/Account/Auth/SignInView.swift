@@ -154,8 +154,16 @@ struct SignInView: View {
 
 // Ensure that valid information is passed into the authentication form
 extension SignInView: AuthenticationFormProtocol {
+    // This function will remain rather unimplemented for now, because I don't want sign-in attempts to know the account parameters
+    
     /// Records any issues found with the user's email attempt format.
     var emailStatus: EmailAuthStatus {
+        return .None
+    }
+    
+    // No display name is requested, so this will remain unimplemented on this page
+    /// Records any issues found with the user's display name attempt format.
+    var displayNameStatus: DisplayNameAuthStatus {
         return .None
     }
     

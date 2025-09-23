@@ -52,7 +52,7 @@ struct SettingsView: View {
                     
                     // TODO: Figure out if I can even do this, given I'm using Firebase
                     SettingsListItem(text: "Change Password", icon: "lock") {
-                        DeleteAccountView()
+                        ChangePasswordView()
                     }
                     
                     // Delete the current account

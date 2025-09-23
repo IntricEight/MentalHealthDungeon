@@ -49,6 +49,7 @@ struct SettingsListItem: View {
             NavigationLink(destination: destination) {
                 content
             }
+            .accessibilityHidden(true)
         } else if let action = action {
             Button(action: action) {
                 content
