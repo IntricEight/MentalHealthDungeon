@@ -306,6 +306,9 @@ class AuthModel: ObservableObject {
             }
         }
         
+        // Change the local copy of the display name
+        currentAccount?.displayName = name
+        
         print("Changed user display name from \"\(oldName)\" to \"\(name)\"")
     }
     

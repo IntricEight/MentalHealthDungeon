@@ -98,6 +98,7 @@ struct SignInView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
+                        .frame(width: screenWidth * 0.8)
                     }
                     .padding()
                     .border(Color.orange)
@@ -127,6 +128,7 @@ struct SignInView: View {
                                 .cornerRadius(10)
                         }
                         .padding(.horizontal)
+                        .frame(width: screenWidth * 0.8)
                         .disabled(!formIsValid)
                         .opacity(formIsValid ? 1.0 : 0.5)
                         
@@ -154,7 +156,7 @@ struct SignInView: View {
 
 // Ensure that valid information is passed into the authentication form
 extension SignInView: AuthenticationFormProtocol {
-    // This function will remain rather unimplemented for now, because I don't want sign-in attempts to know the account parameters
+    // This function's authentications will remain rather unimplemented for now, because I don't want sign-in attempts to know the account parameters
     
     /// Records any issues found with the user's email attempt format.
     var emailStatus: EmailAuthStatus {

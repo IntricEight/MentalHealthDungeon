@@ -58,15 +58,14 @@ struct RegistrationView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
                     .onChange(of: customName) {
-                        let nameCharacterLimit = MAX_DISPLAY_NAME_LENGTH
-                        
-                        if customName.count > nameCharacterLimit {
-                            customName = String(customName.prefix(nameCharacterLimit))
+                        if customName.count > MAX_DISPLAY_NAME_LENGTH {
+                            customName = String(customName.prefix(MAX_DISPLAY_NAME_LENGTH))
                         }
                     }
                 
                 // Password input field with visibility toggle
                 HStack {
+                    // Show or hide the password contents
                     Group {
                         if isSecure {
                             SecureField("Password", text: $password)
@@ -91,6 +90,7 @@ struct RegistrationView: View {
                 
                 // Confirm Password input field with visibility toggle
                 HStack {
+                    // Show or hide the password contents
                     Group {
                         if isSecureConfirm {
                             SecureField("Confirm Password", text: $confirmPassword)
@@ -114,7 +114,7 @@ struct RegistrationView: View {
                 .padding(.horizontal)
                 
                 // Error field to inform the user of proper form
-                VStack(alignment: .leading, spacing: 20) {
+                VStack (alignment: .leading, spacing: 20) {
                     Text("\(emailStatus)")
                         .font(.subheadline)
                         .foregroundColor(Color.red)
@@ -137,7 +137,6 @@ struct RegistrationView: View {
                             // Only pass in the email in a lowercase form, to allow the user to write it however they like
                             try await authModel.CreateUser(withEmail: email.lowercased(), displayName: customName, password: password)
                         }
-                        
                     }) {
                         Text("Create Account")
                             .font(.headline)
@@ -148,13 +147,14 @@ struct RegistrationView: View {
                             .cornerRadius(10)
                     }
                     .padding(.horizontal)
+                    .frame(width: screenWidth * 0.8)
                     .disabled(!formIsValid)
                     .opacity(formIsValid ? 1.0 : 0.5)
                     
                     // Move to sign in with an existing account button
                     Button {
                         // Move down the NavigationStack and back to the Sign In page
-                        // TODO: If I choose to swap around the order of pages, this and the code in SignInView will need to be swapped
+                        // TODO: If I choose to swap around the order of pages, this and the code in SignInView's action will need to be swapped
                         dismiss()
                     } label: {
                         Text("Sign in with an existing account")
@@ -176,7 +176,7 @@ struct RegistrationView: View {
 
 // Ensure that valid information is passed into the authentication form
 extension RegistrationView: AuthenticationFormProtocol {
-    // One issue with the way I have set things up is that only 1 issue with the email will appear at a time
+    // One issue with the way I have set things up is that only 1 issue with each area will appear at a time
     // I'm going to leave it this way for now, as I want to move on to the visuals of the login and registration pages,
     // but I wanted to note my recognition of this issue and assert that I would not normally leave a task poorly completed.
     
