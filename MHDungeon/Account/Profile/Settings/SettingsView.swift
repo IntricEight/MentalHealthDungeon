@@ -48,9 +48,6 @@ struct SettingsView: View {
     * Delete account
  */
                 List {
-                    // TODO: Fill out with the account options, and create the pages for each
-                    
-                    // TODO: Figure out if I can even do this, given I'm using Firebase
                     SettingsListItem(text: "Change Password", icon: "lock") {
                         ChangePasswordView()
                     }
@@ -68,14 +65,6 @@ struct SettingsView: View {
                 .scrollContentBackground(.hidden)
                 .listStyle(.plain)
                 
-                
-                
-                
-                
-                
-                
-                
-                
                 Button {
                     // Return to the central profile page
                     dismiss()
@@ -89,57 +78,10 @@ struct SettingsView: View {
                                 .foregroundColor(Color.white)
                         }
                 }
-                
-                
-                
             }.navigationBarBackButtonHidden(true)
-            
-            
-            
-            
-            
         } else {
             // TODO: Create a large error splash page that we can use when a user is not logged in. In fact, make it a separate subview so that it can be thrown up all over the app.
         }
-    
-        
-//        VStack {
-//            Text("Settings")
-//                .font(.title)
-//                .padding()
-//                .frame(alignment: .top)
-//                .fontWeight(.bold)
-//            
-//            if let user = authModel.currentAccount {
-//                Text("\(user.displayName) (\(user.email))")
-//                    .font(.title)
-//                    .padding()
-//                
-//                Section("Account") {
-//                    Button {
-//                        print("Signing out.")
-//                        
-//                        authModel.SignOut()
-//                    } label: {
-//                        Text("Sign out")
-//                    }
-//                    .padding(10)
-//                    
-//                    Button {
-//                        print("Deleting account...")
-//                        
-//                        // Logic to process deleting an account
-//                        _Concurrency.Task {
-//                            await authModel.DeleteUser()
-//                        }
-//                    } label: {
-//                        Text("Delete account")
-//                    }
-//                }
-//            }
-//        }
-        
-        
     }
 }
 

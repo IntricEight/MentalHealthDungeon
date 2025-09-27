@@ -18,9 +18,6 @@ struct SignInView: View {
     @State private var email: String = ""
     /// The user's password.
     @State private var password: String = ""
-    
-    /// Controls password visibility for Password entry fields
-    @State private var isSecure: Bool = true
 
     var body: some View {
         NavigationStack {
@@ -46,32 +43,12 @@ struct SignInView: View {
                             .padding(.horizontal)
                         
                         // Password input field with visibility toggle
-                        HStack {
-                            Group {
-                                if isSecure {
-                                    SecureField("Password", text: $password)
-                                        .disableAutocorrection(true)
-                                } else {
-                                    TextField("Password", text: $password)
-                                        .disableAutocorrection(true)
-                                }
-                            }
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .autocapitalization(.none)
-                            
-                            // Visibility toggle
-                            Button {
-                                isSecure.toggle()
-                            } label: {
-                                Image(systemName: isSecure ? "eye.slash" : "eye")
-                                    .foregroundColor(Color.gray)
-                            }
-                        }
-                        .padding(.horizontal)
+                        PasswordInput(prompt: "Password", input: $password)
+                            .padding(.horizontal)
                     }
                     
                     // TODO: Remove before releasing as a proper app, if ever
-                    // TODO: Update the listed credentials once database modifications are over
+                    // TODO: Update the listed credentials (if needed) once database modifications are over
                     // A developer-use button to sign in without creating an account
                     Spacer()
                     VStack {

@@ -43,6 +43,7 @@ class AuthModel: ObservableObject {
     }
     
     /// Attempt to sign the user into `Firebase` using the Email/Password sign-in method.
+    ///
     /// - Parameters:
     ///   - email: The user's unique email address.
     ///   - password: The user's password.
@@ -112,6 +113,39 @@ class AuthModel: ObservableObject {
         
         // Store the snapshot of the user's data in the local account
         self.currentAccount = try? snapshot.data(as: Account.self)
+    }
+    
+    /// Reauthenticate a `Firebase` user before allowing them to modify security elements of their account.
+    ///
+    /// Only requires that the user resubmit their password, and uses the app's current email.
+    ///
+    /// - Parameters:
+    ///   - password: The user's password.
+    ///   - completion: The code that should be ran once the authentication is processed
+    func ReauthenticateUser(password: String, completion: @escaping (Bool) -> Void) {
+        print("Attempting to reauthenticate the user with password \(password)")
+        
+        // Get the user's current email
+        guard let currentEmail = userSession?.email else {
+            completion(false)
+            return
+        }
+        
+        // Compile the user's authentication tokens into a credential
+        let cred = EmailAuthProvider.credential(withEmail: currentEmail, password: password)
+        
+        // Attempt to reauthenticate the user
+        userSession?.reauthenticate(with: cred) { _, error in
+            if let error = error {
+                // An error happened.
+                print("Reauthentication failed: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                // User re-authenticated.
+                print("Reauthentication succeeded.")
+                completion(true)
+            }
+        }
     }
     
     /// Sign out of the current `Firebase` session and remove their data from the local storage.

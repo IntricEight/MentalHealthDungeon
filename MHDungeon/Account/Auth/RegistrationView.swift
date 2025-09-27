@@ -25,11 +25,6 @@ struct RegistrationView: View {
     @State private var password: String = ""
     /// A repeat of the user's desired password for verification purposes.
     @State private var confirmPassword: String = ""
-    
-    /// Controls password visibility for the first Password entry field
-    @State private var isSecure: Bool = true
-    /// Controls password visibility for the Confirm Password entry field
-    @State private var isSecureConfirm: Bool = true
 
     var body: some View {
         VStack {
@@ -64,54 +59,12 @@ struct RegistrationView: View {
                     }
                 
                 // Password input field with visibility toggle
-                HStack {
-                    // Show or hide the password contents
-                    Group {
-                        if isSecure {
-                            SecureField("Password", text: $password)
-                                .disableAutocorrection(true)
-                        } else {
-                            TextField("Password", text: $password)
-                                .disableAutocorrection(true)
-                        }
-                    }
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-                    
-                    // Visibility toggle
-                    Button {
-                        isSecure.toggle()
-                    } label: {
-                        Image(systemName: isSecure ? "eye.slash" : "eye")
-                            .foregroundColor(Color.gray)
-                    }
-                }
-                .padding(.horizontal)
+                PasswordInput(prompt: "Password", input: $password)
+                    .padding(.horizontal)
                 
                 // Confirm Password input field with visibility toggle
-                HStack {
-                    // Show or hide the password contents
-                    Group {
-                        if isSecureConfirm {
-                            SecureField("Confirm Password", text: $confirmPassword)
-                                .disableAutocorrection(true)
-                        } else {
-                            TextField("Confirm Password", text: $confirmPassword)
-                                .disableAutocorrection(true)
-                        }
-                    }
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-                    
-                    // Visibility toggle
-                    Button {
-                        isSecureConfirm.toggle()
-                    } label: {
-                        Image(systemName: isSecureConfirm ? "eye.slash" : "eye")
-                            .foregroundColor(Color.gray)
-                    }
-                }
-                .padding(.horizontal)
+                PasswordInput(prompt: "Confirm Password", input: $confirmPassword)
+                    .padding(.horizontal)
                 
                 // Error field to inform the user of proper form
                 VStack (alignment: .leading, spacing: 20) {

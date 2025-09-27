@@ -51,6 +51,8 @@ struct TaskPresetView: View {
                 Spacer(minLength: 30)
                 
                 // Create the new task
+                // TODO: Since the task adding feature works differently to the original idea, change this from an unused add task button into an informational button
+                // Alternatively, put the information button at the top (Replacing the "Choose 5 tasks")
                 Button {
                     print("Add the Selected Task selected")
                     

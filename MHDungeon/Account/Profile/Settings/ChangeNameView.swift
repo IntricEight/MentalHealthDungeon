@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+/// A view page that provides the user with an inferface that they can use to change their account's display name.
 struct ChangeNameView: View {
     @EnvironmentObject private var authModel: AuthModel
     @Environment(\.dismiss) private var dismiss
@@ -33,6 +34,8 @@ struct ChangeNameView: View {
                     }
                 }
             
+            // TODO: Add an error message field to assist the user in validating their Display Name
+            
             Spacer()
             
             // Button to initiate the password change
@@ -55,10 +58,6 @@ struct ChangeNameView: View {
             .frame(width: screenWidth * 0.8)
             .disabled(!formIsValid)
             .opacity(formIsValid ? 1.0 : 0.5)
-            
-            
-            
-            
         }
         .padding()
     }

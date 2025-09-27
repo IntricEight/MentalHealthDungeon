@@ -90,7 +90,7 @@ struct TaskPresetListItem: View {
                         Text("\(timeRemaining)")
                             .onAppear {
                                 // Ensure that the time until expiration is displayed upon loading
-                                dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: Date.now.addingTimeInterval(hoursToExpire * 3600),  template: "", message: "Should not appear")
+                                dhmsTimer.UpdateTimeRemaining(timeRemaining: &timeRemaining, expirationTime: Date.now.addingTimeInterval(hoursToExpire * 3600) + 1,  template: "", message: "This expiration should not appear")
                             }
                     }
                     
